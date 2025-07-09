@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EliteFX Return - 3% Daily Returns</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* CSS for index.html */
+        :root {
+            --primary: #002366;
+            --secondary: #FFD700;
+            --accent: #008080;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        /* Navbar Styles */
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .logo span {
+            color: var(--secondary);
+        }
+        /* Hero Section */
+        .hero {
+            padding: 150px 0 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, #004080 100%);
+            color: white;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .hero h1 span {
+            color: var(--secondary);
+        }
+        /* Add more styles as needed */
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">EliteFX<span>Return</span></a>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#plans">Plans</a>
+                <a href="login.html" class="btn-login">Login</a>
+                <a href="register.html" class="btn-register">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Earn <span>3% Daily Returns</span> On Your Investment</h1>
+            <p>Start with just 5,000 UGX up to 2,000,000 UGX</p>
+            <a href="register.html" class="btn-primary">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Rest of homepage content -->
+    <script>
+        // JavaScript for index.html
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calculator functionality
+            const investmentSlider = document.getElementById('investment');
+            const investmentValue = document.getElementById('investment-value');
+            
+            investmentSlider.addEventListener('input', function() {
+                const value = parseInt(this.value).toLocaleString();
+                investmentValue.textContent = value;
+                
+                // Calculate profits
+                const daily = (this.value * 0.03).toLocaleString();
+                document.getElementById('daily-profit').textContent = daily + ' UGX';
+            });
+        });
+    </script>
+</body>
+</html>
