@@ -1,0 +1,28 @@
+<!DOCTYPE html> <html lang="en">
+ <head> <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Thank You | Support African Children</title> <link rel="stylesheet" href="styles.css"> 
+<style> body { font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; 
+margin: 0; padding: 0; text-align: center; } header { background-color: #ff6600;
+ color: white; padding: 50px 0; } h1 { font-size: 2.5em; } footer {
+ text-align: center; padding: 20px; background-color: #333; color: white; } .
+thank-you-message { padding: 20px; margin: 20px; background: white; 
+box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: inline-block; }
+ .share-button { padding: 10px 20px; background-color: #007bb5; 
+color: white; text-decoration: none; border-radius: 5px; margin-top: 20px;
+} </style> </head> <body>
+<header> <h1>Thank You for Joining Our Program!</h1> </header>
+<div class="thank-you-message"> 
+<h2>Your generosity makes a difference!</h2>
+ <p>We appreciate your support in helping African 
+children achieve a better future.</p>
+ <p><strong>You will receive a confirmation email message to verify your account and participation in the support for the 
+lives of African children.</strong></p> </div>
+<p>
+<a href="index.html" class="share-button">Home</a></p> <p>Share your support on social media!</p>
+<footer> <p>
+ | Follow us on social media</p> <p>© 2025
+RISE. All rights reserved.</p> 
+<p>Psalms 109:9</p>
+</footer>
+</body> </html>
