@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+<meta charsert="UFT-8">
+<meta name"viewport" 
+content="width=device-width,
+initial-scale=1.0">
+<link rel="stylesheet" href="save.css">
+<title>RISE</title>
+</head>
+<body>
+<h1>TERMS AND CONDITIONS</h1>
+<h2>Effective Date</h2>
+welocome to RISE. by accessing or using our website, you agree to comply with and be bound by these Trems and Conditions
+.if you do not agree, please do not use our site.
+
+<h2Introduction</h2>
+the purpose of RISE is to raise funds to support initiatives aimed at saving the lives of African children.
+We are committed to transparency and accountability in all our fundraising efforts.
+
+<h2>User Agreement</h2>
+By using this website, you affirm that you are at least 16 years old or that you have parental permission to donate.
+
+<h2>Fundraising Guidelines</h2>
+All funds raised through this website will be allocated directly to our partnered organisations working to support
+children's health, education, and wlfare in Africa. We will provide periodic updates on how funds are utilised. if the
+donor makes a misake during his/her transaction, he/she will not be refunded be the organisation. 
+
+<h2>Donor Information</h2> 
+We collect personal information from donors to process donations. We re committed to protecting your privacy. 
+Your inormation will not be shared with third-party payment processors. Donations may be subject to transaction fees.
+
+<h2>Intellectual Property</h2>
+All content on this website, including text, graphics, logos, and images, is the property of RISE and is protected by 
+copyright laws. You may not reproduce, distribute, or use any content without our prior written permission.
+
+<h2>Liability Limitations</h2>
+RISE shall not be liable for any direct, indirect, incidental, or consequeuential damages arising from your use of
+this website or your reliance on any information provide. We do not guarantee the effectiveness of the intiatives
+funded through this site.
+
+<h2>Changes to Terms</h2>
+We reserve the right to modify these Terms and Cconditions at any time. Changeswill be posted on this page, and 
+acceptance of the new terms.
+   <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 Rise Organization | <a href="terms.html">Terms & Conditions</a> | <a href="#privacy">Privacy Policy</a></p>
+    </footer>
+</body>
+</html>
