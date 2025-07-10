@@ -1,0 +1,132 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+ <head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width,
+initial-scale=1.0"> <title>FAQs -
+ Supporting African Children in Need</title>
+ <style>
+ body { 
+font-family: 
+Arial, sans-serif;
+ line-height: 1.6; 
+margin: 0; padding: 20px; 
+background-color: #f9f9f9; 
+color: #333; 
+} h1 {
+text-align: center; 
+color: #4CAF50; 
+} 
+h2 {
+color: #333;
+ } 
+a { 
+color: #4CAF50;
+ text-decoration: none;
+ } 
+a:hover { 
+text-decoration: underline; 
+}
+ .faq-section {
+ margin: 20px 0;
+ padding: 15px; 
+border: 1px solid #ddd;
+ background-color: #fff;
+ border-radius: 5px;
+ } </style>
+ </head>
+ <body>
+<h1>FAQs: Supporting African Children in Need</h1>
+<div class="faq-section">
+ <h2>1. What is Our Mission?</h2>
+<p>Our mission is to improve the lives of African children
+ through education, healthcare, and community development. 
+We believe that every child deserves a chance for a brighter future.
+</p> </div>
+<div class="faq-section"> 
+<h2>2. How Can I Help?</h2>
+ <p>There are many ways to support our cause:</p>
+ <ul> <li><strong>Donations:
+</strong>
+ Monetary contributions are always appreciated.
+</li> <li>
+<strong>Volunteering:</strong> 
+Share your skills or time to help us in our initiatives.</li>
+ <li><strong>Fundraising:</strong>
+ Organize events in your community to raise awareness and funds.</li> 
+</ul> </div>
+<div class="faq-section">
+ <h2>3. How Do I Make a Donation?</h2> 
+<p>Making a donation is easy! Visit our 
+<a href="donate.html">donation page</a> and choose your preferred amount.
+ We accept various payment methods including credit cards and PayPal.</p> </div>
+<div class="faq-section"> <h2>4. 
+How Are Donations Used?</h2> 
+<p>Every dollar counts! Donations are allocated towards:</p> 
+<ul> <li><strong>Education Programs:</strong> 
+School supplies, scholarships, and teacher training.</li> 
+<li><strong>Healthcare Initiatives:</strong> Medical supplies, 
+vaccinations, and health education.</li> 
+<li><strong>Community Development:</strong> 
+Sustainable projects to empower families.</li> </ul> </div>
+<div class="faq-section"> <h2>5. What Fundraising Events
+ Do You Organize?</h2>
+ <p>We host several fundraising events throughout the year, including:</p>
+ <ul> <li>Reach Out</li>
+ <li>Charity Fundraising</li> <li>Awareness Campaigns</li> </ul>
+<p>Check our events
+for upcoming opportunities to participate!</p> </div>
+<div class="faq-section">
+ <h2>6. Can I See the Impact of My Contribution?</h2> 
+<p>Absolutely! We regularly share impact stories and testimonials from beneficiaries on our
+ impact. Your support makes a real difference!</p> </div>
+<div class="faq-section">
+ <h2>7. What Volunteer Opportunities Are Available?</h2> 
+<p>We welcome volunteers in various capacities:</p> 
+<ul> <li>Event planning</li>
+<li>Fundraising</li> <li>Community outreach</li> </ul> 
+<p>Visit our <a href="voluteer.html">volunteer page</a>
+ to learn more and sign up!</p> </div>
+<div class="faq-section">
+ <h2>8. Do You Offer Child Sponsorship Programs?</h2>
+ <p>Yes, we have a sponsorship program where you 
+can support a specific child’s education and well-being.
+ Learn more about this rewarding opportunity <a href="sponsor.html">here</a>.</p>
+ </div>
+<div class="faq-section"> 
+<h2>9. Are Donations Tax-Deductible?</h2> 
+<p>Yes, all donations are tax-deductible in accordance with local laws. 
+You will receive a receipt for your contribution, which can be used for tax purposes.</p>
+ </div>
+<div class="faq-section">
+ <h2>10. How Can Businesses Partner with You?</h2> 
+<p>We welcome corporate partnerships! Businesses can 
+sponsor events, donate products or services, and collaborate
+ on fundraising initiatives. Contact us at <a href="mailto:risechildren01@gmail.com">
+risechildren01@gmail.com</a> for more details.</p> </div>
+
+<div class="faq-section"> 
+<h2>11. How Do You Protect Donor Privacy?</h2>
+<p>We take your privacy seriously. All donor information is kept confidential 
+and used solely for the purpose of supporting our mission. For more details,
+ read our <a href="terms.html">privacy policy</a>.</p> 
+</div>
+<div class="faq-section">
+ <h2>12. How Can I Contact You for More Information?</h2> 
+<p>Feel free to reach out! You can contact us via email at 
+<a href="mailto:risechildren01@gmail.com">risechildren01@gmail.com</a> or call us
+ at (+256)81 915 680. We’re here to help!</p>
+ </div>
+<h2>Thank You!</h2>
+ <p>Your support is vital to our mission. Together,
+ we can create lasting change for African children in need.
+ Explore how you can get involved today!</p>
+<p> <a href="donate.html">Make a Donation</a> | <a href="home.html">Home Page</a>
+ | <a href="voluteer.html">Volunteer with Us</a> </p>
+<!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 Rise Organization | <a href="terms.html">Terms & Conditions</a> | <a href="#privacy">Privacy Policy</a></p>
+    </footer>
+
+</body> 
+</html>
