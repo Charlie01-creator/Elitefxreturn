@@ -402,6 +402,45 @@
         menuToggle.addEventListener('click', () => {
             sidebar.classList.toggle('active');
         });
+        
+    document.addEventListener('DOMContentLoaded', function() {
+        const token = localStorage.getItem('authToken');
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        if (!token || !userData || !userData.isVerified || !userData.hasPaid) {
+            // Clear any existing auth data
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            
+            // Redirect to login with error message
+            window.location.href = 'login.html?error=access_denied';
+            return;
+        }
+        
+        // Verify token with server on page load
+        verifyTokenWithServer(token);
+    });
+    
+    async function verifyTokenWithServer(token) {
+        try {
+            const response = await fetch('/api/auth/verify', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (!response.ok) {
+                throw new Error('Session invalid');
+            }
+            
+            // Token is valid, user can stay on dashboard
+            
+        } catch (error) {
+            // Clear storage and redirect
+            localStorage.clear();
+            window.location.href = 'login.html?error=session_expired';
+        }
+    }
     </script>
 </body>
 </html>
