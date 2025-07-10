@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | EliteFX Return</title>
+    <title>Mobile Dashboard | EliteFX Return</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* === Global Styles === */
         :root {
             --primary: #002366;
             --secondary: #FFD700;
             --accent: #008080;
             --dark: #1a1a2e;
             --light: #f8f9fa;
-            --success: #28a745;
-            --danger: #dc3545;
         }
         
         * {
@@ -26,463 +23,206 @@
         }
         
         body {
-            background-color: #f0f2f5;
+            background-color: #f5f7fa;
+            padding-bottom: 70px;
         }
         
         .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
+            padding: 15px;
         }
         
-        /* === Dashboard Header === */
-        .dashboard-header {
+        /* Header */
+        .app-header {
             background-color: var(--primary);
             color: white;
-            padding: 15px 0;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        /* Notification Banner */
+        .notification-banner {
+            background-color: rgba(0, 131, 143, 0.1);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border-left: 4px solid var(--accent);
+        }
+        
+        /* Main Navigation */
+        .main-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .nav-item {
+            background: white;
+            padding: 12px 5px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            font-size: 0.8rem;
+        }
+        
+        .nav-item i {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        /* Secondary Navigation */
+        .secondary-nav {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
             position: fixed;
-            width: 100%;
-            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
             z-index: 1000;
         }
         
-        .dashboard-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-        }
-        
-        .logo span {
-            color: var(--secondary);
-        }
-        
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .user-menu a {
-            color: white;
-            font-size: 1.2rem;
-        }
-        
-        /* === Sidebar === */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 60px;
-            width: 250px;
-            height: calc(100vh - 60px);
-            background: white;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px 0;
-            overflow-y: auto;
-        }
-        
-        .sidebar-menu {
-            list-style: none;
-        }
-        
-        .sidebar-menu li {
-            margin-bottom: 5px;
-        }
-        
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            padding: 12px 20px;
-            color: var(--dark);
-            transition: all 0.3s;
-        }
-        
-        .sidebar-menu a:hover, .sidebar-menu a.active {
-            background: rgba(0, 35, 102, 0.1);
-            color: var(--primary);
-        }
-        
-        .sidebar-menu a i {
-            margin-right: 10px;
-            width: 20px;
+        .bottom-nav-item {
             text-align: center;
+            font-size: 0.7rem;
         }
         
-        /* === Main Content === */
-        .main-content {
-            margin-left: 250px;
-            padding: 80px 20px 20px;
-        }
-        
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .page-header h2 {
+        .bottom-nav-item i {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 3px;
             color: var(--primary);
         }
         
-        /* === Stats Cards === */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .stat-card h3 {
-            color: var(--gray);
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-        
-        .stat-card p {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-        
-        .balance {
-            color: var(--primary);
-        }
-        
-        .earnings {
+        .active {
             color: var(--accent);
         }
         
-        .referrals {
-            color: var(--secondary);
-        }
-        
-        /* === Investment Table === */
-        .investment-table {
-            width: 100%;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-        
-        .investment-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .investment-table th {
-            background: var(--primary);
-            color: white;
-            padding: 15px;
-            text-align: left;
-        }
-        
-        .investment-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .investment-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .status-active {
-            background: rgba(40, 167, 69, 0.1);
-            color: var(--success);
-        }
-        
-        .status-completed {
-            background: rgba(220, 53, 69, 0.1);
-            color: var(--danger);
-        }
-        
-        /* === Quick Actions === */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .action-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .action-card h3 {
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        
-        .btn-action {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-invest {
-            background: var(--secondary);
-            color: var(--primary);
-        }
-        
-        .btn-invest:hover {
-            background: #e6c300;
-        }
-        
-        .btn-withdraw {
-            background: var(--accent);
-            color: white;
-        }
-        
-        .btn-withdraw:hover {
-            background: #006666;
-        }
-        
-        /* === Responsive === */
-        @media (max-width: 992px) {
-            .sidebar {
-                width: 200px;
-            }
-            
-            .main-content {
-                margin-left: 200px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s;
-                z-index: 900;
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .menu-toggle {
-                display: block;
-            }
+        .active i {
+            color: var(--accent);
         }
     </style>
 </head>
 <body>
-    <!-- Dashboard Header -->
-    <header class="dashboard-header">
-        <div class="container dashboard-nav">
-            <div class="logo">EliteFX<span>Return</span></div>
-            <div class="user-menu">
-                <a href="#" title="Notifications"><i class="fas fa-bell"></i></a>
-                <a href="#" title="Profile"><i class="fas fa-user-circle"></i></a>
-                <a href="logout.html" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+    <!-- App Header -->
+    <div class="app-header">
+        EliteFX Return
+    </div>
+    
+    <div class="container">
+        <!-- Notification Banner -->
+        <div class="notification-banner">
+            Congratulations to member ****1287 for recommending J3 and receiving a referral bonus of 93600 UGX
+        </div>
+        
+        <!-- Main Navigation -->
+        <div class="main-nav">
+            <div class="nav-item">
+                <i class="fas fa-briefcase"></i>
+                JOB
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-tasks"></i>
+                Task
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-money-bill-wave"></i>
+                Recharge
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-wallet"></i>
+                Withdrawal
             </div>
         </div>
-    </header>
-
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <ul class="sidebar-menu">
-            <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="invest.html"><i class="fas fa-chart-line"></i> Invest</a></li>
-            <li><a href="withdraw.html"><i class="fas fa-wallet"></i> Withdraw</a></li>
-            <li><a href="referrals.html"><i class="fas fa-users"></i> Referrals</a></li>
-            <li><a href="transactions.html"><i class="fas fa-exchange-alt"></i> Transactions</a></li>
-            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-            <li><a href="support.html"><i class="fas fa-headset"></i> Support</a></li>
-        </ul>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="page-header">
-            <h2>Dashboard Overview</h2>
-            <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
-        </div>
-
-        <!-- Stats Cards -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Account Balance</h3>
-                <p class="balance">1,450,000 UGX</p>
+        
+        <!-- Secondary Navigation -->
+        <div class="main-nav secondary-nav">
+            <div class="nav-item">
+                <i class="fas fa-piggy-bank"></i>
+                Savings
             </div>
-            <div class="stat-card">
-                <h3>Daily Earnings</h3>
-                <p class="earnings">+43,500 UGX</p>
+            <div class="nav-item">
+                <i class="fas fa-user-plus"></i>
+                Invite
             </div>
-            <div class="stat-card">
-                <h3>Referral Earnings</h3>
-                <p class="referrals">120,000 UGX</p>
+            <div class="nav-item">
+                <i class="fas fa-book"></i>
+                Helpbook
             </div>
         </div>
-
-        <!-- Active Investments -->
-        <div class="investment-table">
-            <h3>Active Investments</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Amount</th>
-                        <th>Start Date</th>
-                        <th>Days Left</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1,000,000 UGX</td>
-                        <td>15 Jun 2023</td>
-                        <td>45</td>
-                        <td><span class="status-badge status-active">Active</span></td>
-                    </tr>
-                    <tr>
-                        <td>500,000 UGX</td>
-                        <td>1 Jul 2023</td>
-                        <td>60</td>
-                        <td><span class="status-badge status-active">Active</span></td>
-                    </tr>
-                    <tr>
-                        <td>200,000 UGX</td>
-                        <td>1 May 2023</td>
-                        <td>5</td>
-                        <td><span class="status-badge status-completed">Ending Soon</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <div class="action-card">
-                <h3>Make New Investment</h3>
-                <p>Start earning 3% daily returns on your investment</p>
-                <a href="invest.html" class="btn-action btn-invest">Invest Now</a>
+        
+        <!-- Additional Navigation -->
+        <div class="main-nav secondary-nav">
+            <div class="nav-item">
+                <i class="fas fa-users"></i>
+                Friends
             </div>
-            <div class="action-card">
-                <h3>Withdraw Funds</h3>
-                <p>Withdraw your earnings to your MTN or Airtel Money</p>
-                <a href="withdraw.html" class="btn-action btn-withdraw">Request Withdrawal</a>
+            <div class="nav-item">
+                <i class="fas fa-envelope"></i>
+                Center
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-cog"></i>
+                Settings
             </div>
         </div>
-    </main>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="bottom-nav-item active">
+            <i class="fas fa-home"></i>
+            Home
+        </div>
+        <div class="bottom-nav-item">
+            <i class="fas fa-tasks"></i>
+            Task Area
+        </div>
+        <div class="bottom-nav-item">
+            <i class="fas fa-chart-line"></i>
+            Profit
+        </div>
+        <div class="bottom-nav-item">
+            <i class="fas fa-user"></i>
+            My
+        </div>
+    </div>
 
     <script>
-        // Mobile Menu Toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
+        // Simple navigation active state
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.bottom-nav-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
         });
         
-    document.addEventListener('DOMContentLoaded', function() {
-        const token = localStorage.getItem('authToken');
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        
-        if (!token || !userData || !userData.isVerified || !userData.hasPaid) {
-            // Clear any existing auth data
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('userData');
+        // Check authentication
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             
-            // Redirect to login with error message
-            window.location.href = 'login.html?error=access_denied';
-            return;
-        }
-        
-        // Verify token with server on page load
-        verifyTokenWithServer(token);
-    });
-    
-    async function verifyTokenWithServer(token) {
-        try {
-            const response = await fetch('/api/auth/verify', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('Session invalid');
+            if (!token || !userData.id) {
+                window.location.href = 'login.html';
             }
-            
-            // Token is valid, user can stay on dashboard
-            
-        } catch (error) {
-            // Clear storage and redirect
-            localStorage.clear();
-            window.location.href = 'login.html?error=session_expired';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', async function() {
-        // 1. Check for auth data
-        const token = localStorage.getItem('authToken');
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        
-        if (!token || !userData.id) {
-            redirectToLogin();
-            return;
-        }
-        
-        try {
-            // 2. Verify with server
-            const response = await fetch('/api/users/dashboard', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.message || 'Session verification failed');
-            }
-            
-            // 3. Display dashboard content
-            document.getElementById('welcomeMessage').textContent = 
-                `Welcome back, ${data.user.email}`;
-                
-        } catch (error) {
-            console.error(error);
-            alert(error.message);
-            redirectToLogin();
-        }
-        
-        function redirectToLogin() {
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('userData');
-            window.location.href = '/login.html';
-        }
-    });
-
+        });
     </script>
 </body>
 </html>
