@@ -314,24 +314,60 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        // Form Validation
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            
-            if (password !== confirmPassword) {
-                alert('Passwords do not match!');
-                return;
-            }
-            
-            // Registration successful
-            alert('Registration successful! Redirecting to login...');
-            window.location.href = 'login.html';
+<script>
+// Registration endpoint
+router.post('/register', async (req, res) => {
+    try {
+        const { fullname, email, phone, password } = req.body;
+        
+        // Check if user already exists
+        const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: 'User with this email or phone already exists'
+            });
+        }
+        
+        // Create new user (password is hashed in User model pre-save hook)
+        const user = new User({
+            fullname,
+            email,
+            phone,
+            password,
+            isVerified: true, // Set to false if you have email verification
+            hasPaid: false   // User needs to complete payment
         });
-    </script>
+        
+        await user.save();
+        
+        // Create JWT token
+        const token = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+        
+        res.status(201).json({
+            success: true,
+            token,
+            user: {
+                id: user._id,
+                fullname: user.fullname,
+                email: user.email,
+                phone: user.phone,
+                isVerified: user.isVerified,
+                hasPaid: user.hasPaid
+            }
+        });
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error during registration'
+        });
+    }
+});</script>
 </body>
 </html>
