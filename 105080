@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head> <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, 
+initial-scale=1.0"> <title>About Us - Support Children in Africa</title> 
+<style> body { font-family: Arial, 
+sans-serif; margin: 0; padding: 0; 
+background-color: #f4f4f4; color: #333; }
+header { background: #2c3e50; color: white;
+ padding: 40px 20px; text-align: center; }
+h1 { margin: 0; font-size: 2.5em; }
+p { font-size: 1.2em; }
+main { display: flex; /* Use flexbox to align content */
+ flex-direction: column; /* Stack sections vertically */ padding: 20px; }
+section { padding: 30px 20px; background: white; margin:
+ 20px 0; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+h2 { color: #2c3e50; }
+.sidebar { width: 200px; /* Set width of the sidebar */
+ background: #2c3e50; /* Sidebar background color */ color: 
+white; padding: 20px; margin-top: 20px;
+ /* Space between sections and sidebar */ }
+.sidebar ul { list-style: none; /* Remove default list styles */
+ padding: 0; }
+.sidebar li { margin: 15px 0; /* Space between items */ }
+.sidebar a { color: white; /* Link color
+ */ text-decoration: none; /* Remove underline */ }
+.sidebar a:hover { color: #e74c3c; /* Change color on hover */ }
+footer { text-align: center; padding:
+ 20px; background: #2c3e50; color: white; }
+footer a { color: #e74c3c; text-decoration:
+ none; } </style> </head>
+<body>
+ <header> 
+<h1>About Us</h1>
+ <p>Empowering children in Africa, one life at a time.</p> </header>
+<main>
+ <section id="mission">
+ <h2>Our Mission</h2> <p>At RISE, we believe that every child deserves
+ a chance to thrive. Our mission is to provide essential support and resources
+ to underprivileged children in Africa, empowering them to break the cycle of
+ poverty and reach their full potential.</p> </section>
+<section id="who-we-are"> 
+<h2>Who We Are</h2> <p>Founded in 2022, 
+we are a passionate group of advocates, volunteers, and donors united by
+ a shared vision: a brighter future for children in Africa.
+ Our diverse team includes dedicated professionals
+ committed to making a lasting impact.</p> </section>
+<section id="what-we-do">
+ <h2>What We Do</h2> <ul>
+ <li><strong>Education:</strong>
+ Providing access to quality education and resources.</li> 
+<li><strong>Healthcare:</strong>
+ Offering essential medical services and health education.
+</li> <li><strong>Empowerment:</strong> Supporting children programs
+ that foster talents and skills in all aspects.</li> 
+</ul> </section>
+<nav class="sidebar"> <ul> 
+<li><a href="home.html">Home</a></li> <li><a href="donate.html">Donate</a></li>
+ <li><a href="about.html">About Us</a></li> 
+<li><a href="contact.html">Contact Us</a></li> </ul> </nav> </main>
+<footer>
+<p>Contact us: <a href="mailto:risechildren01@gmail.com">email</a></p>
+ <p>&copy; 2025 RISE. All rights reserved.</p> Psalms 109:9
+</footer> </body> </html>
