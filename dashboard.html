@@ -441,6 +441,48 @@
             window.location.href = 'login.html?error=session_expired';
         }
     }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+        // 1. Check for auth data
+        const token = localStorage.getItem('authToken');
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        if (!token || !userData.id) {
+            redirectToLogin();
+            return;
+        }
+        
+        try {
+            // 2. Verify with server
+            const response = await fetch('/api/users/dashboard', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'Session verification failed');
+            }
+            
+            // 3. Display dashboard content
+            document.getElementById('welcomeMessage').textContent = 
+                `Welcome back, ${data.user.email}`;
+                
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+            redirectToLogin();
+        }
+        
+        function redirectToLogin() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            window.location.href = '/login.html';
+        }
+    });
+
     </script>
 </body>
 </html>
