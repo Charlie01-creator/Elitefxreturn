@@ -313,6 +313,62 @@
         </div>
     </footer>
 <script>
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const submitBtn = document.querySelector('.btn-submit');
+        
+        // UI Loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+        
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                // Handle specific error cases
+                if (data.code === 'UNVERIFIED') {
+                    throw new Error('Account not verified. Please check your email.');
+                } else if (data.code === 'UNPAID') {
+                    // Redirect to payment page if not paid
+                    window.location.href = `/payment.html?email=${encodeURIComponent(email)}`;
+                    return;
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
+            }
+            
+            // Store authentication data
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('userData', JSON.stringify(data.user));
+            
+            // Redirect to dashboard
+            window.location.href = '/dashboard.html';
+            
+        } catch (error) {
+            // Show error message
+            const errorElement = document.getElementById('loginError');
+            errorElement.textContent = error.message;
+            errorElement.style.display = 'block';
+            
+        } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Login';
+        }
+    });
+
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
