@@ -312,7 +312,57 @@
             </div>
         </div>
     </footer>
-
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        try {
+            // Show loading state
+            const submitBtn = document.querySelector('.btn-submit');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+            
+            // Send login request to server
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                if (data.isVerified && data.hasPaid) {
+                    // Store the token in localStorage or cookies
+                    localStorage.setItem('authToken', data.token);
+                    // Redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    if (!data.isVerified) {
+                        alert('Account not verified. Please complete your registration first.');
+                    } else if (!data.hasPaid) {
+                        alert('Payment not completed. Please complete your payment to access your account.');
+                    }
+                }
+            } else {
+                alert(data.message || 'Login failed. Please check your credentials.');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('An error occurred during login. Please try again.');
+        } finally {
+            // Reset button state
+            const submitBtn = document.querySelector('.btn-submit');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Login';
+        }
+    });
+</script>
     <script>
         // Login Form Submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
