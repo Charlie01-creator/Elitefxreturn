@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | EliteFX Return</title>
+    <title>Login | EliteFX Return</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -105,12 +105,12 @@
             cursor: pointer;
         }
         
-        /* === Registration Form === */
-        .register-section {
+        /* === Login Form === */
+        .login-section {
             padding: 120px 0 80px;
         }
         
-        .register-card {
+        .login-card {
             background: white;
             max-width: 500px;
             margin: 0 auto;
@@ -119,7 +119,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
-        .register-card h2 {
+        .login-card h2 {
             color: var(--primary);
             margin-bottom: 30px;
             text-align: center;
@@ -148,6 +148,16 @@
             border-color: var(--accent);
         }
         
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .forgot-password a {
+            color: var(--accent);
+            font-size: 14px;
+        }
+        
         .btn-submit {
             width: 100%;
             background: var(--secondary);
@@ -159,23 +169,22 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 10px;
         }
         
         .btn-submit:hover {
             background: #e6c300;
         }
         
-        .login-link {
+        .register-link {
             text-align: center;
             margin-top: 20px;
         }
         
-        .login-link a {
+        .register-link a {
             color: var(--accent);
         }
         
-        /* Error and success messages */
+        /* Error message styling */
         .error-message {
             color: var(--error);
             background-color: #fdecea;
@@ -194,13 +203,6 @@
             margin-bottom: 20px;
             display: none;
             font-size: 14px;
-        }
-        
-        /* Password requirements */
-        .password-requirements {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
         }
         
         /* === Footer === */
@@ -256,7 +258,7 @@
                 display: block;
             }
             
-            .register-card {
+            .login-card {
                 padding: 30px 20px;
             }
         }
@@ -278,42 +280,29 @@
         </div>
     </nav>
 
-    <!-- Registration Form -->
-    <section class="register-section">
+    <!-- Login Form -->
+    <section class="login-section">
         <div class="container">
-            <div class="register-card">
-                <h2>Create Your Account</h2>
+            <div class="login-card">
+                <h2>Login to Your Account</h2>
                 <div id="errorMessage" class="error-message"></div>
                 <div id="successMessage" class="success-message"></div>
-                <form id="registerForm">
+                <form id="loginForm">
                     <div class="form-group">
-                        <label for="fullname">Full Name</label>
-                        <input type="text" id="fullname" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" required>
+                        <label for="email">Email or Phone</label>
+                        <input type="text" id="email" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" required 
-                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$">
-                        <div class="password-requirements">
-                            Password must contain: 12+ characters, uppercase, lowercase, number, and special character
-                        </div>
+                        <input type="password" id="password" required>
                     </div>
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" id="confirmPassword" required>
+                    <div class="forgot-password">
+                        <a href="forgot-password.html">Forgot Password?</a>
                     </div>
-                    <button type="submit" class="btn-submit">Register Now</button>
+                    <button type="submit" class="btn-submit">Login</button>
                 </form>
-                <div class="login-link">
-                    Already have an account? <a href="login.html">Login here</a>
+                <div class="register-link">
+                    Don't have an account? <a href="register.html">Register here</a>
                 </div>
             </div>
         </div>
@@ -348,17 +337,23 @@
             </div>
         </div>
     </footer>
+
     <!-- Keep all your existing head content -->
     <!-- Add this script at the end of the body -->
     <script>
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const fullname = document.getElementById('fullname').value;
             const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
             const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
             const errorElement = document.getElementById('errorMessage');
             const successElement = document.getElementById('successMessage');
             const submitBtn = document.querySelector('.btn-submit');
@@ -368,40 +363,17 @@
             successElement.style.display = 'none';
             
             // Validate inputs
-            if (!fullname || !email || !phone || !password || !confirmPassword) {
+            if (!email || !password) {
                 showError('Please fill in all fields');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showError('Passwords do not match');
-                return;
-            }
-            
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
-            if (!passwordRegex.test(password)) {
-                showError('Password must contain: 12+ characters, uppercase, lowercase, number, and special character');
-                return;
-            }
-            
-            const phoneRegex = /^\+?\d{10,15}$/;
-            if (!phoneRegex.test(phone)) {
-                showError('Please enter a valid phone number (e.g., +256700123456)');
-                return;
-            }
-            
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showError('Please enter a valid email address');
                 return;
             }
             
             // UI Loading state
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
             
             try {
-                const apiUrl = '/api/auth/register'; // Using relative path for production
+                const apiUrl = '/api/auth/login'; // Using relative path for production
                 
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -409,9 +381,7 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        fullname,
-                        email,
-                        phone,
+                        emailOrPhone: email,
                         password
                     })
                 });
@@ -419,7 +389,14 @@
                 const data = await response.json();
                 
                 if (!response.ok) {
-                    throw new Error(data.message || 'Registration failed. Please try again.');
+                    // Handle specific error cases
+                    if (data.code === 'ACCOUNT_LOCKED') {
+                        throw new Error(data.message);
+                    } else if (data.code === 'USER_NOT_FOUND') {
+                        throw new Error('Account not found. Please register first.');
+                    } else {
+                        throw new Error(data.message || 'Login failed. Please try again.');
+                    }
                 }
                 
                 // Store token and user data
@@ -427,20 +404,20 @@
                 localStorage.setItem('userData', JSON.stringify(data.user));
                 
                 // Show success message
-                successElement.textContent = 'Registration successful! Redirecting to dashboard...';
+                successElement.textContent = 'Login successful! Redirecting to dashboard...';
                 successElement.style.display = 'block';
                 
                 // Redirect to dashboard
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
-                }, 2000);
+                }, 1500);
                 
             } catch (error) {
-                console.error('Registration error:', error);
-                showError(error.message || 'Registration failed. Please try again or contact support.');
+                console.error('Login error:', error);
+                showError(error.message || 'Login failed. Please try again or contact support.');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Register Now';
+                submitBtn.textContent = 'Login';
             }
         });
         
@@ -451,5 +428,6 @@
             errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     </script>
+
     </body>
 </html>
