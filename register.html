@@ -415,17 +415,14 @@
                     password
                 })
             });
-            
-            const data = await response.json();
-            
+
+            // Check if the response is OK (status 200-299)
             if (!response.ok) {
-                // Handle specific error cases
-                if (data.message.includes('already exists')) {
-                    throw new Error('User with this email or phone already exists');
-                } else {
-                    throw new Error(data.message || 'Registration failed');
-                }
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Registration failed with status: ' + response.status);
             }
+
+            const data = await response.json();
             
             // Show success message
             successElement.textContent = 'Registration successful! Redirecting to login...';
@@ -438,7 +435,12 @@
             
         } catch (error) {
             console.error('Registration error:', error);
-            showError(error.message || 'An error occurred during registration. Please try again.');
+            // More specific error messages
+            if (error.message.includes('Failed to fetch')) {
+                showError('Could not connect to server. Please check your internet connection and try again.');
+            } else {
+                showError(error.message || 'An error occurred during registration. Please try again.');
+            }
         } finally {
             // Reset button state
             submitBtn.disabled = false;
