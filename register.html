@@ -14,6 +14,8 @@
             --accent: #008080;
             --dark: #1a1a2e;
             --light: #f8f9fa;
+            --error: #e74c3c;
+            --success: #2ecc71;
         }
         
         * {
@@ -173,6 +175,34 @@
             color: var(--accent);
         }
         
+        /* Error and success messages */
+        .error-message {
+            color: var(--error);
+            background-color: #fdecea;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .success-message {
+            color: var(--success);
+            background-color: #e8f5e9;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        /* Password requirements */
+        .password-requirements {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
         /* === Footer === */
         footer {
             background: var(--dark);
@@ -253,6 +283,8 @@
         <div class="container">
             <div class="register-card">
                 <h2>Create Your Account</h2>
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
                 <form id="registerForm">
                     <div class="form-group">
                         <label for="fullname">Full Name</label>
@@ -269,12 +301,14 @@
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" id="password" required 
-                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$"
-                               title="Must contain 12+ chars, uppercase, lowercase, number & special char">
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$">
+                        <div class="password-requirements">
+                            Password must contain: 12+ characters, uppercase, lowercase, number, and special character
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="confirm-password">Confirm Password</label>
-                        <input type="password" id="confirm-password" required>
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" required>
                     </div>
                     <button type="submit" class="btn-submit">Register Now</button>
                 </form>
@@ -314,60 +348,113 @@
             </div>
         </div>
     </footer>
-<script>
-// Registration endpoint
-router.post('/register', async (req, res) => {
-    try {
-        const { fullname, email, phone, password } = req.body;
-        
-        // Check if user already exists
-        const existingUser = await User.findOne({ $or: [{ email }, { phone }] });
-        if (existingUser) {
-            return res.status(400).json({
-                success: false,
-                message: 'User with this email or phone already exists'
-            });
-        }
-        
-        // Create new user (password is hashed in User model pre-save hook)
-        const user = new User({
-            fullname,
-            email,
-            phone,
-            password,
-            isVerified: true, // Set to false if you have email verification
-            hasPaid: false   // User needs to complete payment
-        });
-        
-        await user.save();
-        
-        // Create JWT token
-        const token = jwt.sign(
-            { userId: user._id },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-        
-        res.status(201).json({
-            success: true,
-            token,
-            user: {
-                id: user._id,
-                fullname: user.fullname,
-                email: user.email,
-                phone: user.phone,
-                isVerified: user.isVerified,
-                hasPaid: user.hasPaid
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorElement = document.getElementById('errorMessage');
+            const successElement = document.getElementById('successMessage');
+            const submitBtn = document.querySelector('.btn-submit');
+            
+            // Hide previous messages
+            errorElement.style.display = 'none';
+            successElement.style.display = 'none';
+            
+            // Validate inputs
+            if (!fullname || !email || !phone || !password || !confirmPassword) {
+                showError('Please fill in all fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showError('Passwords do not match');
+                return;
+            }
+            
+            // Validate password strength (though HTML pattern already does this)
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+            if (!passwordRegex.test(password)) {
+                showError('Password must contain: 12+ characters, uppercase, lowercase, number, and special character');
+                return;
+            }
+            
+            // Validate phone number format (basic validation)
+            const phoneRegex = /^\+?\d{10,15}$/;
+            if (!phoneRegex.test(phone)) {
+                showError('Please enter a valid phone number');
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address');
+                return;
+            }
+            
+            // UI Loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+            
+            try {
+                // Send registration data to your backend API
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fullname,
+                        email,
+                        phone,
+                        password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    // Handle specific error cases
+                    if (data.code === 'USER_EXISTS') {
+                        throw new Error('User with this email or phone already exists');
+                    } else {
+                        throw new Error(data.message || 'Registration failed');
+                    }
+                }
+                
+                // Show success message
+                successElement.textContent = 'Registration successful! Redirecting to login...';
+                successElement.style.display = 'block';
+                
+                // Redirect to login page after short delay
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                showError(error.message || 'An error occurred during registration. Please try again.');
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Register Now';
             }
         });
         
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error during registration'
-        });
-    }
-});</script>
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            // Scroll to error message
+            errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
 </body>
 </html>
