@@ -354,8 +354,7 @@
             
             // Validate inputs
             if (!email || !password) {
-                errorElement.textContent = 'Please fill in all fields';
-                errorElement.style.display = 'block';
+                showError('Please fill in all fields');
                 return;
             }
             
@@ -364,38 +363,49 @@
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
             
             try {
-                // Simulate API call (replace with actual API call in production)
-                // This is where you would connect to your backend
-                const response = await simulateLoginAPI(email, password);
+                // Send login request to your backend API
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        emailOrPhone: email,
+                        password 
+                    })
+                });
                 
-                if (response.success) {
-                    if (response.verified) {
-                        // Store user data in localStorage (in a real app, you'd use more secure methods)
-                        localStorage.setItem('authToken', response.token);
-                        localStorage.setItem('userData', JSON.stringify(response.user));
-                        
-                        // Show success message
-                        successElement.textContent = 'Login successful! Redirecting...';
-                        successElement.style.display = 'block';
-                        
-                        // Redirect to dashboard after short delay
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1500);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    // Handle specific error cases
+                    if (data.code === 'USER_NOT_FOUND') {
+                        throw new Error('Account not found. Please check your credentials or register.');
+                    } else if (data.code === 'UNVERIFIED') {
+                        throw new Error('Account not verified. Please check your email for verification instructions.');
+                    } else if (data.code === 'INVALID_CREDENTIALS') {
+                        throw new Error('Invalid email/phone or password');
                     } else {
-                        // Account not verified
-                        errorElement.textContent = 'Account not verified. Please check your email for verification instructions.';
-                        errorElement.style.display = 'block';
+                        throw new Error(data.message || 'Login failed');
                     }
-                } else {
-                    // Show error message from server
-                    errorElement.textContent = response.message || 'Login failed. Please check your credentials.';
-                    errorElement.style.display = 'block';
                 }
+                
+                // Store authentication data
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('userData', JSON.stringify(data.user));
+                
+                // Show success message
+                successElement.textContent = 'Login successful! Redirecting to dashboard...';
+                successElement.style.display = 'block';
+                
+                // Redirect to dashboard after short delay
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                
             } catch (error) {
                 console.error('Login error:', error);
-                errorElement.textContent = 'An error occurred during login. Please try again.';
-                errorElement.style.display = 'block';
+                showError(error.message || 'An error occurred during login. Please try again.');
             } finally {
                 // Reset button state
                 submitBtn.disabled = false;
@@ -403,75 +413,13 @@
             }
         });
         
-        // Simulated API function - replace with actual fetch() to your backend
-        function simulateLoginAPI(email, password) {
-            return new Promise((resolve) => {
-                // Simulate network delay
-                setTimeout(() => {
-                    // This is mock data - in a real app, you would:
-                    // 1. Send a POST request to your backend API
-                    // 2. Your backend would verify credentials against database
-                    // 3. Return appropriate response
-                    
-                    // Mock users database (in real app, this would be on your server)
-                    const mockUsers = [
-                        {
-                            email: 'user@example.com',
-                            phone: '256700123456',
-                            password: 'password123', // In real app, passwords should be hashed
-                            verified: true,
-                            name: 'John Doe',
-                            accountBalance: 1500.00,
-                            lastLogin: new Date()
-                        },
-                        {
-                            email: 'unverified@example.com',
-                            phone: '256700654321',
-                            password: 'password123',
-                            verified: false,
-                            name: 'Jane Smith'
-                        }
-                    ];
-                    
-                    // Find user by email or phone
-                    const user = mockUsers.find(u => 
-                        u.email === email || u.phone === email
-                    );
-                    
-                    if (!user) {
-                        resolve({
-                            success: false,
-                            message: 'Account not found. Please check your email/phone or register.'
-                        });
-                        return;
-                    }
-                    
-                    // Check password (in real app, this would compare hashed passwords)
-                    if (user.password !== password) {
-                        resolve({
-                            success: false,
-                            message: 'Incorrect password. Please try again.'
-                        });
-                        return;
-                    }
-                    
-                    // Successful login
-                    resolve({
-                        success: true,
-                        verified: user.verified,
-                        message: 'Login successful',
-                        token: 'mock-auth-token-12345', // In real app, this would be a JWT
-                        user: {
-                            id: 123,
-                            name: user.name,
-                            email: user.email,
-                            phone: user.phone,
-                            balance: user.accountBalance || 0,
-                            lastLogin: user.lastLogin
-                        }
-                    });
-                }, 800); // Simulate network delay
-            });
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            // Scroll to error message
+            errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         
         // Check if user is already logged in
