@@ -348,113 +348,112 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const fullname = document.getElementById('fullname').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const errorElement = document.getElementById('errorMessage');
-            const successElement = document.getElementById('successMessage');
-            const submitBtn = document.querySelector('.btn-submit');
-            
-            // Hide previous messages
-            errorElement.style.display = 'none';
-            successElement.style.display = 'none';
-            
-            // Validate inputs
-            if (!fullname || !email || !phone || !password || !confirmPassword) {
-                showError('Please fill in all fields');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showError('Passwords do not match');
-                return;
-            }
-            
-            // Validate password strength (though HTML pattern already does this)
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
-            if (!passwordRegex.test(password)) {
-                showError('Password must contain: 12+ characters, uppercase, lowercase, number, and special character');
-                return;
-            }
-            
-            // Validate phone number format (basic validation)
-            const phoneRegex = /^\+?\d{10,15}$/;
-            if (!phoneRegex.test(phone)) {
-                showError('Please enter a valid phone number');
-                return;
-            }
-            
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showError('Please enter a valid email address');
-                return;
-            }
-            
-            // UI Loading state
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
-            
-            try {
-                // Send registration data to your backend API
-                const response = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        fullname,
-                        email,
-                        phone,
-                        password
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    // Handle specific error cases
-                    if (data.code === 'USER_EXISTS') {
-                        throw new Error('User with this email or phone already exists');
-                    } else {
-                        throw new Error(data.message || 'Registration failed');
-                    }
-                }
-                
-                // Show success message
-                successElement.textContent = 'Registration successful! Redirecting to login...';
-                successElement.style.display = 'block';
-                
-                // Redirect to login page after short delay
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Registration error:', error);
-                showError(error.message || 'An error occurred during registration. Please try again.');
-            } finally {
-                // Reset button state
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Register Now';
-            }
-        });
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        function showError(message) {
-            const errorElement = document.getElementById('errorMessage');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            
-            // Scroll to error message
-            errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const fullname = document.getElementById('fullname').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const errorElement = document.getElementById('errorMessage');
+        const successElement = document.getElementById('successMessage');
+        const submitBtn = document.querySelector('.btn-submit');
+        
+        // Hide previous messages
+        errorElement.style.display = 'none';
+        successElement.style.display = 'none';
+        
+        // Validate inputs
+        if (!fullname || !email || !phone || !password || !confirmPassword) {
+            showError('Please fill in all fields');
+            return;
         }
-    </script>
-</body>
+        
+        if (password !== confirmPassword) {
+            showError('Passwords do not match');
+            return;
+        }
+        
+        // Validate password strength
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+        if (!passwordRegex.test(password)) {
+            showError('Password must contain: 12+ characters, uppercase, lowercase, number, and special character');
+            return;
+        }
+        
+        // Validate phone number format
+        const phoneRegex = /^\+?\d{10,15}$/;
+        if (!phoneRegex.test(phone)) {
+            showError('Please enter a valid phone number');
+            return;
+        }
+        
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showError('Please enter a valid email address');
+            return;
+        }
+        
+        // UI Loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+        
+        try {
+            // Send registration data to backend API
+            const response = await fetch('http://localhost:5000/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fullname,
+                    email,
+                    phone,
+                    password
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) {
+                // Handle specific error cases
+                if (data.message.includes('already exists')) {
+                    throw new Error('User with this email or phone already exists');
+                } else {
+                    throw new Error(data.message || 'Registration failed');
+                }
+            }
+            
+            // Show success message
+            successElement.textContent = 'Registration successful! Redirecting to login...';
+            successElement.style.display = 'block';
+            
+            // Redirect to login page after short delay
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+            
+        } catch (error) {
+            console.error('Registration error:', error);
+            showError(error.message || 'An error occurred during registration. Please try again.');
+        } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Register Now';
+        }
+    });
+    
+    function showError(message) {
+        const errorElement = document.getElementById('errorMessage');
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+        
+        // Scroll to error message
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+</script>
+    </body>
 </html>
