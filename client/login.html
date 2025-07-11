@@ -337,98 +337,97 @@
             </div>
         </div>
     </footer>
-<script>
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const errorElement = document.getElementById('errorMessage');
-        const successElement = document.getElementById('successMessage');
-        const submitBtn = document.querySelector('.btn-submit');
-        
-        // Hide previous messages
-        errorElement.style.display = 'none';
-        successElement.style.display = 'none';
-        
-        // Validate inputs
-        if (!email || !password) {
-            showError('Please fill in all fields');
-            return;
-        }
-        
-        // UI Loading state
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
-        
-        try {
-            // Send login request to backend API
-            const response = await fetch('http://localhost:5000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                    emailOrPhone: email,
-                    password 
-                })
-            });
+
+    <!-- Keep all your existing head content -->
+    <!-- Add this script at the end of the body -->
+    <script>
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            const data = await response.json();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('errorMessage');
+            const successElement = document.getElementById('successMessage');
+            const submitBtn = document.querySelector('.btn-submit');
             
-            if (!response.ok) {
-                // Handle specific error cases
-                if (data.code === 'USER_NOT_FOUND') {
-                    throw new Error('Account not found. Please check your credentials or register.');
-                } else if (data.code === 'UNVERIFIED') {
-                    throw new Error('Account not verified. Please check your email for verification instructions.');
-                } else if (data.code === 'INVALID_CREDENTIALS') {
-                    throw new Error('Invalid email/phone or password');
-                } else {
-                    throw new Error(data.message || 'Login failed');
-                }
+            // Clear previous messages
+            errorElement.style.display = 'none';
+            successElement.style.display = 'none';
+            
+            // Validate inputs
+            if (!email || !password) {
+                showError('Please fill in all fields');
+                return;
             }
             
-            // Store authentication data
-            localStorage.setItem('authToken', data.token);
-            localStorage.setItem('userData', JSON.stringify(data.user));
+            // UI Loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
             
-            // Show success message
-            successElement.textContent = 'Login successful! Redirecting to dashboard...';
-            successElement.style.display = 'block';
-            
-            // Redirect to dashboard after short delay
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
-            
-        } catch (error) {
-            console.error('Login error:', error);
-            showError(error.message || 'An error occurred during login. Please try again.');
-        } finally {
-            // Reset button state
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Login';
-        }
-    });
-    
-    function showError(message) {
-        const errorElement = document.getElementById('errorMessage');
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
+            try {
+                const apiUrl = '/api/auth/login'; // Using relative path for production
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        emailOrPhone: email,
+                        password
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    // Handle specific error cases
+                    if (data.code === 'ACCOUNT_LOCKED') {
+                        throw new Error(data.message);
+                    } else if (data.code === 'USER_NOT_FOUND') {
+                        throw new Error('Account not found. Please register first.');
+                    } else {
+                        throw new Error(data.message || 'Login failed. Please try again.');
+                    }
+                }
+                
+                // Store token and user data
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('userData', JSON.stringify(data.user));
+                
+                // Show success message
+                successElement.textContent = 'Login successful! Redirecting to dashboard...';
+                successElement.style.display = 'block';
+                
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showError(error.message || 'Login failed. Please try again or contact support.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
+            }
+        });
         
-        // Scroll to error message
-        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    
-    // Check if user is already logged in
-    document.addEventListener('DOMContentLoaded', function() {
-        const authToken = localStorage.getItem('authToken');
-        if (authToken) {
-            // User is already logged in, redirect to dashboard
-            window.location.href = 'dashboard.html';
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-    });
-</script>
+    </script>
+
     </body>
 </html>
