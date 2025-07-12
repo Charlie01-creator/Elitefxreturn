@@ -1,76 +1,42 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-const router = express.Router();
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  // Get form values
+  const formData = {
+    fullname: document.getElementById('fullname').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    password: document.getElementById('password').value
+  };
 
-// Login endpoint
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+  // Validate all fields are filled
+  if (!formData.phone) { // Phone was empty in your screenshot
+    showError('Phone number is required');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await response.json();
     
-    try {
-        // 1. Find user
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid credentials'
-            });
-        }
-
-        // 2. Verify password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid credentials'
-            });
-        }
-
-        // 3. Check verification status
-        if (!user.isVerified) {
-            return res.status(403).json({
-                success: false,
-                code: 'UNVERIFIED',
-                message: 'Please complete your registration verification'
-            });
-        }
-
-        // 4. Check payment status
-        if (!user.hasPaid) {
-            return res.status(403).json({
-                success: false,
-                code: 'UNPAID',
-                message: 'Please complete your payment to access the dashboard'
-            });
-        }
-
-        // 5. Create JWT token
-        const token = jwt.sign(
-            { userId: user._id },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-
-        // 6. Successful response
-        res.json({
-            success: true,
-            token,
-            user: {
-                id: user._id,
-                email: user.email,
-                isVerified: user.isVerified,
-                hasPaid: user.hasPaid
-            }
-        });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error during authentication'
-        });
-    }
+    if (!response.ok) throw new Error(data.message || 'Registration failed');
+    
+    // Registration success
+    localStorage.setItem('authToken', data.token);
+    window.location.href = '/dashboard.html';
+    
+  } catch (error) {
+    showError(error.message);
+  }
 });
 
-module.exports = router;
+function showError(message) {
+  const errorElement = document.getElementById('errorMessage');
+  errorElement.textContent = message;
+  errorElement.style.display = 'block';
+}
