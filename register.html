@@ -336,6 +336,96 @@
                 document.getElementById('errorMessage').style.display = 'block';
             }
         });
+        
+// Updated Registration Code with Email Verification
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const fullName = document.getElementById('fullName').value;
+  const phone = document.getElementById('phone').value;
+  const errorElement = document.getElementById('errorMessage');
+  
+  // Clear previous errors
+  errorElement.innerHTML = '';
+  errorElement.style.display = 'none';
+
+  try {
+    // 1. Check if email exists in Auth system
+    const methods = await auth.fetchSignInMethodsForEmail(email);
+    
+    if (methods.length > 0) {
+      // Email exists - provide recovery options
+      let errorMsg = 'This email is already registered. ';
+      
+      if (methods.includes('password')) {
+        errorMsg += `<a href="login.html" style="color:var(--accent);">Login instead</a> or `;
+        errorMsg += `<a href="forgot-password.html" style="color:var(--accent);">reset password</a>.`;
+      } else {
+        errorMsg += 'Please use a different email.';
+      }
+      
+      errorElement.innerHTML = errorMsg;
+      errorElement.style.display = 'block';
+      return;
+    }
+
+    // 2. Check Firestore for orphaned records (optional)
+    const snapshot = await db.collection('users')
+      .where('email', '==', email)
+      .limit(1)
+      .get();
+
+    if (!snapshot.empty) {
+      errorElement.innerHTML = 'Account data exists but authentication is missing. <a href="support.html" style="color:var(--accent);">Contact support</a>.';
+      errorElement.style.display = 'block';
+      return;
+    }
+
+    // 3. Create new account
+    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+    
+    // 4. Update profile and save data
+    await Promise.all([
+      userCredential.user.updateProfile({ displayName: fullName }),
+      db.collection('users').doc(userCredential.user.uid).set({
+        email: email,
+        fullName: fullName,
+        phone: phone,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        status: 'active'
+      }),
+      userCredential.user.sendEmailVerification()
+    ]);
+
+    // Success
+    alert(`Verification email sent to ${email}! Please check your inbox.`);
+    window.location.href = 'verify-email.html';
+    
+  } catch (error) {
+    let errorMessage = 'Registration failed: ';
+    
+    switch(error.code) {
+      case 'auth/invalid-email':
+        errorMessage += 'Invalid email format';
+        break;
+      case 'auth/weak-password':
+        errorMessage += 'Password must be 6+ characters';
+        break;
+      case 'auth/operation-not-allowed':
+        errorMessage += 'Email/password accounts are disabled';
+        break;
+      default:
+        errorMessage += error.message;
+    }
+    
+    errorElement.textContent = errorMessage;
+    errorElement.style.display = 'block';
+    console.error('Registration error:', error);
+  }
+});
+
     </script>
 </body>
 </html>
