@@ -492,5 +492,31 @@
             }
         });
     </script>
-</body>
+    <!-- ... rest of your HTML ... -->
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyBIAtG3aDSqN7iLX-HtoMZopsPT4LS",
+        authDomain: "elitefxreturn.firebaseapp.com",
+        projectId: "elitefxreturn",
+        storageBucket: "elitefxreturn.appspot.com",
+        messagingSenderId: "333913364691",
+        appId: "1:333913364691:web:abc123def456" // Replace with your actual appId
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+    </script>
+
+    <!-- Your custom JavaScript -->
+    <script src="app.js"></script>
+  </body>
 </html>
