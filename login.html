@@ -1,347 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | EliteFX Return</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- [Keep all your existing head content] -->
     <style>
-        /* [Keep the same CSS styles from register.html] */
-        /* Add this additional style for the password toggle */
-          
-        /* === Global Styles === */
-        :root {
-            --primary: #002366;
-            --secondary: #FFD700;
-            --accent: #008080;
-            --dark: #1a1a2e;
-            --light: #f8f9fa;
-            --error: #e74c3c;
-            --success: #2ecc71;
-        }
+        /* [Keep all your existing CSS] */
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        body {
-            background-color: #f5f7fa;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* === Navigation === */
-        .navbar {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 15px 0;
+        /* Add loading indicator */
+        .loading-overlay {
+            display: none;
             position: fixed;
-            width: 100%;
             top: 0;
-            z-index: 1000;
-        }
-        
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
             align-items: center;
         }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--accent);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
         }
-        
-        .logo span {
-            color: var(--secondary);
-        }
-        
-        .nav-links {
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-links a {
-            margin-left: 25px;
-            font-weight: 500;
-            color: var(--dark);
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-        
-        .btn-login {
-            color: var(--primary);
-            margin-right: 15px;
-        }
-        
-        .btn-register {
-            background-color: var(--primary);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        
-        .btn-register:hover {
-            background-color: #001a4d;
-        }
-        
-        .hamburger {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--primary);
-            cursor: pointer;
-        }
-        
-        /* === Login Form === */
-        .login-section {
-            padding: 120px 0 80px;
-        }
-        
-        .login-card {
-            background: white;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .login-card h2 {
-            color: var(--primary);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        
-        .forgot-password {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        
-        .forgot-password a {
-            color: var(--accent);
-            font-size: 14px;
-        }
-        
-        .btn-submit {
-            width: 100%;
-            background: var(--secondary);
-            color: var(--primary);
-            border: none;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-submit:hover {
-            background: #e6c300;
-        }
-        
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .register-link a {
-            color: var(--accent);
-        }
-        
-        /* Error message styling */
-        .error-message {
-            color: var(--error);
-            background-color: #fdecea;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-            font-size: 14px;
-        }
-        
-        .success-message {
-            color: var(--success);
-            background-color: #e8f5e9;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-            font-size: 14px;
-        }
-        
-        /* === Footer === */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-        
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-        }
-        
-        .footer-col h3 {
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-        }
-        
-        .footer-col ul {
-            list-style: none;
-        }
-        
-        .footer-col ul li {
-            margin-bottom: 10px;
-        }
-        
-        .footer-col ul li a {
-            color: #ccc;
-            transition: color 0.3s;
-        }
-        
-        .footer-col ul li a:hover {
-            color: var(--secondary);
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* === Responsive === */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .hamburger {
-                display: block;
-            }
-            
-            .login-card {
-                padding: 30px 20px;
-            }
-        } 
-        .password-container {
-            position: relative;
-        }
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: var(--accent);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation (same as register.html) -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="index.html" class="logo">EliteFX<span>Return</span></a>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="login.html" class="btn-login">Login</a>
-                <a href="register.html" class="btn-register">Register</a>
-            </div>
-        </div>
-    </nav>
+    <!-- [Keep all your existing HTML structure] -->
 
-    <!-- Login Form -->
-    <section class="login-section">
-        <div class="container">
-            <div class="login-card">
-                <h2>Login to Your Account</h2>
-                <div id="errorMessage" class="error-message"></div>
-                <div id="successMessage" class="success-message"></div>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" required>
-                    </div>
-                    <div class="form-group password-container">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" required>
-                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
-                    </div>
-                    <div class="forgot-password">
-                        <a href="#" id="forgotPasswordLink">Forgot Password?</a>
-                    </div>
-                    <button type="submit" class="btn-submit">Login</button>
-                </form>
-                <div class="register-link">
-                    Don't have an account? <a href="register.html">Register here</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer (same as register.html) -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3>EliteFX Return</h3>
-                    <p>Professional forex investment platform</p>
-                </div>
-                <!-- [Other footer columns] -->
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 EliteFX Return. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Add loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
 
     <script>
-        // Firebase Configuration (same as register.html)
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBlAtG3aDSqN7iLX-HtoMZopsPT4LsMni0",
             authDomain: "elitefxreturn.firebaseapp.com",
@@ -354,6 +58,7 @@
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const loadingOverlay = document.getElementById('loadingOverlay');
 
         // Password visibility toggle
         document.getElementById('togglePassword').addEventListener('click', function() {
@@ -373,42 +78,44 @@
             const successElement = document.getElementById('successMessage');
             const submitBtn = document.querySelector('.btn-submit');
             
-            // Clear messages
+            // Clear messages and show loading
             errorElement.style.display = 'none';
             successElement.style.display = 'none';
-            
-            // Validate inputs
-            if (!email || !password) {
-                showError('Please fill in all fields');
-                return;
-            }
-            
-            // Set loading state
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            loadingOverlay.style.display = 'flex';
             
             try {
                 // Firebase login
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 
-                // Check if email is verified
-                if (!userCredential.user.emailVerified) {
+                // Wait for auth state to update
+                await new Promise(resolve => {
+                    const unsubscribe = auth.onAuthStateChanged(user => {
+                        unsubscribe();
+                        resolve();
+                    });
+                });
+
+                // Check verification status directly from user object
+                if (userCredential.user.emailVerified) {
+                    window.location.href = 'dashboard.html';
+                } else {
                     await auth.signOut();
-                    showError('Please verify your email first. Check your inbox.');
-                    return;
+                    showError('Please verify your email first. Check your inbox or <a href="#" id="resendVerification">resend verification email</a>.');
+                    
+                    // Add resend verification handler
+                    document.getElementById('resendVerification').addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        try {
+                            await userCredential.user.sendEmailVerification();
+                            showSuccess('Verification email resent!');
+                        } catch (error) {
+                            showError('Error resending verification: ' + error.message);
+                        }
+                    });
                 }
                 
-                // Login successful
-                successElement.textContent = 'Login successful! Redirecting...';
-                successElement.style.display = 'block';
-                
-                // Redirect to dashboard after 1.5 seconds
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
-                
             } catch (error) {
-                // Handle errors
+                console.error("Login error:", error);
                 let errorMessage = 'Login failed. Please try again.';
                 
                 switch(error.code) {
@@ -419,7 +126,7 @@
                         errorMessage = 'Incorrect password.';
                         break;
                     case 'auth/too-many-requests':
-                        errorMessage = 'Account temporarily locked due to too many attempts.';
+                        errorMessage = 'Account temporarily locked. Try again later or reset password.';
                         break;
                     case 'auth/user-disabled':
                         errorMessage = 'This account has been disabled.';
@@ -428,7 +135,7 @@
                 
                 showError(errorMessage);
             } finally {
-                // Reset button state
+                loadingOverlay.style.display = 'none';
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Login';
             }
@@ -437,39 +144,42 @@
         // Password Reset Handler
         document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
             e.preventDefault();
-            const email = prompt('Please enter your email address:');
+            const email = document.getElementById('email').value || prompt('Enter your email:');
             
             if (email) {
                 try {
                     await auth.sendPasswordResetEmail(email);
-                    alert('Password reset email sent! Check your inbox.');
+                    showSuccess('Password reset email sent to ' + email);
                 } catch (error) {
-                    alert('Error: ' + error.message);
+                    showError('Error: ' + error.message);
                 }
             }
         });
 
-        // Helper function to show errors
+        // Helper functions
         function showError(message) {
             const errorElement = document.getElementById('errorMessage');
-            errorElement.textContent = message;
+            errorElement.innerHTML = message;
             errorElement.style.display = 'block';
             errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+        
+        function showSuccess(message) {
+            const successElement = document.getElementById('successMessage');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            successElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
 
-        // Check if user is already logged in
+        // Check initial auth state (less aggressive)
         auth.onAuthStateChanged((user) => {
-            if (user && user.emailVerified) {
-                window.location.href = 'dashboard.html';
+            if (user && user.emailVerified && window.location.pathname.endsWith('login.html')) {
+                // Small delay to allow form submission to complete
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 500);
             }
         });
-       // Add to your error handling:
-if (error.code === 'auth/email-already-in-use') {
-  const methods = await auth.fetchSignInMethodsForEmail(email);
-  if (methods.includes('google.com')) {
-    showError('This email is registered with Google. <a href="login.html">Login with Google</a>');
-  }
-} 
     </script>
 </body>
 </html>
