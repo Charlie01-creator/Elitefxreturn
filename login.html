@@ -463,6 +463,13 @@
                 window.location.href = 'dashboard.html';
             }
         });
+       // Add to your error handling:
+if (error.code === 'auth/email-already-in-use') {
+  const methods = await auth.fetchSignInMethodsForEmail(email);
+  if (methods.includes('google.com')) {
+    showError('This email is registered with Google. <a href="login.html">Login with Google</a>');
+  }
+} 
     </script>
 </body>
 </html>
