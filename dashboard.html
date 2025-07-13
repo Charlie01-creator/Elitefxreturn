@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobile Dashboard | EliteFX Return</title>
+    <title>Dashboard | EliteFX Return</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -13,6 +13,8 @@
             --accent: #008080;
             --dark: #1a1a2e;
             --light: #f8f9fa;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
         }
         
         * {
@@ -20,11 +22,17 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         body {
             background-color: #f5f7fa;
             padding-bottom: 70px;
+        }
+        
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: white;
         }
         
         .container {
@@ -39,6 +47,14 @@
             text-align: center;
             font-size: 1.2rem;
             font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-welcome {
+            font-size: 0.9rem;
+            font-weight: normal;
         }
         
         /* Notification Banner */
@@ -49,6 +65,36 @@
             border-radius: 8px;
             font-size: 0.9rem;
             border-left: 4px solid var(--accent);
+        }
+        
+        body.dark-mode .notification-banner {
+            background-color: rgba(0, 131, 143, 0.2);
+            color: white;
+        }
+        
+        /* Account Summary */
+        .account-summary {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        body.dark-mode .account-summary {
+            background: var(--dark-card);
+            color: white;
+        }
+        
+        .balance {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        body.dark-mode .balance {
+            color: var(--secondary);
         }
         
         /* Main Navigation */
@@ -68,6 +114,11 @@
             font-size: 0.8rem;
         }
         
+        body.dark-mode .nav-item {
+            background: var(--dark-card);
+            color: white;
+        }
+        
         .nav-item i {
             display: block;
             font-size: 1.2rem;
@@ -75,12 +126,8 @@
             color: var(--primary);
         }
         
-        /* Secondary Navigation */
-        .secondary-nav {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 15px 0;
+        body.dark-mode .nav-item i {
+            color: var(--secondary);
         }
         
         /* Bottom Navigation */
@@ -97,6 +144,10 @@
             z-index: 1000;
         }
         
+        body.dark-mode .bottom-nav {
+            background: var(--dark-card);
+        }
+        
         .bottom-nav-item {
             text-align: center;
             font-size: 0.7rem;
@@ -109,6 +160,10 @@
             color: var(--primary);
         }
         
+        body.dark-mode .bottom-nav-item i {
+            color: var(--secondary);
+        }
+        
         .active {
             color: var(--accent);
         }
@@ -116,15 +171,101 @@
         .active i {
             color: var(--accent);
         }
+        
+        .logout-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 70px;
+            right: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Session Timeout Warning */
+        .timeout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .timeout-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        body.dark-mode .timeout-content {
+            background: var(--dark-card);
+            color: white;
+        }
+        
+        /* Notification System */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--error);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
-    <!-- App Header -->
+    <!-- App Header with User Info -->
     <div class="app-header">
-        EliteFX Return
+        <span>EliteFX Return</span>
+        <div class="user-welcome">
+            <span id="userGreeting">Welcome</span>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
     </div>
     
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+    
     <div class="container">
+        <!-- Account Summary -->
+        <div class="account-summary">
+            <div>Account Balance</div>
+            <div class="balance" id="accountBalance">Loading...</div>
+            <div>Available for withdrawal</div>
+        </div>
+        
         <!-- Notification Banner -->
         <div class="notification-banner">
             Congratulations to member ****1287 for recommending J3 and receiving a referral bonus of 93600 UGX
@@ -139,6 +280,7 @@
             <div class="nav-item">
                 <i class="fas fa-tasks"></i>
                 Task
+                <div class="notification-badge" id="taskBadge">3</div>
             </div>
             <div class="nav-item">
                 <i class="fas fa-money-bill-wave"></i>
@@ -151,7 +293,7 @@
         </div>
         
         <!-- Secondary Navigation -->
-        <div class="main-nav secondary-nav">
+        <div class="main-nav">
             <div class="nav-item">
                 <i class="fas fa-piggy-bank"></i>
                 Savings
@@ -164,19 +306,7 @@
                 <i class="fas fa-book"></i>
                 Helpbook
             </div>
-        </div>
-        
-        <!-- Additional Navigation -->
-        <div class="main-nav secondary-nav">
-            <div class="nav-item">
-                <i class="fas fa-users"></i>
-                Friends
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-envelope"></i>
-                Center
-            </div>
-            <div class="nav-item">
+            <div class="nav-item" id="settingsBtn">
                 <i class="fas fa-cog"></i>
                 Settings
             </div>
@@ -202,9 +332,226 @@
             My
         </div>
     </div>
+    
+    <!-- Session Timeout Modal -->
+    <div class="timeout-modal" id="timeoutModal">
+        <div class="timeout-content">
+            <h3>Session About to Expire</h3>
+            <p>You will be logged out in <span id="timeoutCounter">60</span> seconds due to inactivity.</p>
+            <button id="stayLoggedIn" style="margin-top: 15px; padding: 8px 15px; background: var(--accent); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Stay Logged In
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // Simple navigation active state
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlAtG3aDSqN7iLX-HtoMZopsPT4LsMni0",
+            authDomain: "elitefxreturn.firebaseapp.com",
+            projectId: "elitefxreturn",
+            storageBucket: "elitefxreturn.firebasestorage.app",
+            messagingSenderId: "333913364691",
+            appId: "1:333913364691:web:82566d278552b6cdec1c26"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ========================
+        // Authentication Management
+        // ========================
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                // Not logged in - redirect to login
+                window.location.href = 'login.html';
+            } else if (!user.emailVerified) {
+                // Logged in but not verified - redirect to verification
+                window.location.href = 'verify-email.html';
+            } else {
+                // User is properly authenticated
+                document.getElementById('userGreeting').textContent = `Hi, ${user.displayName || user.email.split('@')[0]}!`;
+                loadUserData(user.uid);
+                startInactivityTimer();
+            }
+        });
+
+        // =================
+        // User Data Loading
+        // =================
+        function loadUserData(userId) {
+            db.collection('users').doc(userId).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        // Update balance
+                        document.getElementById('accountBalance').textContent = 
+                            userData.balance ? `UGX ${userData.balance.toLocaleString()}` : 'UGX 0';
+                        
+                        // Check for dark mode preference
+                        if (userData.darkMode) {
+                            document.body.classList.add('dark-mode');
+                            document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error("Error loading user data:", error);
+                });
+        }
+
+        // ==============
+        // Logout Handler
+        // ==============
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            auth.signOut()
+                .then(() => {
+                    window.location.href = 'login.html';
+                })
+                .catch(error => {
+                    console.error("Logout error:", error);
+                    alert("Logout failed: " + error.message);
+                });
+        });
+
+        // =====================
+        // Session Timeout Logic
+        // =====================
+        let inactivityTimer;
+        let timeoutWarningTimer;
+        const TIMEOUT_DURATION = 30 * 60 * 1000; // 30 minutes
+        const WARNING_DURATION = 60; // Show warning 1 minute before logout
+
+        function startInactivityTimer() {
+            resetInactivityTimer();
+            
+            // Set up event listeners
+            document.addEventListener('mousemove', resetInactivityTimer);
+            document.addEventListener('keypress', resetInactivityTimer);
+            document.addEventListener('click', resetInactivityTimer);
+            document.addEventListener('scroll', resetInactivityTimer);
+        }
+
+        function resetInactivityTimer() {
+            // Clear existing timers
+            clearTimeout(inactivityTimer);
+            clearTimeout(timeoutWarningTimer);
+            document.getElementById('timeoutModal').style.display = 'none';
+            
+            // Set new timer
+            inactivityTimer = setTimeout(() => {
+                // Show warning 1 minute before logout
+                showTimeoutWarning();
+                
+                // Set actual logout timer
+                timeoutWarningTimer = setTimeout(() => {
+                    auth.signOut().then(() => {
+                        window.location.href = 'login.html?reason=timeout';
+                    });
+                }, WARNING_DURATION * 1000);
+            }, TIMEOUT_DURATION - (WARNING_DURATION * 1000));
+        }
+
+        function showTimeoutWarning() {
+            const modal = document.getElementById('timeoutModal');
+            const counter = document.getElementById('timeoutCounter');
+            modal.style.display = 'flex';
+            
+            let seconds = WARNING_DURATION;
+            const countdown = setInterval(() => {
+                seconds--;
+                counter.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdown);
+                }
+            }, 1000);
+            
+            document.getElementById('stayLoggedIn').addEventListener('click', () => {
+                clearInterval(countdown);
+                modal.style.display = 'none';
+                resetInactivityTimer();
+            });
+        }
+
+        // ================
+        // Dark Mode Toggle
+        // ================
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            const body = document.body;
+            const toggleBtn = document.getElementById('darkModeToggle');
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+                saveUserPreference('darkMode', false);
+            } else {
+                body.classList.add('dark-mode');
+                toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+                saveUserPreference('darkMode', true);
+            }
+        });
+
+        function saveUserPreference(key, value) {
+            const user = auth.currentUser;
+            if (user) {
+                db.collection('users').doc(user.uid).update({
+                    [key]: value
+                }).catch(error => {
+                    console.error("Error saving preference:", error);
+                });
+            }
+        }
+
+        // ===================
+        // Password Management
+        // ===================
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            const newPassword = prompt("Enter new password (min 8 characters):");
+            if (newPassword && newPassword.length >= 8) {
+                auth.currentUser.updatePassword(newPassword)
+                    .then(() => {
+                        alert("Password updated successfully!");
+                    })
+                    .catch(error => {
+                        if (error.code === 'auth/requires-recent-login') {
+                            alert("For security, please reauthenticate before changing password.");
+                            reauthenticateAndChangePassword(newPassword);
+                        } else {
+                            alert("Error: " + error.message);
+                        }
+                    });
+            } else if (newPassword) {
+                alert("Password must be at least 8 characters long");
+            }
+        });
+
+        function reauthenticateAndChangePassword(newPassword) {
+            const user = auth.currentUser;
+            const credential = firebase.auth.EmailAuthProvider.credential(
+                user.email,
+                prompt("Please enter your current password to continue:")
+            );
+            
+            user.reauthenticateWithCredential(credential)
+                .then(() => {
+                    user.updatePassword(newPassword)
+                        .then(() => alert("Password updated successfully!"))
+                        .catch(error => alert("Error: " + error.message));
+                })
+                .catch(error => alert("Authentication failed: " + error.message));
+        }
+
+        // =====================
+        // Navigation Management
+        // =====================
         document.querySelectorAll('.bottom-nav-item').forEach(item => {
             item.addEventListener('click', function() {
                 document.querySelectorAll('.bottom-nav-item').forEach(i => {
@@ -212,16 +559,6 @@
                 });
                 this.classList.add('active');
             });
-        });
-        
-        // Check authentication
-        document.addEventListener('DOMContentLoaded', function() {
-            const token = localStorage.getItem('authToken');
-            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-            
-            if (!token || !userData.id) {
-                window.location.href = 'login.html';
-            }
         });
     </script>
 </body>
