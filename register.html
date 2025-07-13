@@ -458,6 +458,14 @@ try {
     showError(msg);
   }
 }
+        // Add on email blur
+document.getElementById('email').addEventListener('blur', async () => {
+  const email = document.getElementById('email').value;
+  const methods = await auth.fetchSignInMethodsForEmail(email);
+  if (methods.length > 0) {
+    showError('Email already registered');
+  }
+});
     </script>
 </body>
 </html>
