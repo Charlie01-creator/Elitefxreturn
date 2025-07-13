@@ -7,8 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* [Keep all your existing CSS styles] */
-  
         :root {
             --primary: #002366;
             --secondary: #FFD700;
@@ -37,7 +35,6 @@
             padding: 0 15px;
         }
         
-        /* Navigation */
         .navbar {
             background-color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -93,7 +90,6 @@
             background-color: #001a4d;
         }
         
-        /* Registration Form */
         .register-section {
             padding: 120px 0 80px;
         }
@@ -163,7 +159,6 @@
             text-decoration: none;
         }
         
-        /* Messages */
         .error-message {
             color: var(--error);
             background-color: #fdecea;
@@ -201,7 +196,6 @@
             color: #2ecc71;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -211,24 +205,29 @@
                 padding: 30px 20px;
             }
         }
-    .error-message a {
-  color: var(--accent);
-  text-decoration: underline;
-}
-.error-message a:hover {
-  color: #0066cc;
-}
-       .error-message a {
-  color: var(--accent);
-  text-decoration: underline;
-  font-weight: 600;
-} 
+        
+        .error-message a {
+            color: var(--accent);
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        
+        .error-message a:hover {
+            color: #0066cc;
+        }
+        
+        .recovery-options {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .recovery-options a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <!-- [Keep all your existing HTML structure] -->
-
-    <body>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container nav-container">
@@ -272,23 +271,23 @@
                     </div>
                     <button type="submit" class="btn-submit">Register</button>
                 </form>
-                
+                <div class="recovery-options">
+                    <p>Already have an account? 
+                        <a href="login.html">Login</a> or 
+                        <a href="forgot-password.html">Reset password</a>
+                    </p>
+                </div>
             </div>
         </div>
-        <div class="recovery-options">
-  <p>Already have an account? 
-    <a href="login.html">Login</a> or 
-    <a href="forgot-password.html">Reset password</a>
-  </p>
-</div>
     </section>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // Firebase Configuration (from your project)
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBlAtG3aDSqN7iLX-HtoMZopsPT4LsMni0",
             authDomain: "elitefxreturn.firebaseapp.com",
@@ -303,169 +302,124 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Registration Functionality
+        // Debugging: Log current auth state
+        auth.onAuthStateChanged(user => {
+            console.log('Auth state changed:', user ? user.uid : 'No user');
+        });
+
+        // Registration with full validation
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const fullName = document.getElementById('fullName').value;
-            const phone = document.getElementById('phone').value;
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const errorElement = document.getElementById('errorMessage');
+            const successElement = document.getElementById('successMessage');
+            const submitBtn = document.querySelector('.btn-submit');
             
+            // Reset UI
+            errorElement.style.display = 'none';
+            successElement.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+
             try {
-                // 1. Create user account
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                
-                // 2. Update user profile
-                await userCredential.user.updateProfile({
-                    displayName: fullName
-                });
-                
-                // 3. Save additional data to Firestore
-                await db.collection('users').doc(userCredential.user.uid).set({
-                    email: email,
-                    fullName: fullName,
-                    phone: phone,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                    status: 'active'
-                });
-                
-                // 4. Send verification email
-                await userCredential.user.sendEmailVerification();
-                
-                alert('Registration successful! Please check your email for verification.');
-                window.location.href = 'dashboard.html';
-                
-            } catch (error) {
-                let errorMessage = 'Registration failed. Please try again.';
-                
-                // User-friendly error messages
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = 'This email is already registered.';
-                } else if (error.code === 'auth/weak-password') {
-                    errorMessage = 'Password should be at least 6 characters.';
+                // 1. Validate inputs
+                if (!email || !password || !fullName || !phone) {
+                    throw new Error('Please fill all fields');
                 }
                 
-                document.getElementById('errorMessage').textContent = errorMessage;
-                document.getElementById('errorMessage').style.display = 'block';
+                if (password.length < 8) {
+                    throw new Error('Password must be at least 8 characters');
+                }
+                
+                if (password !== document.getElementById('confirmPassword').value) {
+                    throw new Error('Passwords do not match');
+                }
+
+                // 2. Check if email exists
+                const methods = await auth.fetchSignInMethodsForEmail(email);
+                if (methods.length > 0) {
+                    let errorMsg = 'Email already registered. ';
+                    if (methods.includes('password')) {
+                        errorMsg += `<a href="login.html">Login</a> or <a href="forgot-password.html">reset password</a>`;
+                    } else {
+                        errorMsg += 'Please use another email.';
+                    }
+                    errorElement.innerHTML = errorMsg;
+                    errorElement.style.display = 'block';
+                    return;
+                }
+
+                // 3. Create user
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                
+                // 4. Update profile and save data
+                await Promise.all([
+                    userCredential.user.updateProfile({ displayName: fullName }),
+                    db.collection('users').doc(userCredential.user.uid).set({
+                        email: email,
+                        fullName: fullName,
+                        phone: phone,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                        status: 'active'
+                    }),
+                    userCredential.user.sendEmailVerification()
+                ]);
+
+                // 5. Force refresh and verify
+                await userCredential.user.reload();
+                console.log('User created:', {
+                    uid: userCredential.user.uid,
+                    emailVerified: userCredential.user.emailVerified
+                });
+
+                // Success
+                successElement.textContent = 'Registration successful! Verification email sent.';
+                successElement.style.display = 'block';
+                window.location.href = 'verify-email.html';
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                
+                let errorMessage = error.message;
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'Email already registered. <a href="login.html">Login here</a>';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password must be at least 8 characters';
+                }
+                
+                errorElement.innerHTML = errorMessage;
+                errorElement.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Register';
             }
         });
-        
-// Updated Registration Code with Email Verification
-document.getElementById('registerForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const fullName = document.getElementById('fullName').value;
-  const phone = document.getElementById('phone').value;
-  const errorElement = document.getElementById('errorMessage');
-  
-  // Clear previous errors
-  errorElement.innerHTML = '';
-  errorElement.style.display = 'none';
 
-  try {
-    // 1. Check if email exists in Auth system
-    const methods = await auth.fetchSignInMethodsForEmail(email);
-    
-    if (methods.length > 0) {
-      // Email exists - provide recovery options
-      let errorMsg = 'This email is already registered. ';
-      
-      if (methods.includes('password')) {
-        errorMsg += `<a href="login.html" style="color:var(--accent);">Login instead</a> or `;
-        errorMsg += `<a href="forgot-password.html" style="color:var(--accent);">reset password</a>.`;
-      } else {
-        errorMsg += 'Please use a different email.';
-      }
-      
-      errorElement.innerHTML = errorMsg;
-      errorElement.style.display = 'block';
-      return;
-    }
+        // Password strength indicator
+        document.getElementById('password').addEventListener('input', function() {
+            const strength = checkPasswordStrength(this.value);
+            const indicator = document.getElementById('passwordStrength');
+            indicator.textContent = strength.message;
+            indicator.className = 'password-strength ' + strength.class;
+        });
 
-    // 2. Check Firestore for orphaned records (optional)
-    const snapshot = await db.collection('users')
-      .where('email', '==', email)
-      .limit(1)
-      .get();
-
-    if (!snapshot.empty) {
-      errorElement.innerHTML = 'Account data exists but authentication is missing. <a href="support.html" style="color:var(--accent);">Contact support</a>.';
-      errorElement.style.display = 'block';
-      return;
-    }
-
-    // 3. Create new account
-    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-    
-    // 4. Update profile and save data
-    await Promise.all([
-      userCredential.user.updateProfile({ displayName: fullName }),
-      db.collection('users').doc(userCredential.user.uid).set({
-        email: email,
-        fullName: fullName,
-        phone: phone,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        status: 'active'
-      }),
-      userCredential.user.sendEmailVerification()
-    ]);
-
-    // Success
-    alert(`Verification email sent to ${email}! Please check your inbox.`);
-    window.location.href = 'verify-email.html';
-    
-  } catch (error) {
-    let errorMessage = 'Registration failed: ';
-    
-    switch(error.code) {
-      case 'auth/invalid-email':
-        errorMessage += 'Invalid email format';
-        break;
-      case 'auth/weak-password':
-        errorMessage += 'Password must be 6+ characters';
-        break;
-      case 'auth/operation-not-allowed':
-        errorMessage += 'Email/password accounts are disabled';
-        break;
-      default:
-        errorMessage += error.message;
-    }
-    
-    errorElement.textContent = errorMessage;
-    errorElement.style.display = 'block';
-    console.error('Registration error:', error);
-  }
-});
-        
-try {
-  // Registration attempt
-} catch (error) {
-  if (error.code === 'auth/email-already-in-use') {
-    const methods = await auth.fetchSignInMethodsForEmail(email);
-    let msg = 'This email is already registered. ';
-    
-    if (methods.includes('password')) {
-      msg += `<a href="login.html">Login</a> or `;
-      msg += `<a href="forgot-password.html">reset password</a>`;
-    } else if (methods.includes('google.com')) {
-      msg += `It's linked to Google. <a href="login.html">Login with Google</a>`;
-    }
-    
-    showError(msg);
-  }
-}
-        // Add on email blur
-document.getElementById('email').addEventListener('blur', async () => {
-  const email = document.getElementById('email').value;
-  const methods = await auth.fetchSignInMethodsForEmail(email);
-  if (methods.length > 0) {
-    showError('Email already registered');
-  }
-});
+        function checkPasswordStrength(password) {
+            const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+            const mediumRegex = /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/;
+            
+            if (strongRegex.test(password)) {
+                return { message: 'Strong password', class: 'strong' };
+            } else if (mediumRegex.test(password)) {
+                return { message: 'Medium strength', class: 'medium' };
+            } else {
+                return { message: 'Weak password', class: 'weak' };
+            }
+        }
     </script>
 </body>
 </html>
