@@ -431,7 +431,24 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     console.error('Registration error:', error);
   }
 });
-
+        
+try {
+  // Registration attempt
+} catch (error) {
+  if (error.code === 'auth/email-already-in-use') {
+    const methods = await auth.fetchSignInMethodsForEmail(email);
+    let msg = 'This email is already registered. ';
+    
+    if (methods.includes('password')) {
+      msg += `<a href="login.html">Login</a> or `;
+      msg += `<a href="forgot-password.html">reset password</a>`;
+    } else if (methods.includes('google.com')) {
+      msg += `It's linked to Google. <a href="login.html">Login with Google</a>`;
+    }
+    
+    showError(msg);
+  }
+}
     </script>
 </body>
 </html>
