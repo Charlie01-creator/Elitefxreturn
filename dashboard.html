@@ -373,10 +373,8 @@
             if (!user) {
                 // Not logged in → Redirect to login
                 window.location.href = "login.html";
-            } else if (!user.emailVerified) {
-                // Logged in but not verified → Redirect to verification
-                window.location.href = "dashboard.html";
-            } else {
+
+        else {
                 // User is properly logged in and verified → Load dashboard
                 document.getElementById("userGreeting").textContent = `Hi, ${user.displayName || user.email.split("@")[0]}!`;
                 loadUserData(user.uid);
