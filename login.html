@@ -5,612 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | EliteFX Return</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --primary: #002366;
             --secondary: #FFD700;
-            --accent: #008080;
-            --dark: #1a1a2e;
-            --light: #f8f9fa;
             --error: #e74c3c;
-            --success: #2ecc71;
         }
-        
-        * {
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fa;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
-        
-        body {
-            background-color: #f5f7fa;
-        }
-        
         .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* === Navigation === */
-        .navbar {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 15px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-        
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .logo span {
-            color: var(--secondary);
-        }
-        
-        .nav-links {
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-links a {
-            margin-left: 25px;
-            font-weight: 500;
-            color: var(--dark);
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--secondary);
-        }
-        
-        .btn-login {
-            color: var(--primary);
-            margin-right: 15px;
-        }
-        
-        .btn-register {
-            background-color: var(--primary);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        
-        .btn-register:hover {
-            background-color: #001a4d;
-        }
-        
-        .hamburger {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--primary);
-            cursor: pointer;
-        }
-        
-        /* === Login Form === */
-        .login-section {
-            padding: 120px 0 80px;
-        }
-        
-        .login-card {
-            background: white;
             max-width: 500px;
-            margin: 0 auto;
-            padding: 40px;
+            margin: 100px auto;
+            padding: 30px;
+            background: white;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
-        .login-card h2 {
+        h2 {
             color: var(--primary);
-            margin-bottom: 30px;
             text-align: center;
+            margin-bottom: 30px;
         }
-        
         .form-group {
             margin-bottom: 20px;
-            position: relative;
         }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        
-        .form-group input {
+        input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 12px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
         }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        
-        .invalid input {
-            border-color: var(--error);
-        }
-        
-        .forgot-password {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        
-        .forgot-password a {
-            color: var(--accent);
-            font-size: 14px;
-        }
-        
-        .btn-submit {
+        button {
             width: 100%;
             background: var(--secondary);
             color: var(--primary);
             border: none;
             padding: 12px;
-            font-size: 16px;
             font-weight: 600;
             border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s;
         }
-        
-        .btn-submit:hover {
-            background: #e6c300;
-        }
-        
         .register-link {
             text-align: center;
             margin-top: 20px;
         }
-        
-        .register-link a {
-            color: var(--accent);
-        }
-        
-        /* Error message styling */
-        .error-message {
-            color: var(--error);
-            background-color: #fdecea;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-            font-size: 14px;
-        }
-        
-        .success-message {
-            color: var(--success);
-            background-color: #e8f5e9;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-            font-size: 14px;
-        }
-        
-        /* Password toggle */
-        .password-container {
-            position: relative;
-        }
-        
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: var(--accent);
-        }
-        
-        /* Loading overlay */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .spinner {
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--accent);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* === Footer === */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-        
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-        }
-        
-        .footer-col h3 {
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-        }
-        
-        .footer-col ul {
-            list-style: none;
-        }
-        
-        .footer-col ul li {
-            margin-bottom: 10px;
-        }
-        
-        .footer-col ul li a {
-            color: #ccc;
-            transition: color 0.3s;
-        }
-        
-        .footer-col ul li a:hover {
-            color: var(--secondary);
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* === Responsive === */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .hamburger {
-                display: block;
-            }
-            
-            .login-card {
-                padding: 30px 20px;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="index.html" class="logo">EliteFX<span>Return</span></a>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="login.html" class="btn-login">Login</a>
-                <a href="register.html" class="btn-register">Register</a>
+    <div class="container">
+        <h2>Login to Your Account</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Email Address" required>
             </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div class="register-link">
+            Don't have an account? <a href="register.html">Register</a>
         </div>
-    </nav>
-
-    <!-- Login Form -->
-    <section class="login-section">
-        <div class="container">
-            <div class="login-card">
-                <h2>Login to Your Account</h2>
-                <div id="errorMessage" class="error-message"></div>
-                <div id="successMessage" class="success-message"></div>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" required>
-                    </div>
-                    <div class="form-group password-container">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" required>
-                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
-                    </div>
-                    <div class="forgot-password">
-                        <a href="#" id="forgotPasswordLink">Forgot Password?</a>
-                    </div>
-                    <button type="submit" class="btn-submit">Login</button>
-                </form>
-                <div class="register-link">
-                    Don't have an account? <a href="register.html">Register here</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3>EliteFX Return</h3>
-                    <p>Professional forex investment platform</p>
-                </div>
-                <div class="footer-col">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Legal</h3>
-                    <ul>
-                        <li><a href="terms.html">Terms of Service</a></li>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 EliteFX Return. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
     </div>
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // Firebase Configuration
+        // Firebase Config
         const firebaseConfig = {
-            apiKey: "AIzaSyBlAtG3aDSqN7iLX-HtoMZopsPT4LsMni0",
-            authDomain: "elitefxreturn.firebaseapp.com",
-            projectId: "elitefxreturn",
-            storageBucket: "elitefxreturn.firebasestorage.app",
-            messagingSenderId: "333913364691",
-            appId: "1:333913364691:web:82566d278552b6cdec1c26"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const db = firebase.firestore();
-        const loadingOverlay = document.getElementById('loadingOverlay');
 
-        // Password visibility toggle
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.classList.toggle('fa-eye-slash');
-        });
-
-        // Login Form Handler
+        // Login (no email verification check)
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const errorElement = document.getElementById('errorMessage');
-            const successElement = document.getElementById('successMessage');
-            const submitBtn = document.querySelector('.btn-submit');
-            
-            // Clear previous errors and disable button
-            errorElement.style.display = 'none';
-            successElement.style.display = 'none';
-            document.getElementById('email').classList.remove('invalid');
-            document.getElementById('password').classList.remove('invalid');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Logging in...';
-            loadingOverlay.style.display = 'flex';
-            
-            // Basic validation
-            if (!email || !password) {
-                showError('Please fill in all fields');
-                if (!email) document.getElementById('email').classList.add('invalid');
-                if (!password) document.getElementById('password').classList.add('invalid');
-                resetFormState();
-                return;
-            }
-            
-            if (!validateEmail(email)) {
-                showError('Please enter a valid email address');
-                document.getElementById('email').classList.add('invalid');
-                resetFormState();
-                return;
-            }
-            
-            if (password.length < 6) {
-                showError('Password must be at least 6 characters');
-                document.getElementById('password').classList.add('invalid');
-                resetFormState();
-                return;
-            }
-            
+
             try {
-                // Firebase login
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                
-                // Wait for auth state to update
-                await new Promise(resolve => {
-                    const unsubscribe = auth.onAuthStateChanged(user => {
-                        unsubscribe();
-                        resolve();
-                    });
-                });
-
-                // Check verification status
-                if (userCredential.user.emailVerified) {
-                    // Check if user exists in Firestore
-                    const userDoc = await db.collection('users').doc(userCredential.user.uid).get();
-                    
-                    if (userDoc.exists) {
-                        // Successful login - redirect to dashboard
-                        window.location.href = 'dashboard.html';
-                    } else {
-                        // User doesn't exist in Firestore (shouldn't happen for registered users)
-                        await auth.signOut();
-                        showError('Account not properly registered. Please contact support.');
-                    }
-                } else {
-                    await auth.signOut();
-                    showError('Please verify your email first. Check your inbox or <a href="#" id="resendVerification">resend verification email</a>.');
-                    
-                    // Add resend verification handler
-                    document.getElementById('resendVerification').addEventListener('click', async (e) => {
-                        e.preventDefault();
-                        try {
-                            await userCredential.user.sendEmailVerification();
-                            showSuccess('Verification email resent!');
-                        } catch (error) {
-                            showError('Error resending verification: ' + error.message);
-                        }
-                    });
-                }
-                
+                await auth.signInWithEmailAndPassword(email, password);
+                window.location.href = 'dashboard.html';
             } catch (error) {
-                console.error("Login error:", error);
-                let errorMessage = 'Login failed. Please try again.';
-                
-                switch(error.code) {
-                    case 'auth/invalid-email':
-                        errorMessage = 'Please enter a valid email address';
-                        document.getElementById('email').classList.add('invalid');
-                        break;
-                    case 'auth/user-not-found':
-                        errorMessage = 'No account found with this email. <a href="register.html">Create an account?</a>';
-                        document.getElementById('email').classList.add('invalid');
-                        break;
-                    case 'auth/wrong-password':
-                        errorMessage = 'Incorrect password. <a href="#" id="forgotPasswordLinkInline">Forgot password?</a>';
-                        document.getElementById('password').classList.add('invalid');
-                        break;
-                    case 'auth/too-many-requests':
-                        errorMessage = 'Account temporarily locked. Try again later or reset password.';
-                        break;
-                    case 'auth/user-disabled':
-                        errorMessage = 'This account has been disabled. Contact support.';
-                        break;
-                }
-                
-                showError(errorMessage);
-                
-                // Add inline forgot password handler
-                const forgotLink = document.getElementById('forgotPasswordLinkInline');
-                if (forgotLink) {
-                    forgotLink.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        handleForgotPassword(email);
-                    });
-                }
-            } finally {
-                loadingOverlay.style.display = 'none';
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Login';
-            }
-        });
-
-        // Email validation helper
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-        
-        // Reset form state helper
-        function resetFormState() {
-            loadingOverlay.style.display = 'none';
-            const submitBtn = document.querySelector('.btn-submit');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Login';
-        }
-
-        // Password Reset Handler
-        document.getElementById('forgotPasswordLink').addEventListener('click', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value.trim();
-            handleForgotPassword(email);
-        });
-        
-        async function handleForgotPassword(email) {
-            if (!email) {
-                email = prompt('Enter your email address:');
-                if (!email) return;
-            }
-            
-            if (!validateEmail(email)) {
-                showError('Please enter a valid email address');
-                return;
-            }
-            
-            try {
-                loadingOverlay.style.display = 'flex';
-                await auth.sendPasswordResetEmail(email);
-                showSuccess('Password reset email sent to ' + email);
-            } catch (error) {
-                let errorMessage = 'Error sending password reset email.';
-                if (error.code === 'auth/user-not-found') {
-                    errorMessage = 'No account found with this email.';
-                }
-                showError(errorMessage);
-            } finally {
-                loadingOverlay.style.display = 'none';
-            }
-        }
-
-        // Helper functions
-        function showError(message) {
-            const errorElement = document.getElementById('errorMessage');
-            errorElement.innerHTML = message;
-            errorElement.style.display = 'block';
-            errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        
-        function showSuccess(message) {
-            const successElement = document.getElementById('successMessage');
-            successElement.textContent = message;
-            successElement.style.display = 'block';
-            successElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        // Check initial auth state
-        auth.onAuthStateChanged((user) => {
-            if (user && user.emailVerified && window.location.pathname.endsWith('login.html')) {
-                // Small delay to allow form submission to complete
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 500);
+                alert(`Login failed: ${error.code === 'auth/wrong-password' ? 'Wrong password' : 'Account not found'}`);
             }
         });
     </script>
