@@ -1,4 +1,4 @@
-m<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -144,6 +144,18 @@ m<!DOCTYPE html>
             margin-top: 1rem;
             display: none;
         }
+        
+        .forgot-password {
+            text-align: right;
+            margin-top: -1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .forgot-password a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -173,6 +185,9 @@ m<!DOCTYPE html>
                     <div class="password-container">
                         <input type="password" id="password" placeholder="Enter your password" required>
                         <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="forgot-password.html">Forgot password?</a>
                     </div>
                 </div>
                 
@@ -224,17 +239,22 @@ m<!DOCTYPE html>
             
             errorMessage.style.display = 'none';
             
+            // Show loading state
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+            
             auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    if (!userCredential.user.emailVerified) {
-                        auth.signOut();
-                        errorMessage.textContent = 'Please verify your email before logging in';
-                        errorMessage.style.display = 'block';
-                        return;
-                    }
+                .then(() => {
+                    // Successful login - redirect to dashboard
                     window.location.href = 'dashboard.html';
                 })
                 .catch((error) => {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign In';
+                    
+                    // Handle errors
                     let errorMsg = '';
                     switch(error.code) {
                         case 'auth/invalid-email':
@@ -247,6 +267,9 @@ m<!DOCTYPE html>
                         case 'auth/wrong-password':
                             errorMsg = 'Invalid email or password';
                             break;
+                        case 'auth/too-many-requests':
+                            errorMsg = 'Account temporarily locked due to too many attempts';
+                            break;
                         default:
                             errorMsg = 'Login failed. Please try again';
                     }
@@ -257,7 +280,7 @@ m<!DOCTYPE html>
 
         // Check if user is already logged in
         auth.onAuthStateChanged((user) => {
-            if (user && user.emailVerified) {
+            if (user) {
                 window.location.href = 'dashboard.html';
             }
         });
