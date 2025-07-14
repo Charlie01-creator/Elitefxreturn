@@ -15,6 +15,8 @@
             --light: #f8f9fa;
             --dark-bg: #121212;
             --dark-card: #1e1e1e;
+            --error: #ff4444;
+            --success: #00C851;
         }
         
         * {
@@ -22,7 +24,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
+            transition: all 0.3s ease;
         }
         
         body {
@@ -113,6 +115,7 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             font-size: 0.8rem;
             position: relative;
+            cursor: pointer;
         }
         
         body.dark-mode .nav-item {
@@ -152,6 +155,7 @@
         .bottom-nav-item {
             text-align: center;
             font-size: 0.7rem;
+            cursor: pointer;
         }
         
         .bottom-nav-item i {
@@ -179,6 +183,7 @@
             color: white;
             font-size: 0.8rem;
             cursor: pointer;
+            margin-left: 10px;
         }
         
         /* Dark Mode Toggle */
@@ -200,31 +205,101 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         
-        /* Session Timeout Modal */
-        .timeout-modal {
+        /* Modals */
+        .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
             z-index: 2000;
             justify-content: center;
             align-items: center;
         }
         
-        .timeout-content {
+        .modal-content {
             background: white;
             padding: 20px;
             border-radius: 10px;
-            text-align: center;
-            max-width: 300px;
+            width: 90%;
+            max-width: 400px;
         }
         
-        body.dark-mode .timeout-content {
+        body.dark-mode .modal-content {
             background: var(--dark-card);
             color: white;
+        }
+        
+        .modal-content h3 {
+            margin-bottom: 15px;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        body.dark-mode .modal-content input {
+            background: var(--dark-bg);
+            color: white;
+            border-color: #444;
+        }
+        
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 3000;
+            display: none;
+            max-width: 90%;
+            text-align: center;
+        }
+        
+        .toast.error {
+            background: var(--error);
+        }
+        
+        .toast.success {
+            background: var(--success);
+        }
+        
+        /* Task Modal */
+        .task-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        body.dark-mode .task-item {
+            border-color: #444;
+        }
+        
+        .task-reward {
+            color: var(--accent);
+            font-weight: bold;
         }
         
         /* Notification Badge */
@@ -232,7 +307,7 @@
             position: absolute;
             top: -5px;
             right: -5px;
-            background: red;
+            background: var(--error);
             color: white;
             border-radius: 50%;
             width: 18px;
@@ -266,28 +341,28 @@
             <div class="balance" id="accountBalance">Loading...</div>
             <div>Available for withdrawal</div>
         </div>
-
+        
         <!-- Notification Banner -->
         <div class="notification-banner">
             Congratulations to member ****1287 for receiving a referral bonus of 93,600 UGX
         </div>
-
+        
         <!-- Main Navigation -->
         <div class="main-nav">
-            <div class="nav-item">
+            <div class="nav-item" id="nav-job">
                 <i class="fas fa-briefcase"></i>
                 JOB
             </div>
-            <div class="nav-item">
+            <div class="nav-item" id="nav-task">
                 <i class="fas fa-tasks"></i>
                 Task
-                <div class="notification-badge">3</div>
+                <div class="notification-badge" id="taskBadge">3</div>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" id="nav-recharge">
                 <i class="fas fa-money-bill-wave"></i>
                 Recharge
             </div>
-            <div class="nav-item">
+            <div class="nav-item" id="nav-withdraw">
                 <i class="fas fa-wallet"></i>
                 Withdrawal
             </div>
@@ -295,19 +370,19 @@
         
         <!-- Secondary Navigation -->
         <div class="main-nav">
-            <div class="nav-item">
+            <div class="nav-item" id="nav-savings">
                 <i class="fas fa-piggy-bank"></i>
                 Savings
             </div>
-            <div class="nav-item">
+            <div class="nav-item" id="nav-invite">
                 <i class="fas fa-user-plus"></i>
                 Invite
             </div>
-            <div class="nav-item">
+            <div class="nav-item" id="nav-help">
                 <i class="fas fa-book"></i>
                 Helpbook
             </div>
-            <div class="nav-item" id="settingsBtn">
+            <div class="nav-item" id="nav-settings">
                 <i class="fas fa-cog"></i>
                 Settings
             </div>
@@ -316,32 +391,98 @@
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <div class="bottom-nav-item active">
+        <div class="bottom-nav-item active" id="bottom-home">
             <i class="fas fa-home"></i>
             Home
         </div>
-        <div class="bottom-nav-item">
+        <div class="bottom-nav-item" id="bottom-tasks">
             <i class="fas fa-tasks"></i>
             Task Area
         </div>
-        <div class="bottom-nav-item">
+        <div class="bottom-nav-item" id="bottom-profit">
             <i class="fas fa-chart-line"></i>
             Profit
         </div>
-        <div class="bottom-nav-item">
+        <div class="bottom-nav-item" id="bottom-profile">
             <i class="fas fa-user"></i>
             My
         </div>
     </div>
 
-    <!-- Session Timeout Modal -->
-    <div class="timeout-modal" id="timeoutModal">
-        <div class="timeout-content">
-            <h3>Session About to Expire</h3>
-            <p>You will be logged out in <span id="timeoutCounter">60</span> seconds due to inactivity.</p>
-            <button id="stayLoggedIn" style="margin-top: 15px; padding: 8px 15px; background: var(--accent); color: white; border: none; border-radius: 5px; cursor: pointer;">
-                Stay Logged In
-            </button>
+    <!-- Toast Notification -->
+    <div class="toast" id="toastNotification"></div>
+
+    <!-- Deposit Modal -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <h3>Deposit Funds</h3>
+            <input type="number" id="depositAmount" placeholder="Enter amount (UGX)">
+            <button id="confirmDeposit">Proceed</button>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <h3>Withdraw Funds</h3>
+            <input type="number" id="withdrawAmount" placeholder="Enter amount (UGX)">
+            <button id="confirmWithdraw">Submit</button>
+        </div>
+    </div>
+
+    <!-- Tasks Modal -->
+    <div class="modal" id="tasksModal">
+        <div class="modal-content">
+            <h3>Available Tasks</h3>
+            <div id="tasksList">
+                <div class="task-item">
+                    <span>Watch video (30 sec)</span>
+                    <span class="task-reward">+500 UGX</span>
+                </div>
+                <div class="task-item">
+                    <span>Complete survey</span>
+                    <span class="task-reward">+1000 UGX</span>
+                </div>
+                <div class="task-item">
+                    <span>Install app</span>
+                    <span class="task-reward">+1500 UGX</span>
+                </div>
+            </div>
+            <button id="closeTasks">Close</button>
+        </div>
+    </div>
+
+    <!-- Job Modal -->
+    <div class="modal" id="jobModal">
+        <div class="modal-content">
+            <h3>Available Jobs</h3>
+            <p>Complete tasks to earn money daily</p>
+            <div id="jobsList">
+                <div class="task-item">
+                    <span>Basic Package (3 tasks/day)</span>
+                    <span class="task-reward">+2000 UGX</span>
+                </div>
+                <div class="task-item">
+                    <span>Premium Package (10 tasks/day)</span>
+                    <span class="task-reward">+5000 UGX</span>
+                </div>
+            </div>
+            <button id="closeJob">Close</button>
+        </div>
+    </div>
+
+    <!-- Savings Modal -->
+    <div class="modal" id="savingsModal">
+        <div class="modal-content">
+            <h3>Savings Account</h3>
+            <p>Earn 5% monthly interest on your savings</p>
+            <div id="savingsBalance">
+                <p>Current Savings: <span id="savingsAmount">0 UGX</span></p>
+            </div>
+            <input type="number" id="savingsInput" placeholder="Amount to save (UGX)">
+            <button id="addSavings">Add to Savings</button>
+            <button id="withdrawSavings">Withdraw Savings</button>
+            <button id="closeSavings">Close</button>
         </div>
     </div>
 
@@ -351,7 +492,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // Firebase Config
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBlAtG3aDSqN7iLX-HtoMZopsPT4LsMni0",
             authDomain: "elitefxreturn.firebaseapp.com",
@@ -366,78 +507,80 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // Global Variables
+        let userData = {};
+        let inactivityTimer;
+        const TIMEOUT_DURATION = 30 * 60 * 1000; // 30 minutes timeout
+
         // ========================
-        // Authentication Check
+        // Authentication Management
         // ========================
         auth.onAuthStateChanged((user) => {
             if (!user) {
-                // Not logged in → Redirect to login
-                window.location.href = "login.html";
-
-        else {
-                // User is properly logged in and verified → Load dashboard
-                document.getElementById("userGreeting").textContent = `Hi, ${user.displayName || user.email.split("@")[0]}!`;
+                // Not logged in - redirect to login
+                window.location.href = 'login.html';
+            } else if (!user.emailVerified) {
+                // Logged in but not verified - redirect to verification
+                
+            } else {
+                // User is properly authenticated
+                document.getElementById('userGreeting').textContent = `Hi, ${user.displayName || user.email.split('@')[0]}!`;
                 loadUserData(user.uid);
                 startInactivityTimer();
+                startWithdrawalAlerts();
             }
         });
 
         // =================
-        // Load User Data
+        // User Data Loading
         // =================
         function loadUserData(userId) {
-            db.collection("users").doc(userId).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        document.getElementById("accountBalance").textContent = 
-                            `UGX ${userData.balance?.toLocaleString() || "0"}`;
+            db.collection('users').doc(userId).onSnapshot((doc) => {
+                if (doc.exists) {
+                    userData = doc.data();
+                    
+                    // Update balance display
+                    if (userData.hasDeposited) {
+                        document.getElementById('accountBalance').textContent = `UGX ${userData.balance?.toLocaleString() || '0'}`;
                     } else {
-                        console.error("No user data found!");
+                        document.getElementById('accountBalance').textContent = 'Deposit to unlock';
                     }
-                })
-                .catch((error) => {
-                    console.error("Error loading data:", error);
-                });
+                    
+                    // Update savings if exists
+                    if (userData.savings) {
+                        document.getElementById('savingsAmount').textContent = `${userData.savings.toLocaleString()} UGX`;
+                    }
+                    
+                    // Update task badge
+                    if (userData.pendingTasks) {
+                        document.getElementById('taskBadge').textContent = userData.pendingTasks;
+                    }
+                    
+                    // Check for dark mode preference
+                    if (userData.darkMode) {
+                        document.body.classList.add('dark-mode');
+                        document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+                    }
+                }
+            });
         }
 
         // ==============
-        // Logout
+        // Logout Handler
         // ==============
-        document.getElementById("logoutBtn").addEventListener("click", () => {
+        document.getElementById('logoutBtn').addEventListener('click', () => {
             auth.signOut()
                 .then(() => {
-                    window.location.href = "login.html";
+                    window.location.href = 'login.html';
                 })
-                .catch((error) => {
-                    alert("Logout failed: " + error.message);
+                .catch(error => {
+                    showToast('Logout failed: ' + error.message, true);
                 });
-        });
-
-        // ================
-        // Dark Mode Toggle
-        // ================
-        document.getElementById("darkModeToggle").addEventListener("click", () => {
-            const body = document.body;
-            const toggleBtn = document.getElementById("darkModeToggle");
-            
-            if (body.classList.contains("dark-mode")) {
-                body.classList.remove("dark-mode");
-                toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
-            } else {
-                body.classList.add("dark-mode");
-                toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
-            }
         });
 
         // =====================
         // Session Timeout Logic
         // =====================
-        let inactivityTimer;
-        let timeoutWarningTimer;
-        const TIMEOUT_DURATION = 30 * 60 * 1000; // 30 minutes
-        const WARNING_DURATION = 60; // Show warning 1 minute before logout
-
         function startInactivityTimer() {
             resetInactivityTimer();
             
@@ -449,67 +592,261 @@
         }
 
         function resetInactivityTimer() {
-            // Clear existing timers
+            // Clear existing timer
             clearTimeout(inactivityTimer);
-            clearTimeout(timeoutWarningTimer);
-            document.getElementById('timeoutModal').style.display = 'none';
             
             // Set new timer
             inactivityTimer = setTimeout(() => {
-                // Show warning 1 minute before logout
-                showTimeoutWarning();
-                
-                // Set actual logout timer
-                timeoutWarningTimer = setTimeout(() => {
-                    auth.signOut().then(() => {
-                        window.location.href = 'login.html?reason=timeout';
-                    });
-                }, WARNING_DURATION * 1000);
-            }, TIMEOUT_DURATION - (WARNING_DURATION * 1000));
+                auth.signOut().then(() => {
+                    window.location.href = 'login.html?reason=timeout';
+                });
+            }, TIMEOUT_DURATION);
         }
 
-        function showTimeoutWarning() {
-            const modal = document.getElementById('timeoutModal');
-            const counter = document.getElementById('timeoutCounter');
-            modal.style.display = 'flex';
+        // ================
+        // Dark Mode Toggle
+        // ================
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            const body = document.body;
+            const toggleBtn = document.getElementById('darkModeToggle');
             
-            let seconds = WARNING_DURATION;
-            const countdown = setInterval(() => {
-                seconds--;
-                counter.textContent = seconds;
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+                saveUserPreference('darkMode', false);
+            } else {
+                body.classList.add('dark-mode');
+                toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+                saveUserPreference('darkMode', true);
+            }
+        });
+
+        function saveUserPreference(key, value) {
+            const user = auth.currentUser;
+            if (user) {
+                db.collection('users').doc(user.uid).update({
+                    [key]: value
+                }).catch(error => {
+                    console.error("Error saving preference:", error);
+                });
+            }
+        }
+
+        // ===================
+        // Deposit/Withdrawal
+        // ===================
+        document.getElementById('nav-recharge').addEventListener('click', () => {
+            document.getElementById('depositModal').style.display = 'flex';
+        });
+
+        document.getElementById('confirmDeposit').addEventListener('click', () => {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if (amount > 0) {
+                const user = auth.currentUser;
+                db.collection('users').doc(user.uid).update({
+                    balance: firebase.firestore.FieldValue.increment(amount),
+                    hasDeposited: true
+                }).then(() => {
+                    showToast(`Successfully deposited ${amount} UGX!`);
+                    document.getElementById('depositModal').style.display = 'none';
+                    document.getElementById('depositAmount').value = '';
+                }).catch(error => {
+                    showToast('Deposit failed: ' + error.message, true);
+                });
+            } else {
+                showToast('Please enter a valid amount', true);
+            }
+        });
+
+        document.getElementById('nav-withdraw').addEventListener('click', () => {
+            if (!userData.hasDeposited) {
+                showToast('You need to deposit first before withdrawing', true);
+                return;
+            }
+            document.getElementById('withdrawModal').style.display = 'flex';
+        });
+
+        document.getElementById('confirmWithdraw').addEventListener('click', () => {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            if (amount <= 0) {
+                showToast('Please enter a valid amount', true);
+                return;
+            }
+            
+            if (amount > (userData.balance || 0)) {
+                showToast('Insufficient balance', true);
+                return;
+            }
+            
+            const user = auth.currentUser;
+            db.collection('users').doc(user.uid).update({
+                balance: firebase.firestore.FieldValue.increment(-amount)
+            }).then(() => {
+                // Record withdrawal
+                db.collection('withdrawals').add({
+                    userId: user.uid,
+                    amount: amount,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
                 
-                if (seconds <= 0) {
-                    clearInterval(countdown);
-                }
-            }, 1000);
-            
-            document.getElementById('stayLoggedIn').addEventListener('click', () => {
-                clearInterval(countdown);
-                modal.style.display = 'none';
-                resetInactivityTimer();
+                showToast(`Withdrawal request for ${amount} UGX submitted!`);
+                document.getElementById('withdrawModal').style.display = 'none';
+                document.getElementById('withdrawAmount').value = '';
+            }).catch(error => {
+                showToast('Withdrawal failed: ' + error.message, true);
             });
+        });
+
+        // =====================
+        // Withdrawal Alerts
+        // =====================
+        function startWithdrawalAlerts() {
+            db.collection('withdrawals')
+                .orderBy('timestamp', 'desc')
+                .limit(5)
+                .onSnapshot((snapshot) => {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === 'added') {
+                            const data = change.doc.data();
+                            // Don't show alert for current user's withdrawals
+                            if (data.userId !== auth.currentUser?.uid) {
+                                showToast(`Member ****${data.userId.slice(-4)} withdrew ${data.amount} UGX!`);
+                            }
+                        }
+                    });
+                });
         }
 
-        // ===================
-        // Password Management
-        // ===================
-        document.getElementById('settingsBtn').addEventListener('click', () => {
-            const newPassword = prompt("Enter new password (min 8 characters):");
+        // =============
+        // Task System
+        // =============
+        document.getElementById('nav-task').addEventListener('click', () => {
+            document.getElementById('tasksModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeTasks').addEventListener('click', () => {
+            document.getElementById('tasksModal').style.display = 'none';
+        });
+
+        // Simulate task completion
+        document.getElementById('tasksList').addEventListener('click', (e) => {
+            if (e.target.classList.contains('task-item') || e.target.parentElement.classList.contains('task-item')) {
+                const reward = parseInt(e.target.querySelector('.task-reward')?.textContent || 
+                                e.target.parentElement.querySelector('.task-reward')?.textContent || '500').replace(/\D/g, '');
+                
+                const user = auth.currentUser;
+                db.collection('users').doc(user.uid).update({
+                    balance: firebase.firestore.FieldValue.increment(reward),
+                    pendingTasks: firebase.firestore.FieldValue.increment(-1)
+                }).then(() => {
+                    showToast(`Task completed! +${reward} UGX`);
+                }).catch(error => {
+                    showToast('Failed to complete task: ' + error.message, true);
+                });
+            }
+        });
+
+        // =============
+        // Job System
+        // =============
+        document.getElementById('nav-job').addEventListener('click', () => {
+            document.getElementById('jobModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeJob').addEventListener('click', () => {
+            document.getElementById('jobModal').style.display = 'none';
+        });
+
+        // ==============
+        // Savings System
+        // ==============
+        document.getElementById('nav-savings').addEventListener('click', () => {
+            document.getElementById('savingsModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeSavings').addEventListener('click', () => {
+            document.getElementById('savingsModal').style.display = 'none';
+        });
+
+        document.getElementById('addSavings').addEventListener('click', () => {
+            const amount = parseFloat(document.getElementById('savingsInput').value);
+            if (amount <= 0 || amount > (userData.balance || 0)) {
+                showToast('Invalid amount or insufficient balance', true);
+                return;
+            }
+            
+            const user = auth.currentUser;
+            db.collection('users').doc(user.uid).update({
+                balance: firebase.firestore.FieldValue.increment(-amount),
+                savings: firebase.firestore.FieldValue.increment(amount)
+            }).then(() => {
+                showToast(`${amount} UGX added to savings!`);
+                document.getElementById('savingsInput').value = '';
+            }).catch(error => {
+                showToast('Failed to add to savings: ' + error.message, true);
+            });
+        });
+
+        document.getElementById('withdrawSavings').addEventListener('click', () => {
+            if ((userData.savings || 0) <= 0) {
+                showToast('No savings to withdraw', true);
+                return;
+            }
+            
+            const user = auth.currentUser;
+            db.collection('users').doc(user.uid).update({
+                balance: firebase.firestore.FieldValue.increment(userData.savings || 0),
+                savings: 0
+            }).then(() => {
+                showToast(`Withdrew ${userData.savings} UGX from savings!`);
+            }).catch(error => {
+                showToast('Failed to withdraw savings: ' + error.message, true);
+            });
+        });
+
+        // ==============
+        // Referral System
+        // ==============
+        document.getElementById('nav-invite').addEventListener('click', () => {
+            const referralCode = `ELITE${auth.currentUser.uid.slice(0, 5).toUpperCase()}`;
+            const referralLink = `${window.location.origin}/register.html?ref=${referralCode}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join EliteFX Return',
+                    text: 'Earn money with me on EliteFX Return!',
+                    url: referralLink
+                }).catch(() => {
+                    prompt('Copy your referral link:', referralLink);
+                });
+            } else {
+                prompt('Copy your referral link:', referralLink);
+            }
+        });
+
+        // =============
+        // Help & Settings
+        // =============
+        document.getElementById('nav-help').addEventListener('click', () => {
+            showToast('Help center is coming soon!');
+        });
+
+        document.getElementById('nav-settings').addEventListener('click', () => {
+            const newPassword = prompt('Enter new password (min 8 characters):');
             if (newPassword && newPassword.length >= 8) {
                 auth.currentUser.updatePassword(newPassword)
                     .then(() => {
-                        alert("Password updated successfully!");
+                        showToast('Password updated successfully!');
                     })
                     .catch(error => {
                         if (error.code === 'auth/requires-recent-login') {
-                            alert("For security, please reauthenticate before changing password.");
                             reauthenticateAndChangePassword(newPassword);
                         } else {
-                            alert("Error: " + error.message);
+                            showToast('Error: ' + error.message, true);
                         }
                     });
             } else if (newPassword) {
-                alert("Password must be at least 8 characters long");
+                showToast('Password must be at least 8 characters', true);
             }
         });
 
@@ -517,20 +854,20 @@
             const user = auth.currentUser;
             const credential = firebase.auth.EmailAuthProvider.credential(
                 user.email,
-                prompt("Please enter your current password to continue:")
+                prompt('Please enter your current password to continue:')
             );
             
             user.reauthenticateWithCredential(credential)
                 .then(() => {
                     user.updatePassword(newPassword)
-                        .then(() => alert("Password updated successfully!"))
-                        .catch(error => alert("Error: " + error.message));
+                        .then(() => showToast('Password updated successfully!'))
+                        .catch(error => showToast('Error: ' + error.message, true));
                 })
-                .catch(error => alert("Authentication failed: " + error.message));
+                .catch(error => showToast('Authentication failed: ' + error.message, true));
         }
 
         // =====================
-        // Navigation Management
+        // Bottom Navigation
         // =====================
         document.querySelectorAll('.bottom-nav-item').forEach(item => {
             item.addEventListener('click', function() {
@@ -538,7 +875,41 @@
                     i.classList.remove('active');
                 });
                 this.classList.add('active');
+                
+                // Simulate page changes
+                switch(this.id) {
+                    case 'bottom-tasks':
+                        document.getElementById('tasksModal').style.display = 'flex';
+                        break;
+                    case 'bottom-profit':
+                        showToast('Profit analytics coming soon!');
+                        break;
+                    case 'bottom-profile':
+                        showToast('Profile page coming soon!');
+                        break;
+                }
             });
+        });
+
+        // =============
+        // Toast Helper
+        // =============
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toastNotification');
+            toast.textContent = message;
+            toast.className = 'toast ' + (isError ? 'error' : 'success');
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 5000);
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
         });
     </script>
 </body>
