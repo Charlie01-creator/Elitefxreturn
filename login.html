@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | EliteFX Return</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --primary: #002366;
             --secondary: #FFD700;
+            --accent: #008080;
             --error: #e74c3c;
+            --success: #2ecc71;
         }
         body {
             font-family: 'Poppins', sans-serif;
@@ -32,6 +35,7 @@
         }
         .form-group {
             margin-bottom: 20px;
+            position: relative;
         }
         input {
             width: 100%;
@@ -39,6 +43,17 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
+        }
+        .password-container {
+            position: relative;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--accent);
         }
         button {
             width: 100%;
@@ -49,28 +64,75 @@
             font-weight: 600;
             border-radius: 5px;
             cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #e6c300;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
         }
         .register-link {
             text-align: center;
             margin-top: 20px;
+        }
+        .error-message {
+            color: var(--error);
+            background-color: #fdecea;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--accent);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Login to Your Account</h2>
+        <div id="errorMessage" class="error-message"></div>
         <form id="loginForm">
             <div class="form-group">
                 <input type="email" id="email" placeholder="Email Address" required>
             </div>
-            <div class="form-group">
+            <div class="form-group password-container">
                 <input type="password" id="password" placeholder="Password" required>
+                <i class="fas fa-eye toggle-password" id="togglePassword"></i>
             </div>
-            <button type="submit">Login</button>
+            <button type="submit" id="loginBtn">Login</button>
         </form>
         <div class="register-link">
             Don't have an account? <a href="register.html">Register</a>
         </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
     </div>
 
     <!-- Firebase SDK -->
@@ -78,8 +140,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
 
     <script>
-        // Firebase Config
-         // Firebase Configuration
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBlAtG3aDSqN7iLX-HtoMZopsPT4LsMni0",
             authDomain: "elitefxreturn.firebaseapp.com",
@@ -88,25 +149,110 @@
             messagingSenderId: "333913364691",
             appId: "1:333913364691:web:82566d278552b6cdec1c26"
         };
-     
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
 
-        // Login (no email verification check)
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Password visibility toggle
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Login handler
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('errorMessage');
+            
+            // Reset UI
+            errorElement.style.display = 'none';
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in...';
+            loadingOverlay.style.display = 'flex';
 
             try {
+                // Set persistence to LOCAL (optional)
+                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                
+                // Sign in
                 await auth.signInWithEmailAndPassword(email, password);
+                
+                // Force redirect (bypass any auth listeners)
+                console.log("Login successful - redirecting to dashboard");
                 window.location.href = 'dashboard.html';
+                
             } catch (error) {
-                alert(`Login failed: ${error.code === 'auth/wrong-password' ? 'Wrong password' : 'Account not found'}`);
+                console.error("Login error:", error);
+                
+                // Handle specific errors
+                let errorMessage;
+                switch(error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'Invalid email format';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'Account not found. <a href="register.html">Register instead?</a>';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'Incorrect password. <a href="#" id="forgotPassword">Forgot password?</a>';
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = 'Account temporarily locked. Try again later.';
+                        break;
+                    default:
+                        errorMessage = 'Login failed. Please try again.';
+                }
+                
+                showError(errorMessage);
+                
+                // Add forgot password handler if needed
+                const forgotLink = document.getElementById('forgotPassword');
+                if (forgotLink) {
+                    forgotLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        handleForgotPassword(email);
+                    });
+                }
+            } finally {
+                loadingOverlay.style.display = 'none';
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
             }
         });
+
+        // Show error message
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.innerHTML = message;
+            errorElement.style.display = 'block';
+            errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Forgot password handler
+        async function handleForgotPassword(email) {
+            if (!email) {
+                email = prompt('Please enter your email address:');
+                if (!email) return;
+            }
+            
+            try {
+                loadingOverlay.style.display = 'flex';
+                await auth.sendPasswordResetEmail(email);
+                showError(`Password reset email sent to ${email}. Check your inbox.`);
+            } catch (error) {
+                showError('Error: ' + error.message);
+            } finally {
+                loadingOverlay.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>
