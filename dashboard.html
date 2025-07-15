@@ -819,7 +819,23 @@
                             timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         })
                     });
-                    
+                    async function loadUserData(userId) {
+  try {
+    const doc = await db.collection('users').doc(userId).get();
+    if (!doc.exists) {
+      // Create document if missing
+      await db.collection('users').doc(userId).set({
+        balance: 0,
+        earnings: 0
+      });
+    }
+    updateUI(doc.data());
+  } catch (error) {
+    console.error("Error loading user data:", error);
+    // Show user-friendly message
+    showErrorToast("Couldn't load data. Please refresh.");
+  }
+}
                     // Close modal and show success
                     document.getElementById('depositModal').style.display = 'none';
                     document.getElementById('depositForm').reset();
