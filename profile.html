@@ -3,235 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profit History | EliteFX Return</title>
-    <!-- Same stylesheets as dashboard -->
+    <title>Profit Analytics | EliteFX Return</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .profit-container {
-            padding: 20px;
+        :root {
+            --primary: #002366;
+            --secondary: #FFD700;
+            --accent: #008080;
+            --success: #00C851;
+            --error: #ff4444;
         }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Header - Same as dashboard */
+        .app-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Time Filters */
         .time-filters {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            padding-bottom: 5px;
         }
+
         .time-filter {
             padding: 8px 15px;
             border-radius: 20px;
             background: #f0f0f0;
             border: none;
+            font-size: 0.8rem;
+            white-space: nowrap;
             cursor: pointer;
         }
+
         .time-filter.active {
             background: var(--primary);
             color: white;
         }
-        .profit-stats {
+
+        /* Stats Cards */
+        .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-bottom: 25px;
+            margin: 20px 0;
         }
-        .stat-box {
+
+        .stat-card {
             background: white;
             border-radius: 10px;
             padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .stat-box h3 {
-            margin-top: 0;
-            color: #666;
-            font-size: 1rem;
+
+        .stat-card i {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 10px;
         }
-        .stat-box .value {
-            font-size: 1.5rem;
-            font-weight: bold;
+
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 700;
             margin: 5px 0;
         }
-        .profit-chart {
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .trend {
+            font-size: 0.7rem;
+            margin-top: 5px;
+        }
+
+        .trend.up {
+            color: var(--success);
+        }
+
+        .trend.down {
+            color: var(--error);
+        }
+
+        /* Chart Container */
+        .chart-container {
             background: white;
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
             height: 250px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
-        .profit-history {
+
+        /* Earnings History */
+        .earnings-history {
             background: white;
             border-radius: 10px;
             padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
+
         .history-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #f0f0f0;
         }
+
         .history-item:last-child {
             border-bottom: none;
         }
+
+        .history-details {
+            flex: 1;
+        }
+
+        .history-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .history-time {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .history-amount {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* Bottom Navigation - Same as dashboard */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            max-width: 90%;
+        }
     </style>
-    <!-- Chart.js for graphs -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Same header as dashboard -->
+    <!-- App Header -->
+    <div class="app-header">
+        <div>Profit Analytics</div>
+        <div class="user-welcome">
+            <i class="fas fa-chart-line"></i>
+        </div>
+    </div>
 
-    <div class="profit-container">
-        <h2>Profit Analytics</h2>
-        
+    <div class="container">
+        <!-- Time Filters -->
         <div class="time-filters">
             <button class="time-filter active" data-range="today">Today</button>
             <button class="time-filter" data-range="week">This Week</button>
             <button class="time-filter" data-range="month">This Month</button>
+            <button class="time-filter" data-range="year">This Year</button>
             <button class="time-filter" data-range="all">All Time</button>
         </div>
-        
-        <div class="profit-stats">
-            <div class="stat-box">
-                <h3>Total Earnings</h3>
-                <div class="value" id="totalEarnings">UGX 0.00</div>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-wallet"></i>
+                <div class="stat-value" id="totalEarnings">USX 0.00</div>
+                <div class="stat-label">Total Earnings</div>
                 <div class="trend up">↑ 12% from last week</div>
             </div>
-            <div class="stat-box">
-                <h3>Available Balance</h3>
-                <div class="value" id="availableBalance">UGX 0.00</div>
-                <div class="trend">Withdraw anytime</div>
+            <div class="stat-card">
+                <i class="fas fa-calendar-day"></i>
+                <div class="stat-value" id="todayEarnings">USX 0.00</div>
+                <div class="stat-label">Today's Earnings</div>
+                <div class="trend up">↑ 5% from yesterday</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-bullseye"></i>
+                <div class="stat-value" id="targetEarnings">USX 0.00</div>
+                <div class="stat-label">Daily Target</div>
+                <div class="trend" id="targetProgress">0% completed</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-trophy"></i>
+                <div class="stat-value" id="bestDay">USX 0.00</div>
+                <div class="stat-label">Best Day</div>
+                <div class="trend" id="bestDayDate">--/--/----</div>
             </div>
         </div>
-        
-        <div class="profit-chart">
+
+        <!-- Earnings Chart -->
+        <div class="chart-container">
             <canvas id="earningsChart"></canvas>
         </div>
-        
-        <h3>Recent Earnings</h3>
-        <div class="profit-history" id="profitHistory">
-            <!-- Earnings will be loaded here -->
+
+        <!-- Recent Earnings -->
+        <div class="earnings-history">
+            <h3>Recent Earnings</h3>
+            <div id="earningsList">
+                <!-- Earnings will be loaded here -->
+                <div class="history-item">
+                    <div class="history-details">
+                        <div class="history-title">Task Completion</div>
+                        <div class="history-time">Today, 10:30 AM</div>
+                    </div>
+                    <div class="history-amount">+500 USX</div>
+                </div>
+                <div class="history-item">
+                    <div class="history-details">
+                        <div class="history-title">Referral Bonus</div>
+                        <div class="history-time">Yesterday, 3:45 PM</div>
+                    </div>
+                    <div class="history-amount">+2000 USX</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Same bottom nav as dashboard -->
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="withdraw.html" class="bottom-nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>Withdraw</span>
+        </a>
+        <a href="profit.html" class="bottom-nav-item active">
+            <i class="fas fa-chart-line"></i>
+            <span>Profit</span>
+        </a>
+        <a href="account.html" class="bottom-nav-item">
+            <i class="fas fa-user"></i>
+            <span>Account</span>
+        </a>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toastNotification"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // Firebase initialization same as dashboard
-        let earningsChart = null;
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlAtG3aDSqN7iLX-HtoMZopsPT4LsMni0",
+            authDomain: "elitefxreturn.firebaseapp.com",
+            projectId: "elitefxreturn",
+            storageBucket: "elitefxreturn.appspot.com",
+            messagingSenderId: "333913364691",
+            appId: "1:333913364691:web:82566d278552b6cdec1c26"
+        };
 
-        auth.onAuthStateChanged(user => {
-            if (!user) window.location.href = 'login.html';
-            else loadProfitData(user.uid);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Global Variables
+        let earningsChart = null;
+        let currentUser = null;
+        let currentRange = 'week';
+        let unsubscribeEarnings = null;
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initAuth();
+            setupEventListeners();
         });
 
-        async function loadProfitData(userId) {
-            // Load user balance
-            const userDoc = await db.collection('users').doc(userId).get();
-            if (userDoc.exists) {
-                document.getElementById('availableBalance').textContent = 
-                    `UGX ${userDoc.data().balance?.toFixed(2) || '0.00'}`;
-            }
-            
-            // Load earnings data
-            const earningsSnapshot = await db.collection('earnings')
-                .where('userId', '==', userId)
-                .orderBy('date', 'desc')
-                .limit(10)
-                .get();
-                
-            const earningsData = processEarningsData(earningsSnapshot);
-            updateProfitUI(earningsData);
-            setupEventListeners();
-        }
-
-        function processEarningsData(snapshot) {
-            const earnings = [];
-            let total = 0;
-            
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                earnings.push({
-                    date: data.date.toDate(),
-                    amount: data.amount,
-                    source: data.source || 'Task'
-                });
-                total += data.amount;
-            });
-            
-            return { list: earnings, total: total };
-        }
-
-        function updateProfitUI(data) {
-            // Update total earnings
-            document.getElementById('totalEarnings').textContent = `UGX ${data.total.toFixed(2)}`;
-            
-            // Update history list
-            const historyContainer = document.getElementById('profitHistory');
-            historyContainer.innerHTML = '';
-            
-            data.list.forEach(earning => {
-                const item = document.createElement('div');
-                item.className = 'history-item';
-                item.innerHTML = `
-                    <div>
-                        <strong>${earning.source}</strong>
-                        <div class="date">${formatDate(earning.date)}</div>
-                    </div>
-                    <div class="amount">+ UGX ${earning.amount.toFixed(2)}</div>
-                `;
-                historyContainer.appendChild(item);
-            });
-            
-            // Initialize/update chart
-            initChart(data.list);
-        }
-
-        function initChart(earningsData) {
-            const ctx = document.getElementById('earningsChart').getContext('2d');
-            
-            if (earningsChart) {
-                earningsChart.destroy();
-            }
-            
-            // Group by date for chart
-            const chartData = processChartData(earningsData);
-            
-            earningsChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: chartData.labels,
-                    datasets: [{
-                        label: 'Daily Earnings (UGX)',
-                        data: chartData.amounts,
-                        borderColor: '#008080',
-                        backgroundColor: 'rgba(0, 128, 128, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+        // Authentication Management
+        function initAuth() {
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    loadProfitData(user.uid);
+                } else {
+                    window.location.href = 'login.html';
                 }
             });
         }
 
+        // Load profit data based on selected time range
+        function loadProfitData(userId) {
+            // Clear previous listener if exists
+            if (unsubscribeEarnings) unsubscribeEarnings();
+            
+            let query = db.collection('earnings')
+                .where('userId', '==', userId)
+                .orderBy('timestamp', 'desc');
+
+            // Apply time range filter
+            if (currentRange !== 'all') {
+                const now = new Date();
+                let startDate = new Date();
+                
+                switch(currentRange) {
+                    case 'today':
+                        startDate.setHours(0, 0, 0, 0);
+                        break;
+                    case 'week':
+                        startDate.setDate(startDate.getDate() - 7);
+                        break;
+                    case 'month':
+                        startDate.setMonth(startDate.getMonth() - 1);
+                        break;
+                    case 'year':
+                        startDate.setFullYear(startDate.getFullYear() - 1);
+                        break;
+                }
+                
+                query = query.where('timestamp', '>=', startDate);
+            }
+
+            // Set up real-time listener
+            unsubscribeEarnings = query.onSnapshot((snapshot) => {
+                const earningsData = processEarningsData(snapshot);
+                updateProfitUI(earningsData);
+            }, (error) => {
+                showToast('Error loading earnings data', 'error');
+                console.error('Error loading earnings:', error);
+            });
+        }
+
+        // Process earnings data from Firestore
+        function processEarningsData(snapshot) {
+            const earnings = [];
+            let total = 0;
+            let todayTotal = 0;
+            let bestDay = { amount: 0, date: null };
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const earningsDate = data.timestamp.toDate();
+                const amount = data.amount || 0;
+                
+                earnings.push({
+                    id: doc.id,
+                    type: data.type || 'task',
+                    title: data.title || 'Earning',
+                    amount: amount,
+                    timestamp: earningsDate
+                });
+                
+                total += amount;
+                
+                // Calculate today's earnings
+                if (earningsDate >= todayStart) {
+                    todayTotal += amount;
+                }
+                
+                // Track best day
+                if (amount > bestDay.amount) {
+                    bestDay.amount = amount;
+                    bestDay.date = earningsDate;
+                }
+            });
+            
+            return {
+                list: earnings,
+                total: total,
+                todayTotal: todayTotal,
+                bestDay: bestDay
+            };
+        }
+
+        // Update the UI with processed earnings data
+        function updateProfitUI(data) {
+            // Update stats cards
+            document.getElementById('totalEarnings').textContent = `USX ${data.total.toFixed(2)}`;
+            document.getElementById('todayEarnings').textContent = `USX ${data.todayTotal.toFixed(2)}`;
+            document.getElementById('targetEarnings').textContent = `USX 5000.00`; // Example target
+            document.getElementById('targetProgress').textContent = `${Math.min(100, Math.round((data.todayTotal / 5000) * 100)}% completed`;
+            
+            if (data.bestDay.amount > 0) {
+                document.getElementById('bestDay').textContent = `USX ${data.bestDay.amount.toFixed(2)}`;
+                document.getElementById('bestDayDate').textContent = 
+                    data.bestDay.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }
+            
+            // Update earnings list
+            updateEarningsList(data.list.slice(0, 10));
+            
+            // Update chart
+            updateEarningsChart(data.list);
+        }
+
+        // Update earnings history list
+        function updateEarningsList(earnings) {
+            const earningsList = document.getElementById('earningsList');
+            earningsList.innerHTML = '';
+            
+            earnings.forEach(earning => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                
+                item.innerHTML = `
+                    <div class="history-details">
+                        <div class="history-title">${earning.title}</div>
+                        <div class="history-time">${formatTime(earning.timestamp)}</div>
+                    </div>
+                    <div class="history-amount">+${earning.amount.toFixed(2)} USX</div>
+                `;
+                
+                earningsList.appendChild(item);
+            });
+        }
+
+        // Format timestamp for display
+        function formatTime(date) {
+            const now = new Date();
+            const diffInHours = (now - date) / (1000 * 60 * 60);
+            
+            if (diffInHours < 24) {
+                return `Today, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+            } else if (diffInHours < 48) {
+                return `Yesterday, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+            } else {
+                return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+            }
+        }
+
+        // Update or create the earnings chart
+        function updateEarningsChart(earnings) {
+            const ctx = document.getElementById('earningsChart').getContext('2d');
+            
+            // Group earnings by day for the chart
+            const chartData = groupEarningsByDay(earnings);
+            
+            if (earningsChart) {
+                earningsChart.data.labels = chartData.labels;
+                earningsChart.data.datasets[0].data = chartData.amounts;
+                earningsChart.update();
+            } else {
+                earningsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: 'Earnings (USX)',
+                            data: chartData.amounts,
+                            backgroundColor: 'rgba(0, 128, 128, 0.7)',
+                            borderColor: 'rgba(0, 128, 128, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'USX ' + value;
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'USX ' + context.raw.toFixed(2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Group earnings by day for chart display
+        function groupEarningsByDay(earnings) {
+            const grouped = {};
+            const now = new Date();
+            const labels = [];
+            const amounts = [];
+            
+            // Initialize last 7 days
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(now);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toLocaleDateString('en-US', { weekday: 'short' });
+                labels.push(dateStr);
+                amounts.push(0);
+            }
+            
+            // Group earnings by day
+            earnings.forEach(earning => {
+                const earningDate = earning.timestamp;
+                const dayDiff = Math.floor((now - earningDate) / (1000 * 60 * 60 * 24));
+                
+                if (dayDiff >= 0 && dayDiff <= 6) {
+                    amounts[6 - dayDiff] += earning.amount;
+                }
+            });
+            
+            return { labels, amounts };
+        }
+
+        // Setup event listeners
         function setupEventListeners() {
             // Time filter buttons
             document.querySelectorAll('.time-filter').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.time-filter').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
-                    // In a real app, you would reload data for this time range
+                    currentRange = this.dataset.range;
+                    loadProfitData(currentUser.uid);
                 });
             });
             
             // Navigation
-            document.getElementById('navHome').addEventListener('click', () => {
-                window.location.href = 'dashboard.html';
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (!this.classList.contains('active')) {
+                        window.location.href = this.getAttribute('href');
+                    }
+                    e.preventDefault();
+                });
             });
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'default') {
+            const toast = document.getElementById('toastNotification');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 5000);
         }
     </script>
 </body>
