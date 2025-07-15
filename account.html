@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account | EliteFX Return</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #002366;
+            --secondary: #FFD700;
+            --accent: #008080;
+            --success: #00C851;
+            --error: #ff4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Header - Same as dashboard */
+        .app-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+
+        .profile-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .profile-email {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .account-status {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(0, 200, 81, 0.1);
+            color: var(--success);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Account Details */
+        .account-details {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #666;
+        }
+
+        .detail-value {
+            font-weight: 600;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: none;
+            text-align: left;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .action-btn i {
+            font-size: 1.2rem;
+            margin-right: 15px;
+            color: var(--accent);
+        }
+
+        /* Bottom Navigation - Same as dashboard */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            max-width: 90%;
+        }
+    </style>
+</head>
+<body>
+    <!-- App Header -->
+    <div class="app-header">
+        <div>My Account</div>
+        <div class="user-welcome">
+            <i class="fas fa-user-cog"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="profile-avatar" id="userAvatar">U</div>
+            <div class="profile-name" id="userName">Loading...</div>
+            <div class="profile-email" id="userEmail">user@example.com</div>
+            <div class="account-status">Verified Account</div>
+        </div>
+
+        <!-- Account Details -->
+        <div class="account-details">
+            <div class="detail-item">
+                <span class="detail-label">Member Since</span>
+                <span class="detail-value" id="memberSince">Loading...</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Account Tier</span>
+                <span class="detail-value" id="accountTier">Standard</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Referral Code</span>
+                <span class="detail-value" id="referralCode">ELITE-XXXX</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Total Earnings</span>
+                <span class="detail-value" id="totalAccountEarnings">USX 0.00</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="action-btn" id="editProfileBtn">
+                <i class="fas fa-user-edit"></i>
+                <span>Edit Profile</span>
+            </button>
+            <button class="action-btn" id="changePasswordBtn">
+                <i class="fas fa-lock"></i>
+                <span>Change Password</span>
+            </button>
+            <button class="action-btn" id="paymentMethodsBtn">
+                <i class="fas fa-credit-card"></i>
+                <span>Payment Methods</span>
+            </button>
+            <button class="action-btn" id="securitySettingsBtn">
+                <i class="fas fa-shield-alt"></i>
+                <span>Security Settings</span>
+            </button>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="action-btn logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="bottom-nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="withdraw.html" class="bottom-nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>Withdraw</span>
+        </a>
+        <a href="profit.html" class="bottom-nav-item">
+            <i class="fas fa-chart-line"></i>
+            <span>Profit</span>
+        </a>
+        <a href="account.html" class="bottom-nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Account</span>
+        </a>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="passwordModal">
+        <div class="modal-content">
+            <h2>Change Password</h2>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" minlength="6" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" minlength="6" required>
+                </div>
+                <button type="submit" class="btn-primary">Update Password</button>
+                <button type="button" class="btn-secondary" id="cancelPasswordChange">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toastNotification"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlAtG3aDSqN7iLX-HtoMZopsPT4LsMni0",
+            authDomain: "elitefxreturn.firebaseapp.com",
+            projectId: "elitefxreturn",
+            storageBucket: "elitefxreturn.appspot.com",
+            messagingSenderId: "333913364691",
+            appId: "1:333913364691:web:82566d278552b6cdec1c26"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Global Variables
+        let currentUser = null;
+        let userData = {};
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initAuth();
+            setupEventListeners();
+        });
+
+        // Authentication Management
+        function initAuth() {
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    currentUser = user;
+                    updateUserProfile(user);
+                    loadAccountData(user.uid);
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+        }
+
+        // Update user profile section
+        function updateUserProfile(user) {
+            document.getElementById('userAvatar').textContent = 
+                user.displayName ? user.displayName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase();
+            
+            document.getElementById('userName').textContent = 
+                user.displayName || user.email.split('@')[0];
+            
+            document.getElementById('userEmail').textContent = user.email;
+        }
+
+        // Load account data from Firestore
+        async function loadAccountData(userId) {
+            try {
+                const userDoc = await db.collection('users').doc(userId).get();
+                
+                if (userDoc.exists) {
+                    userData = userDoc.data();
+                    updateAccountUI();
+                }
+            } catch (error) {
+                showToast('Error loading account data', 'error');
+                console.error('Error loading account data:', error);
+            }
+        }
+
+        // Update the account UI with loaded data
+        function updateAccountUI() {
+            // Member since date
+            if (userData.createdAt) {
+                const joinDate = userData.createdAt.toDate();
+                document.getElementById('memberSince').textContent = 
+                    joinDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            }
+            
+            // Account tier
+            if (userData.accountTier) {
+                document.getElementById('accountTier').textContent = 
+                    userData.accountTier.charAt(0).toUpperCase() + userData.accountTier.slice(1);
+            }
+            
+            // Referral code
+            document.getElementById('referralCode').textContent = 
+                userData.referralCode || `ELITE-${currentUser.uid.slice(0, 5).toUpperCase()}`;
+            
+            // Total earnings
+            document.getElementById('totalAccountEarnings').textContent = 
+                `USX ${(userData.totalEarnings || 0).toFixed(2)}`;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Navigation
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (!this.classList.contains('active')) {
+                        window.location.href = this.getAttribute('href');
+                    }
+                    e.preventDefault();
+                });
+            });
+            
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                auth.signOut().then(() => {
+                    window.location.href = 'login.html';
+                }).catch(error => {
+                    showToast('Logout failed: ' + error.message, 'error');
+                });
+            });
+            
+            // Change password button
+            document.getElementById('changePasswordBtn').addEventListener('click', () => {
+                document.getElementById('passwordModal').style.display = 'flex';
+            });
+            
+            // Cancel password change
+            document.getElementById('cancelPasswordChange').addEventListener('click', () => {
+                document.getElementById('passwordModal').style.display = 'none';
+                document.getElementById('passwordForm').reset();
+            });
+            
+            // Password form submission
+            document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (newPassword !== confirmPassword) {
+                    showToast('New passwords do not match', 'error');
+                    return;
+                }
+                
+                if (newPassword.length < 6) {
+                    showToast('Password must be at least 6 characters', 'error');
+                    return;
+                }
+                
+                try {
+                    // Reauthenticate user
+                    const credential = firebase.auth.EmailAuthProvider.credential(
+                        currentUser.email, 
+                        currentPassword
+                    );
+                    
+                    await currentUser.reauthenticateWithCredential(credential);
+                    
+                    // Update password
+                    await currentUser.updatePassword(newPassword);
+                    
+                    // Show success and close modal
+                    showToast('Password updated successfully', 'success');
+                    document.getElementById('passwordModal').style.display = 'none';
+                    document.getElementById('passwordForm').reset();
+                    
+                } catch (error) {
+                    console.error('Password change error:', error);
+                    
+                    let errorMessage = 'Password change failed';
+                    if (error.code === 'auth/wrong-password') {
+                        errorMessage = 'Incorrect current password';
+                    } else if (error.code === 'auth/weak-password') {
+                        errorMessage = 'Password is too weak';
+                    }
+                    
+                    showToast(errorMessage, 'error');
+                }
+            });
+            
+            // Other action buttons
+            document.getElementById('editProfileBtn').addEventListener('click', () => {
+                showToast('Edit profile feature coming soon', 'info');
+            });
+            
+            document.getElementById('paymentMethodsBtn').addEventListener('click', () => {
+                showToast('Payment methods feature coming soon', 'info');
+            });
+            
+            document.getElementById('securitySettingsBtn').addEventListener('click', () => {
+                showToast('Security settings feature coming soon', 'info');
+            });
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'default') {
+            const toast = document.getElementById('toastNotification');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
