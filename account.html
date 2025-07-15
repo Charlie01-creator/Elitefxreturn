@@ -1,305 +1,715 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Profit | EliteFX Return</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Update Account | EliteFX Return</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
-      --primary:#0d1b2a;--secondary:#1b263b;--accent:#00bcd4;
-      --success:#00C851;--error:#ff4444;--text-light:#e0e0e0;
-      --text-muted:#a0a0a0;--card-bg:#1e293b;--nav-bg:#0f172a;
+      --primary: #0d1b2a;
+      --secondary: #1b263b;
+      --accent: #00bcd4;
+      --success: #00C851;
+      --error: #ff4444;
+      --text-light: #e0e0e0;
+      --text-muted: #a0a0a0;
+      --card-bg: #1e293b;
+      --nav-bg: #0f172a;
     }
-    *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-    body{background:var(--primary);color:var(--text-light);padding-bottom:90px;}
-    .container{padding:15px;max-width:600px;margin:0 auto;}
-    .app-header{background:var(--secondary);padding:15px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.5);}
-    .profile-header{display:flex;align-items:center;padding:20px 15px;background:var(--secondary);border-radius:10px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,0.2);}
-    .profile-pic{width:60px;height:60px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-right:15px;font-size:1.5rem;color:#000;}
-    .profile-info h3{font-size:1.2rem;margin-bottom:5px;}
-    .profile-info p{font-size:0.8rem;color:var(--text-muted);}
-    .card{background:var(--card-bg);border-radius:10px;padding:20px;margin-bottom:20px;box-shadow:0 2px 10px rgba(0,0,0,0.2);}
-    .section-title{display:flex;align-items:center;margin-bottom:10px;font-size:1rem;color:var(--accent);}
-    .section-title i{margin-right:10px;}
-    .profit-number{font-size:2.5rem;font-weight:700;margin:10px 0;color:var(--success);}
-    .stats{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:10px 0;}
-    .stat{background:#2d3748;border-radius:8px;padding:15px;text-align:center;}
-    .stat-label{font-size:0.8rem;color:var(--text-muted);}
-    .stat-value{font-size:1.3rem;margin-top:5px;}
-    .trend-up{color:#00C851;margin-left:5px;}
-    .trend-down{color:#ff4444;margin-left:5px;}
-    .filters{display:flex;gap:10px;margin-bottom:10px;}
-    .filters button{background:var(--accent);border:none;color:#000;padding:8px 12px;border-radius:8px;cursor:pointer;transition:0.2s;}
-    .filters button.active{opacity:0.8;}
-    .actions{display:flex;justify-content:space-between;margin-top:10px;}
-    .actions button{background:var(--secondary);color:var(--text-light);border:none;padding:8px 12px;border-radius:8px;cursor:pointer;}
-    .loader, .empty-state {text-align:center;padding:40px;color:var(--text-muted);}
-    canvas{width:100%;max-height:250px;background:#2d3748;border-radius:8px;}
-    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--nav-bg);display:flex;justify-content:space-around;padding:12px 0;box-shadow:0 -2px 10px rgba(0,0,0,0.5);z-index:100;}
-    .bottom-nav-item{text-align:center;color:var(--text-muted);font-size:0.75rem;text-decoration:none;}
-    .bottom-nav-item i{display:block;font-size:1rem;}
-    .bottom-nav-item.active{color:var(--accent);}
-    .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--accent);color:black;padding:12px 20px;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;display:none;max-width:90%;}
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--primary);
+      color: var(--text-light);
+      padding-bottom: 80px;
+    }
+
+    .container {
+      padding: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .app-header {
+      background-color: var(--secondary);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      padding: 20px 15px;
+      background: var(--secondary);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .profile-pic {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 1.5rem;
+      color: #000;
+    }
+
+    .profile-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .profile-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .update-section {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      font-size: 1rem;
+      color: var(--accent);
+    }
+
+    .section-title i {
+      margin-right: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      background: #2d3748;
+      border: 1px solid #3c4a5e;
+      border-radius: 8px;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 20px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #2d3748;
+      color: var(--text-light);
+    }
+
+    .divider {
+      height: 1px;
+      background: #2c3e50;
+      margin: 20px 0;
+    }
+
+    .switch-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .switch-label {
+      font-size: 0.9rem;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #3c4a5e;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--nav-bg);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+
+    .bottom-nav-item {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-decoration: none;
+    }
+
+    .bottom-nav-item i {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .bottom-nav-item.active {
+      color: var(--accent);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: black;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      z-index: 1000;
+      display: none;
+      max-width: 90%;
+    }
+
+    .verification-badge {
+      display: inline-block;
+      background: var(--success);
+      color: #000;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+
+    .pending-badge {
+      display: inline-block;
+      background: #ffc107;
+      color: #000;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      margin-left: 8px;
+    }
   </style>
 </head>
 <body>
+  <!-- App Header -->
   <div class="app-header">
-    <div>Profit</div>
-    <div><i class="fas fa-chart-line"></i></div>
+    <div>Update Account</div>
+    <div class="user-welcome">
+      <i class="fas fa-user-cog"></i>
+    </div>
   </div>
+
   <div class="container">
+    <!-- Profile Header -->
     <div class="profile-header">
-      <div class="profile-pic"><i class="fas fa-user"></i></div>
+      <div class="profile-pic">
+        <i class="fas fa-user"></i>
+      </div>
       <div class="profile-info">
         <h3 id="userName">Loading...</h3>
         <p id="userEmail">user@example.com</p>
       </div>
     </div>
 
-    <div class="filters">
-      <button data-range="7" class="active">7d</button>
-      <button data-range="30">30d</button>
-      <button data-range="365">1y</button>
+    <!-- Personal Information Section -->
+    <div class="update-section">
+      <div class="section-title">
+        <i class="fas fa-user-edit"></i>
+        <span>Personal Information</span>
+      </div>
+      
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" class="form-control" placeholder="Enter your full name">
+      </div>
+      
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="tel" id="phoneNumber" class="form-control" placeholder="Enter your phone number">
+      </div>
+      
+      <div class="form-group">
+        <label for="country">Country</label>
+        <select id="country" class="form-control">
+          <option value="">Select your country</option>
+          <option value="US">United States</option>
+          <option value="UK">United Kingdom</option>
+          <option value="CA">Canada</option>
+          <option value="AU">Australia</option>
+          <!-- More countries would be added here -->
+        </select>
+      </div>
+      
+      <button id="savePersonalInfo" class="btn">Save Changes</button>
     </div>
-    <button id="refreshBtn" class="actions-btn">🔄 Refresh</button>
 
-    <div id="loader" class="card loader">Loading profit data...</div>
-    <div id="empty" class="card empty-state" style="display:none;">No profit data yet. Start trading to see progress!</div>
-
-    <div id="profitContent" style="display:none;">
-      <div class="card">
-        <div class="section-title"><i class="fas fa-dollar-sign"></i><span>Current Profit</span></div>
-        <div class="profit-number" id="currentProfit">US$ 0.00</div>
-        <div class="stats">
-          <div class="stat"><div class="stat-label">Today</div><div class="stat-value" id="profitToday">—</div></div>
-          <div class="stat"><div class="stat-label">This Month</div><div class="stat-value" id="profitMonth">—</div></div>
-          <div class="stat"><div class="stat-label">This Year</div><div class="stat-value" id="profitYear">—</div></div>
-          <div class="stat"><div class="stat-label">Total</div><div class="stat-value" id="profitTotal">—</div></div>
+    <!-- Security Section -->
+    <div class="update-section">
+      <div class="section-title">
+        <i class="fas fa-shield-alt"></i>
+        <span>Security</span>
+      </div>
+      
+      <div class="form-group">
+        <label>Email Verification</label>
+        <div id="emailVerificationStatus" style="padding: 8px 0;">
+          <span id="emailStatusText">Status: Loading...</span>
+          <span id="verificationBadge" class="pending-badge">Pending</span>
         </div>
+        <button id="verifyEmailBtn" class="btn btn-secondary">Send Verification Email</button>
       </div>
+      
+      <div class="divider"></div>
+      
+      <div class="form-group">
+        <label for="currentPassword">Current Password</label>
+        <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password">
+      </div>
+      
+      <div class="form-group">
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
+      </div>
+      
+      <div class="form-group">
+        <label for="confirmPassword">Confirm New Password</label>
+        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
+      </div>
+      
+      <button id="changePasswordBtn" class="btn">Change Password</button>
+    </div>
 
-      <div class="actions">
-        <button id="exportBtn">Export CSV</button>
-        <button id="withdrawBtn">Request Withdrawal</button>
+    <!-- Preferences Section -->
+    <div class="update-section">
+      <div class="section-title">
+        <i class="fas fa-cog"></i>
+        <span>Preferences</span>
       </div>
+      
+      <div class="switch-container">
+        <span class="switch-label">Dark Mode</span>
+        <label class="switch">
+          <input type="checkbox" id="darkModeToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="switch-container">
+        <span class="switch-label">Email Notifications</span>
+        <label class="switch">
+          <input type="checkbox" id="emailNotificationsToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="switch-container">
+        <span class="switch-label">SMS Notifications</span>
+        <label class="switch">
+          <input type="checkbox" id="smsNotificationsToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+      
+      <div class="divider"></div>
+      
+      <div class="form-group">
+        <label for="language">Language</label>
+        <select id="language" class="form-control">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="de">German</option>
+          <!-- More languages would be added here -->
+        </select>
+      </div>
+      
+      <button id="savePreferencesBtn" class="btn">Save Preferences</button>
+    </div>
 
-      <div class="card">
-        <div class="section-title"><i class="fas fa-chart-area"></i><span>Profit Chart</span></div>
-        <canvas id="profitChart"></canvas>
+    <!-- Account Actions Section -->
+    <div class="update-section">
+      <div class="section-title">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Account Actions</span>
       </div>
+      
+      <button id="logoutBtn" class="btn btn-secondary" style="margin-bottom: 10px;">
+        <i class="fas fa-sign-out-alt"></i> Log Out
+      </button>
+      
+      <button id="deleteAccountBtn" class="btn btn-secondary" style="background: var(--error);">
+        <i class="fas fa-trash-alt"></i> Delete Account
+      </button>
     </div>
   </div>
 
+  <!-- Bottom Navigation -->
   <div class="bottom-nav">
-    <a href="dashboard.html" class="bottom-nav-item"><i class="fas fa-home"></i><span>Home</span></a>
-    <a href="withdraw.html" class="bottom-nav-item"><i class="fas fa-wallet"></i><span>Withdraw</span></a>
-    <a href="profit.html" class="bottom-nav-item active"><i class="fas fa-chart-line"></i><span>Profit</span></a>
-    <a href="account.html" class="bottom-nav-item"><i class="fas fa-user"></i><span>Account</span></a>
+    <a href="dashboard.html" class="bottom-nav-item">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="withdraw.html" class="bottom-nav-item">
+      <i class="fas fa-wallet"></i>
+      <span>Withdraw</span>
+    </a>
+    <a href="profit.html" class="bottom-nav-item">
+      <i class="fas fa-chart-line"></i>
+      <span>Profit</span>
+    </a>
+    <a href="account.html" class="bottom-nav-item active">
+      <i class="fas fa-user"></i>
+      <span>Account</span>
+    </a>
   </div>
 
+  <!-- Toast Notification -->
   <div class="toast" id="toastNotification"></div>
 
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-    
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth(), db = firebase.firestore();
-    let currentUser, rawData = null, chart;
 
-    const loader = document.getElementById('loader');
-    const empty = document.getElementById('empty');
-    const content = document.getElementById('profitContent');
-    const toastEl = document.getElementById('toastNotification');
+  <!-- Your Custom JavaScript -->
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlAtG3aDSqN7iLX-HtoMZopsPT4LsMni0",
+      authDomain: "elitefxreturn.firebaseapp.com",
+      projectId: "elitefxreturn",
+      storageBucket: "elitefxreturn.appspot.com",
+      messagingSenderId: "333913364691",
+      appId: "1:333913364691:web:82566d278552b6cdec1c26"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    let currentUser = null;
+    let userData = null;
 
     document.addEventListener('DOMContentLoaded', () => {
-      auth.onAuthStateChanged(u => {
-        if (!u) return window.location.href = 'login.html';
-        currentUser = u;
-        document.getElementById('userName').textContent = u.displayName || u.email.split('@')[0];
-        document.getElementById('userEmail').textContent = u.email;
-        fetchAndRender();
-      });
-
-      document.querySelectorAll('.filters button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));
-          btn.classList.add('active');
-          renderChartWithRange(parseInt(btn.dataset.range));
-        });
-      });
-
-      document.getElementById('refreshBtn').addEventListener('click', fetchAndRender);
-      document.getElementById('exportBtn').addEventListener('click', exportCSV);
-      document.getElementById('withdrawBtn').addEventListener('click', () => {
-        window.location.href = 'withdraw.html';
-      });
+      initAuth();
+      setupEventListeners();
     });
 
-    async function fetchAndRender() {
-      loader.style.display = 'block'; 
-      empty.style.display = 'none'; 
-      content.style.display = 'none';
+    function initAuth() {
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          currentUser = user;
+          loadUserData(user.uid);
+          updateUserProfileUI(user);
+        } else {
+          window.location.href = 'login.html';
+        }
+      });
+    }
+
+    function loadUserData(userId) {
+      db.collection('users').doc(userId).get()
+        .then((doc) => {
+          if (doc.exists) {
+            userData = doc.data();
+            updateFormFields(userData);
+          } else {
+            console.log("No user data found");
+          }
+        })
+        .catch((error) => {
+          showToast('Error loading user data', 'error');
+          console.error('Error loading user data:', error);
+        });
+    }
+
+    function updateUserProfileUI(user) {
+      document.getElementById('userName').textContent = user.displayName || 'User';
+      document.getElementById('userEmail').textContent = user.email;
       
-      try {
-        const doc = await db.collection('profits').doc(currentUser.uid).get();
-        rawData = doc.exists ? doc.data() : null;
+      // Update email verification status
+      const emailStatusText = document.getElementById('emailStatusText');
+      const verificationBadge = document.getElementById('verificationBadge');
+      
+      if (user.emailVerified) {
+        emailStatusText.textContent = 'Status: Verified';
+        verificationBadge.textContent = 'Verified';
+        verificationBadge.className = 'verification-badge';
+        document.getElementById('verifyEmailBtn').style.display = 'none';
+      } else {
+        emailStatusText.textContent = 'Status: Not Verified';
+        verificationBadge.textContent = 'Pending';
+        verificationBadge.className = 'pending-badge';
+        document.getElementById('verifyEmailBtn').style.display = 'block';
+      }
+    }
+
+    function updateFormFields(data) {
+      // Personal Info
+      document.getElementById('fullName').value = data.fullName || '';
+      document.getElementById('phoneNumber').value = data.phoneNumber || '';
+      document.getElementById('country').value = data.country || '';
+      
+      // Preferences
+      document.getElementById('darkModeToggle').checked = data.preferences?.darkMode !== false;
+      document.getElementById('emailNotificationsToggle').checked = data.preferences?.emailNotifications !== false;
+      document.getElementById('smsNotificationsToggle').checked = data.preferences?.smsNotifications || false;
+      document.getElementById('language').value = data.preferences?.language || 'en';
+    }
+
+    function setupEventListeners() {
+      // Save Personal Info
+      document.getElementById('savePersonalInfo').addEventListener('click', () => {
+        const fullName = document.getElementById('fullName').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        const country = document.getElementById('country').value;
         
-        if (!rawData || !rawData.history || rawData.history.length === 0) {
-          empty.style.display = 'block'; 
-          loader.style.display = 'none';
+        if (!fullName) {
+          showToast('Please enter your full name', 'error');
           return;
         }
         
-        // Sort history by date (newest first)
-        rawData.history.sort((a, b) => new Date(b.date) - new Date(a.date));
-        
-        renderOverview(rawData);
-        renderChartWithRange(parseInt(document.querySelector('.filters button.active').dataset.range));
-        loader.style.display = 'none'; 
-        content.style.display = 'block';
-      } catch(e) {
-        showToast('Error loading profit data','error');
-        console.error(e);
-        loader.textContent = 'Failed to load data';
-      }
-    }
-
-    function renderOverview(d) {
-      const fmt = v => v.toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-      
-      document.getElementById('currentProfit').textContent = fmt(d.current || 0);
-      document.getElementById('profitToday').textContent = fmt(d.today || 0);
-      document.getElementById('profitMonth').textContent = fmt(d.month || 0);
-      document.getElementById('profitYear').textContent = fmt(d.year || 0);
-      document.getElementById('profitTotal').textContent = fmt(d.total || 0);
-    }
-
-    function renderChartWithRange(days) {
-      if (!rawData) return;
-      
-      const cutoff = Date.now() - days * 24 * 3600 * 1000;
-      const arr = rawData.history
-        .filter(h => new Date(h.date).getTime() >= cutoff)
-        .sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort chronologically for chart
-      
-      const labels = arr.map(h => {
-        const date = new Date(h.date);
-        return days <= 30 ? 
-          date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) :
-          date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-      });
-      
-      const data = arr.map(h => h.profit);
-      
-      if (!chart) {
-        const ctx = document.getElementById('profitChart').getContext('2d');
-        chart = new Chart(ctx, {
-          type: 'line',
-          data: { 
-            labels, 
-            datasets: [{ 
-              label: 'Profit', 
-              data, 
-              borderColor: '#00C851', 
-              backgroundColor: 'rgba(0,200,81,0.2)', 
-              fill: true,
-              tension: 0.4
-            }] 
-          },
-          options: { 
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: { 
-              x: { 
-                ticks: {
-                  color: '#a0a0a0',
-                  maxRotation: 45,
-                  minRotation: 45
-                } 
-              }, 
-              y: { 
-                ticks: {
-                  color: '#a0a0a0',
-                  callback: function(value) {
-                    return '$' + value.toLocaleString();
-                  }
-                } 
-              } 
-            },
-            plugins: { 
-              legend: {
-                labels: {
-                  color: '#e0e0e0'
-                }
-              },
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    return 'Profit: ' + context.parsed.y.toLocaleString('en-US', {
-                      style: 'currency',
-                      currency: 'USD'
-                    });
-                  }
-                }
-              }
-            } 
+        db.collection('users').doc(currentUser.uid).update({
+          fullName,
+          phoneNumber,
+          country,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+          showToast('Personal information updated successfully');
+          // Update display name if changed
+          if (fullName !== currentUser.displayName) {
+            currentUser.updateProfile({
+              displayName: fullName
+            }).then(() => {
+              document.getElementById('userName').textContent = fullName;
+            });
           }
+        })
+        .catch((error) => {
+          showToast('Error updating information', 'error');
+          console.error('Error updating user data:', error);
         });
-      } else {
-        chart.data.labels = labels; 
-        chart.data.datasets[0].data = data; 
-        chart.update();
-      }
-    }
-
-    function exportCSV() {
-      if (!rawData) return showToast('No data to export','error');
-      
-      // Format dates for CSV
-      const formattedData = rawData.history.map(h => {
-        const date = new Date(h.date);
-        return {
-          date: date.toLocaleDateString('en-US'),
-          profit: h.profit.toFixed(2)
-        };
       });
       
-      let csv = 'Date,Profit\n' + 
-        formattedData.map(h => `${h.date},${h.profit}`).join('\n');
+      // Verify Email
+      document.getElementById('verifyEmailBtn').addEventListener('click', () => {
+        currentUser.sendEmailVerification()
+          .then(() => {
+            showToast('Verification email sent. Please check your inbox.');
+          })
+          .catch((error) => {
+            showToast('Error sending verification email', 'error');
+            console.error('Error sending verification email:', error);
+          });
+      });
       
-      const blob = new Blob([csv], {type:'text/csv'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; 
-      a.download = `profit-history-${new Date().toISOString().split('T')[0]}.csv`;
-      a.click(); 
-      URL.revokeObjectURL(url);
-      showToast('CSV exported successfully');
+      // Change Password
+      document.getElementById('changePasswordBtn').addEventListener('click', () => {
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (!currentPassword || !newPassword || !confirmPassword) {
+          showToast('Please fill all password fields', 'error');
+          return;
+        }
+        
+        if (newPassword !== confirmPassword) {
+          showToast('New passwords do not match', 'error');
+          return;
+        }
+        
+        if (newPassword.length < 6) {
+          showToast('Password must be at least 6 characters', 'error');
+          return;
+        }
+        
+        // Reauthenticate user before changing password
+        const credential = firebase.auth.EmailAuthProvider.credential(
+          currentUser.email,
+          currentPassword
+        );
+        
+        currentUser.reauthenticateWithCredential(credential)
+          .then(() => {
+            return currentUser.updatePassword(newPassword);
+          })
+          .then(() => {
+            showToast('Password changed successfully');
+            // Clear password fields
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+          })
+          .catch((error) => {
+            showToast('Error changing password', 'error');
+            console.error('Error changing password:', error);
+          });
+      });
+      
+      // Save Preferences
+      document.getElementById('savePreferencesBtn').addEventListener('click', () => {
+        const preferences = {
+          darkMode: document.getElementById('darkModeToggle').checked,
+          emailNotifications: document.getElementById('emailNotificationsToggle').checked,
+          smsNotifications: document.getElementById('smsNotificationsToggle').checked,
+          language: document.getElementById('language').value
+        };
+        
+        db.collection('users').doc(currentUser.uid).update({
+          preferences,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+        .then(() => {
+          showToast('Preferences saved successfully');
+          // Apply dark mode immediately
+          if (preferences.darkMode) {
+            document.documentElement.style.setProperty('--primary', '#0d1b2a');
+            document.documentElement.style.setProperty('--secondary', '#1b263b');
+            document.documentElement.style.setProperty('--card-bg', '#1e293b');
+          } else {
+            document.documentElement.style.setProperty('--primary', '#f8f9fa');
+            document.documentElement.style.setProperty('--secondary', '#e9ecef');
+            document.documentElement.style.setProperty('--card-bg', '#ffffff');
+          }
+        })
+        .catch((error) => {
+          showToast('Error saving preferences', 'error');
+          console.error('Error saving preferences:', error);
+        });
+      });
+      
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        auth.signOut()
+          .then(() => {
+            window.location.href = 'login.html';
+          })
+          .catch((error) => {
+            showToast('Error logging out', 'error');
+            console.error('Error logging out:', error);
+          });
+      });
+      
+      // Delete Account
+      document.getElementById('deleteAccountBtn').addEventListener('click', () => {
+        if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+          // First delete user data
+          db.collection('users').doc(currentUser.uid).delete()
+            .then(() => {
+              // Then delete the user account
+              return currentUser.delete();
+            })
+            .then(() => {
+              window.location.href = 'login.html';
+            })
+            .catch((error) => {
+              showToast('Error deleting account', 'error');
+              console.error('Error deleting account:', error);
+            });
+        }
+      });
     }
 
-    function showToast(msg, type = 'info') {
-      toastEl.textContent = msg;
-      toastEl.style.backgroundColor = type === 'error' ? 'var(--error)' : 'var(--accent)';
-      toastEl.style.display = 'block';
-      setTimeout(() => toastEl.style.display = 'none', 3000);
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toastNotification');
+      toast.textContent = message;
+      toast.style.backgroundColor = type === 'error' ? '#ff4444' : '#00bcd4';
+      toast.style.display = 'block';
+
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
     }
   </script>
 </body>
