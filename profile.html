@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profit History | EliteFX Return</title>
+    <!-- Same stylesheets as dashboard -->
+    <style>
+        .profit-container {
+            padding: 20px;
+        }
+        .time-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .time-filter {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: #f0f0f0;
+            border: none;
+            cursor: pointer;
+        }
+        .time-filter.active {
+            background: var(--primary);
+            color: white;
+        }
+        .profit-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-box {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .stat-box h3 {
+            margin-top: 0;
+            color: #666;
+            font-size: 1rem;
+        }
+        .stat-box .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .profit-chart {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            height: 250px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .profit-history {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+    <!-- Chart.js for graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Same header as dashboard -->
+
+    <div class="profit-container">
+        <h2>Profit Analytics</h2>
+        
+        <div class="time-filters">
+            <button class="time-filter active" data-range="today">Today</button>
+            <button class="time-filter" data-range="week">This Week</button>
+            <button class="time-filter" data-range="month">This Month</button>
+            <button class="time-filter" data-range="all">All Time</button>
+        </div>
+        
+        <div class="profit-stats">
+            <div class="stat-box">
+                <h3>Total Earnings</h3>
+                <div class="value" id="totalEarnings">UGX 0.00</div>
+                <div class="trend up">↑ 12% from last week</div>
+            </div>
+            <div class="stat-box">
+                <h3>Available Balance</h3>
+                <div class="value" id="availableBalance">UGX 0.00</div>
+                <div class="trend">Withdraw anytime</div>
+            </div>
+        </div>
+        
+        <div class="profit-chart">
+            <canvas id="earningsChart"></canvas>
+        </div>
+        
+        <h3>Recent Earnings</h3>
+        <div class="profit-history" id="profitHistory">
+            <!-- Earnings will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Same bottom nav as dashboard -->
+
+    <script>
+        // Firebase initialization same as dashboard
+        let earningsChart = null;
+
+        auth.onAuthStateChanged(user => {
+            if (!user) window.location.href = 'login.html';
+            else loadProfitData(user.uid);
+        });
+
+        async function loadProfitData(userId) {
+            // Load user balance
+            const userDoc = await db.collection('users').doc(userId).get();
+            if (userDoc.exists) {
+                document.getElementById('availableBalance').textContent = 
+                    `UGX ${userDoc.data().balance?.toFixed(2) || '0.00'}`;
+            }
+            
+            // Load earnings data
+            const earningsSnapshot = await db.collection('earnings')
+                .where('userId', '==', userId)
+                .orderBy('date', 'desc')
+                .limit(10)
+                .get();
+                
+            const earningsData = processEarningsData(earningsSnapshot);
+            updateProfitUI(earningsData);
+            setupEventListeners();
+        }
+
+        function processEarningsData(snapshot) {
+            const earnings = [];
+            let total = 0;
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                earnings.push({
+                    date: data.date.toDate(),
+                    amount: data.amount,
+                    source: data.source || 'Task'
+                });
+                total += data.amount;
+            });
+            
+            return { list: earnings, total: total };
+        }
+
+        function updateProfitUI(data) {
+            // Update total earnings
+            document.getElementById('totalEarnings').textContent = `UGX ${data.total.toFixed(2)}`;
+            
+            // Update history list
+            const historyContainer = document.getElementById('profitHistory');
+            historyContainer.innerHTML = '';
+            
+            data.list.forEach(earning => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <div>
+                        <strong>${earning.source}</strong>
+                        <div class="date">${formatDate(earning.date)}</div>
+                    </div>
+                    <div class="amount">+ UGX ${earning.amount.toFixed(2)}</div>
+                `;
+                historyContainer.appendChild(item);
+            });
+            
+            // Initialize/update chart
+            initChart(data.list);
+        }
+
+        function initChart(earningsData) {
+            const ctx = document.getElementById('earningsChart').getContext('2d');
+            
+            if (earningsChart) {
+                earningsChart.destroy();
+            }
+            
+            // Group by date for chart
+            const chartData = processChartData(earningsData);
+            
+            earningsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [{
+                        label: 'Daily Earnings (UGX)',
+                        data: chartData.amounts,
+                        borderColor: '#008080',
+                        backgroundColor: 'rgba(0, 128, 128, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function setupEventListeners() {
+            // Time filter buttons
+            document.querySelectorAll('.time-filter').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.time-filter').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    // In a real app, you would reload data for this time range
+                });
+            });
+            
+            // Navigation
+            document.getElementById('navHome').addEventListener('click', () => {
+                window.location.href = 'dashboard.html';
+            });
+        }
+    </script>
+</body>
+</html>
