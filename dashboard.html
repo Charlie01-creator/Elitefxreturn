@@ -13,9 +13,10 @@
             --accent: #008080;
             --dark: #1a1a2e;
             --light: #f8f9fa;
-            --success: #00C851;
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
             --error: #ff4444;
-            --warning: #ffbb33;
+            --success: #00C851;
         }
         
         * {
@@ -28,37 +29,16 @@
         
         body {
             background-color: #f5f7fa;
-            color: #333;
-            padding-bottom: 80px;
+            padding-bottom: 70px;
+        }
+        
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: white;
         }
         
         .container {
             padding: 15px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        /* Loading State */
-        .loading-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 200px;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(0, 35, 102, 0.2);
-            border-radius: 50%;
-            border-top-color: var(--primary);
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
         
         /* Header */
@@ -66,221 +46,92 @@
             background-color: var(--primary);
             color: white;
             padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .app-title {
-            font-size: 1.2rem;
-            font-weight: 600;
         }
         
         .user-welcome {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .user-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: var(--secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-weight: bold;
-        }
-        
-        .logout-btn {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
             font-size: 0.9rem;
+            font-weight: normal;
+        }
+        
+        /* Notification Banner */
+        .notification-banner {
+            background-color: rgba(0, 131, 143, 0.1);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border-left: 4px solid var(--accent);
+        }
+        
+        body.dark-mode .notification-banner {
+            background-color: rgba(0, 131, 143, 0.2);
+            color: white;
         }
         
         /* Account Summary */
         .account-summary {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 15px;
             margin: 15px 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
         
-        .account-summary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 5px;
-            height: 100%;
-            background: var(--accent);
-        }
-        
-        .balance-label {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 5px;
+        body.dark-mode .account-summary {
+            background: var(--dark-card);
+            color: white;
         }
         
         .balance {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary);
-            margin: 5px 0;
+            margin: 10px 0;
         }
         
-        .balance-subtext {
-            font-size: 0.8rem;
-            color: #666;
+        body.dark-mode .balance {
+            color: var(--secondary);
         }
         
-        /* Quick Actions */
-        .quick-actions {
+        /* Main Navigation */
+        .main-nav {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
         }
         
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            border-radius: 10px;
+        .nav-item {
             background: white;
-            border: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 12px 5px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            font-size: 0.8rem;
+            position: relative;
             cursor: pointer;
         }
         
-        .action-btn i {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
+        body.dark-mode .nav-item {
+            background: var(--dark-card);
+            color: white;
+        }
+        
+        .nav-item i {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
             color: var(--primary);
         }
         
-        .action-btn.deposit i {
-            color: var(--success);
-        }
-        
-        .action-btn.withdraw i {
-            color: var(--accent);
-        }
-        
-        /* Stats Cards */
-        .stats-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .stat-card i {
-            font-size: 1.2rem;
-            color: var(--accent);
-            margin-bottom: 10px;
-        }
-        
-        .stat-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.8rem;
-            color: #666;
-        }
-        
-        /* Recent Activity */
-        .recent-activity {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
-        }
-        
-        .section-title {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .section-title a {
-            font-size: 0.8rem;
-            color: var(--accent);
-            text-decoration: none;
-        }
-        
-        .activity-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .activity-item {
-            display: flex;
-            align-items: center;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .activity-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-        
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(0, 128, 128, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: var(--accent);
-        }
-        
-        .activity-details {
-            flex: 1;
-        }
-        
-        .activity-title {
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-        
-        .activity-time {
-            font-size: 0.8rem;
-            color: #666;
-        }
-        
-        .activity-amount {
-            font-weight: 600;
-            color: var(--success);
+        body.dark-mode .nav-item i {
+            color: var(--secondary);
         }
         
         /* Bottom Navigation */
@@ -292,27 +143,66 @@
             background: white;
             display: flex;
             justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.1);
-            z-index: 100;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        body.dark-mode .bottom-nav {
+            background: var(--dark-card);
         }
         
         .bottom-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #666;
+            text-align: center;
             font-size: 0.7rem;
+            cursor: pointer;
         }
         
         .bottom-nav-item i {
+            display: block;
             font-size: 1.2rem;
             margin-bottom: 3px;
+            color: var(--primary);
         }
         
-        .bottom-nav-item.active {
-            color: var(--primary);
+        body.dark-mode .bottom-nav-item i {
+            color: var(--secondary);
+        }
+        
+        .active {
+            color: var(--accent);
+        }
+        
+        .active i {
+            color: var(--accent);
+        }
+        
+        .logout-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 70px;
+            right: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         
         /* Modals */
@@ -324,311 +214,283 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            z-index: 2000;
             justify-content: center;
             align-items: center;
         }
         
         .modal-content {
             background: white;
+            padding: 20px;
+            border-radius: 10px;
             width: 90%;
             max-width: 400px;
-            border-radius: 15px;
-            padding: 20px;
-            animation: modalFadeIn 0.3s ease;
         }
         
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .modal-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-        
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            flex: 1;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
+        body.dark-mode .modal-content {
+            background: var(--dark-card);
             color: white;
         }
         
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #333;
+        .modal-content h3 {
+            margin-bottom: 15px;
         }
         
-        /* Toast Notifications */
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        body.dark-mode .modal-content input {
+            background: var(--dark-bg);
+            color: white;
+            border-color: #444;
+        }
+        
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        /* Toast Notification */
         .toast {
             position: fixed;
-            bottom: 80px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--primary);
             color: white;
-            padding: 12px 20px;
+            padding: 12px 24px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 3000;
             display: none;
             max-width: 90%;
             text-align: center;
-            animation: toastFadeIn 0.3s ease;
-        }
-        
-        @keyframes toastFadeIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-        
-        .toast.success {
-            background: var(--success);
         }
         
         .toast.error {
             background: var(--error);
         }
         
-        .toast.warning {
-            background: var(--warning);
+        .toast.success {
+            background: var(--success);
         }
         
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 20px;
-            color: #666;
+        /* Task Modal */
+        .task-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
         }
         
-        .empty-state i {
-            font-size: 2rem;
-            color: #ddd;
-            margin-bottom: 10px;
+        body.dark-mode .task-item {
+            border-color: #444;
         }
         
-        /* Dark Mode */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: #121212;
-                color: #f0f0f0;
-            }
-            
-            .account-summary, 
-            .action-btn, 
-            .stat-card, 
-            .recent-activity {
-                background: #1e1e1e;
-                color: #f0f0f0;
-            }
-            
-            .balance, .stat-value {
-                color: var(--secondary);
-            }
-            
-            .balance-label, 
-            .balance-subtext, 
-            .stat-label, 
-            .activity-time {
-                color: #aaa;
-            }
-            
-            .bottom-nav {
-                background: #1e1e1e;
-                border-top: 1px solid #333;
-            }
-            
-            .modal-content {
-                background: #1e1e1e;
-                color: #f0f0f0;
-            }
-            
-            .form-group input, 
-            .form-group select {
-                background: #333;
-                border-color: #444;
-                color: #f0f0f0;
-            }
-            
-            .empty-state {
-                color: #aaa;
-            }
+        .task-reward {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--error);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
     <!-- App Header -->
     <div class="app-header">
-        <div class="app-title">EliteFX Return</div>
+        <span>EliteFX Return</span>
         <div class="user-welcome">
-            <div class="user-avatar" id="userAvatar">U</div>
-            <button class="logout-btn" id="logoutBtn">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
+            <span id="userGreeting">Welcome</span>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
         </div>
     </div>
 
-    <!-- Dashboard Content -->
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" id="darkModeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <div class="container">
-        <!-- Loading State -->
-        <div class="loading-state" id="loadingState">
-            <div class="loading-spinner"></div>
-            <p>Loading your dashboard...</p>
-        </div>
-        
         <!-- Account Summary -->
-        <div class="account-summary" id="accountSummary" style="display: none;">
-            <div class="balance-label">Account Balance</div>
-            <div class="balance" id="accountBalance">UGX 0.00</div>
-            <div class="balance-subtext">Available for withdrawal</div>
+        <div class="account-summary">
+            <div>Account Balance</div>
+            <div class="balance" id="accountBalance">Loading...</div>
+            <div>Available for withdrawal</div>
         </div>
         
-        <!-- Quick Actions -->
-        <div class="quick-actions" id="quickActions" style="display: none;">
-            <button class="action-btn deposit" id="quickDeposit">
-                <i class="fas fa-plus-circle"></i>
-                <span>Deposit</span>
-            </button>
-            <button class="action-btn withdraw" id="quickWithdraw">
-                <i class="fas fa-hand-holding-usd"></i>
-                <span>Withdraw</span>
-            </button>
+        <!-- Notification Banner -->
+        <div class="notification-banner">
+            Congratulations to member ****1287 for receiving a referral bonus of 93,600 UGX
         </div>
         
-        <!-- Stats Cards -->
-        <div class="stats-cards" id="statsCards" style="display: none;">
-            <div class="stat-card">
-                <i class="fas fa-chart-line"></i>
-                <div class="stat-value" id="todayEarnings">UGX 0.00</div>
-                <div class="stat-label">Today's Earnings</div>
+        <!-- Main Navigation -->
+        <div class="main-nav">
+            <div class="nav-item" id="nav-job">
+                <i class="fas fa-briefcase"></i>
+                JOB
             </div>
-            <div class="stat-card">
-                <i class="fas fa-calendar-week"></i>
-                <div class="stat-value" id="totalEarnings">UGX 0.00</div>
-                <div class="stat-label">Total Earnings</div>
+            <div class="nav-item" id="nav-task">
+                <i class="fas fa-tasks"></i>
+                Task
+                <div class="notification-badge" id="taskBadge">3</div>
+            </div>
+            <div class="nav-item" id="nav-recharge">
+                <i class="fas fa-money-bill-wave"></i>
+                Recharge
+            </div>
+            <div class="nav-item" id="nav-withdraw">
+                <i class="fas fa-wallet"></i>
+                Withdrawal
             </div>
         </div>
         
-        <!-- Recent Activity -->
-        <div class="recent-activity" id="recentActivity" style="display: none;">
-            <div class="section-title">
-                <span>Recent Activity</span>
-                <a href="activity.html">View All</a>
+        <!-- Secondary Navigation -->
+        <div class="main-nav">
+            <div class="nav-item" id="nav-savings">
+                <i class="fas fa-piggy-bank"></i>
+                Savings
             </div>
-            <div class="activity-list" id="activityList">
-                <!-- Activities will be loaded here -->
-                <div class="empty-state">
-                    <i class="fas fa-history"></i>
-                    <p>No recent activity</p>
-                </div>
+            <div class="nav-item" id="nav-invite">
+                <i class="fas fa-user-plus"></i>
+                Invite
+            </div>
+            <div class="nav-item" id="nav-help">
+                <i class="fas fa-book"></i>
+                Helpbook
+            </div>
+            <div class="nav-item" id="nav-settings">
+                <i class="fas fa-cog"></i>
+                Settings
             </div>
         </div>
     </div>
-    
+
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <a href="dashboard.html" class="bottom-nav-item active">
+        <div class="bottom-nav-item active" id="bottom-home">
             <i class="fas fa-home"></i>
-            <span>Home</span>
-        </a>
-        <a href="withdraw.html" class="bottom-nav-item">
-            <i class="fas fa-wallet"></i>
-            <span>Withdraw</span>
-        </a>
-        <a href="profit.html" class="bottom-nav-item">
+            Home
+        </div>
+        <div class="bottom-nav-item" id="bottom-tasks">
+            <i class="fas fa-tasks"></i>
+            Task Area
+        </div>
+        <div class="bottom-nav-item" id="bottom-profit">
             <i class="fas fa-chart-line"></i>
-            <span>Profit</span>
-        </a>
-        <a href="account.html" class="bottom-nav-item">
+            Profit
+        </div>
+        <div class="bottom-nav-item" id="bottom-profile">
             <i class="fas fa-user"></i>
-            <span>Account</span>
-        </a>
+            My
+        </div>
     </div>
-    
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toastNotification"></div>
+
     <!-- Deposit Modal -->
     <div class="modal" id="depositModal">
         <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">Deposit Funds</div>
-                <button class="close-modal" id="closeDepositModal">&times;</button>
-            </div>
-            <form id="depositForm">
-                <div class="form-group">
-                    <label for="depositAmount">Amount (UGX)</label>
-                    <input type="number" id="depositAmount" placeholder="Enter amount" min="1000" required>
-                </div>
-                <div class="form-group">
-                    <label for="depositMethod">Payment Method</label>
-                    <select id="depositMethod" required>
-                        <option value="">Select method</option>
-                        <option value="mobile_money">Mobile Money</option>
-                        <option value="bank">Bank Transfer</option>
-                        <option value="card">Credit/Debit Card</option>
-                    </select>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelDeposit">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Proceed</button>
-                </div>
-            </form>
+            <h3>Deposit Funds</h3>
+            <input type="number" id="depositAmount" placeholder="Enter amount (UGX)">
+            <button id="confirmDeposit">Proceed</button>
         </div>
     </div>
-    
-    <!-- Toast Notification -->
-    <div class="toast" id="toastNotification"></div>
+
+    <!-- Withdrawal Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <h3>Withdraw Funds</h3>
+            <input type="number" id="withdrawAmount" placeholder="Enter amount (UGX)">
+            <button id="confirmWithdraw">Submit</button>
+        </div>
+    </div>
+
+    <!-- Tasks Modal -->
+    <div class="modal" id="tasksModal">
+        <div class="modal-content">
+            <h3>Available Tasks</h3>
+            <div id="tasksList">
+                <div class="task-item">
+                    <span>Watch video (30 sec)</span>
+                    <span class="task-reward">+500 UGX</span>
+                </div>
+                <div class="task-item">
+                    <span>Complete survey</span>
+                    <span class="task-reward">+1000 UGX</span>
+                </div>
+                <div class="task-item">
+                    <span>Install app</span>
+                    <span class="task-reward">+1500 UGX</span>
+                </div>
+            </div>
+            <button id="closeTasks">Close</button>
+        </div>
+    </div>
+
+    <!-- Job Modal -->
+    <div class="modal" id="jobModal">
+        <div class="modal-content">
+            <h3>Available Jobs</h3>
+            <p>Complete tasks to earn money daily</p>
+            <div id="jobsList">
+                <div class="task-item">
+                    <span>Basic Package (3 tasks/day)</span>
+                    <span class="task-reward">+2000 UGX</span>
+                </div>
+                <div class="task-item">
+                    <span>Premium Package (10 tasks/day)</span>
+                    <span class="task-reward">+5000 UGX</span>
+                </div>
+            </div>
+            <button id="closeJob">Close</button>
+        </div>
+    </div>
+
+    <!-- Savings Modal -->
+    <div class="modal" id="savingsModal">
+        <div class="modal-content">
+            <h3>Savings Account</h3>
+            <p>Earn 5% monthly interest on your savings</p>
+            <div id="savingsBalance">
+                <p>Current Savings: <span id="savingsAmount">0 UGX</span></p>
+            </div>
+            <input type="number" id="savingsInput" placeholder="Amount to save (UGX)">
+            <button id="addSavings">Add to Savings</button>
+            <button id="withdrawSavings">Withdraw Savings</button>
+            <button id="closeSavings">Close</button>
+        </div>
+    </div>
 
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    
+
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -644,331 +506,411 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        
+
         // Global Variables
-        let currentUser = null;
-        let userData = {
-            balance: 0,
-            todayEarnings: 0,
-            totalEarnings: 0,
-            recentActivities: []
-        };
-        
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            initAuth();
-            setupEventListeners();
-        });
-        
+        let userData = {};
+        let inactivityTimer;
+        const TIMEOUT_DURATION = 30 * 60 * 1000; // 30 minutes timeout
+
+        // ========================
         // Authentication Management
-        function initAuth() {
-            auth.onAuthStateChanged((user) => {
-                if (user) {
-                    currentUser = user;
-                    updateUserUI(user);
-                    loadUserData(user.uid);
-                } else {
-                    window.location.href = 'login.html';
+        // ========================
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                // Not logged in - redirect to login
+                window.location.href = 'login.html';
+            } else if (!user.emailVerified) {
+                // Logged in but not verified - redirect to verification
+                window.location.href = 'verify-email.html';
+            } else {
+                // User is properly authenticated
+                document.getElementById('userGreeting').textContent = `Hi, ${user.displayName || user.email.split('@')[0]}!`;
+                loadUserData(user.uid);
+                startInactivityTimer();
+                startWithdrawalAlerts();
+            }
+        });
+
+        // =================
+        // User Data Loading
+        // =================
+        function loadUserData(userId) {
+            db.collection('users').doc(userId).onSnapshot((doc) => {
+                if (doc.exists) {
+                    userData = doc.data();
+                    
+                    // Update balance display
+                    if (userData.hasDeposited) {
+                        document.getElementById('accountBalance').textContent = `UGX ${userData.balance?.toLocaleString() || '0'}`;
+                    } else {
+                        document.getElementById('accountBalance').textContent = 'Deposit to unlock';
+                    }
+                    
+                    // Update savings if exists
+                    if (userData.savings) {
+                        document.getElementById('savingsAmount').textContent = `${userData.savings.toLocaleString()} UGX`;
+                    }
+                    
+                    // Update task badge
+                    if (userData.pendingTasks) {
+                        document.getElementById('taskBadge').textContent = userData.pendingTasks;
+                    }
+                    
+                    // Check for dark mode preference
+                    if (userData.darkMode) {
+                        document.body.classList.add('dark-mode');
+                        document.getElementById('darkModeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+                    }
                 }
             });
         }
-        
-        // Update UI with user info
-        function updateUserUI(user) {
-            const displayName = user.displayName || user.email.split('@')[0];
-            document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
-        }
-        
-        // Load user data from Firestore
-        async function loadUserData(userId) {
-            try {
-                // Show loading state
-                showLoading(true);
-                
-                const userDoc = await db.collection('users').doc(userId).get();
-                
-                if (userDoc.exists) {
-                    userData = userDoc.data();
-                    
-                    // Initialize missing fields with default values
-                    userData.balance = userData.balance || 0;
-                    userData.todayEarnings = userData.todayEarnings || 0;
-                    userData.totalEarnings = userData.totalEarnings || 0;
-                    userData.recentActivities = userData.recentActivities || [];
-                    
-                    updateDashboardUI();
-                    
-                    // Set up real-time listener
-                    db.collection('users').doc(userId).onSnapshot((doc) => {
-                        if (doc.exists) {
-                            userData = doc.data();
-                            updateDashboardUI();
-                        }
-                    }, (error) => {
-                        console.error('Snapshot error:', error);
-                        showToast('Connection interrupted. Trying to reconnect...', 'warning');
-                    });
-                } else {
-                    // Create user document if it doesn't exist
-                    await initializeUserDocument(userId);
-                }
-                
-                // Hide loading and show content
-                showLoading(false);
-                showContent();
-                
-            } catch (error) {
-                console.error('Error loading user data:', error);
-                showToast('Failed to load data. Please refresh.', 'error');
-                showLoading(false);
-                showContent(); // Still show UI but with default/empty values
-            }
-        }
-        
-        // Initialize new user document
-        async function initializeUserDocument(userId) {
-            try {
-                await db.collection('users').doc(userId).set({
-                    balance: 0,
-                    todayEarnings: 0,
-                    totalEarnings: 0,
-                    recentActivities: [],
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+
+        // ==============
+        // Logout Handler
+        // ==============
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            auth.signOut()
+                .then(() => {
+                    window.location.href = 'login.html';
+                })
+                .catch(error => {
+                    showToast('Logout failed: ' + error.message, true);
                 });
-                
-                // Update local data
-                userData = {
-                    balance: 0,
-                    todayEarnings: 0,
-                    totalEarnings: 0,
-                    recentActivities: []
-                };
-                
-            } catch (error) {
-                console.error('Error initializing user document:', error);
-                throw error;
+        });
+
+        // =====================
+        // Session Timeout Logic
+        // =====================
+        function startInactivityTimer() {
+            resetInactivityTimer();
+            
+            // Set up event listeners
+            document.addEventListener('mousemove', resetInactivityTimer);
+            document.addEventListener('keypress', resetInactivityTimer);
+            document.addEventListener('click', resetInactivityTimer);
+            document.addEventListener('scroll', resetInactivityTimer);
+        }
+
+        function resetInactivityTimer() {
+            // Clear existing timer
+            clearTimeout(inactivityTimer);
+            
+            // Set new timer
+            inactivityTimer = setTimeout(() => {
+                auth.signOut().then(() => {
+                    window.location.href = 'login.html?reason=timeout';
+                });
+            }, TIMEOUT_DURATION);
+        }
+
+        // ================
+        // Dark Mode Toggle
+        // ================
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            const body = document.body;
+            const toggleBtn = document.getElementById('darkModeToggle');
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+                saveUserPreference('darkMode', false);
+            } else {
+                body.classList.add('dark-mode');
+                toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+                saveUserPreference('darkMode', true);
+            }
+        });
+
+        function saveUserPreference(key, value) {
+            const user = auth.currentUser;
+            if (user) {
+                db.collection('users').doc(user.uid).update({
+                    [key]: value
+                }).catch(error => {
+                    console.error("Error saving preference:", error);
+                });
             }
         }
-        
-        // Update the dashboard UI with latest data
-        function updateDashboardUI() {
-            // Update balance
-            document.getElementById('accountBalance').textContent = 
-                `UGX ${userData.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-            
-            // Update earnings
-            document.getElementById('todayEarnings').textContent = 
-                `UGX ${userData.todayEarnings.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-            
-            document.getElementById('totalEarnings').textContent = 
-                `UGX ${userData.totalEarnings.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-            
-            // Update recent activities
-            updateActivitiesUI(userData.recentActivities);
-        }
-        
-        // Update activities list
-        function updateActivitiesUI(activities) {
-            const activityList = document.getElementById('activityList');
-            
-            if (!activities || activities.length === 0) {
-                activityList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-history"></i>
-                        <p>No recent activity</p>
-                    </div>
-                `;
+
+        // ===================
+        // Deposit/Withdrawal
+        // ===================
+        document.getElementById('nav-recharge').addEventListener('click', () => {
+            document.getElementById('depositModal').style.display = 'flex';
+        });
+
+        document.getElementById('confirmDeposit').addEventListener('click', () => {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if (amount > 0) {
+                const user = auth.currentUser;
+                db.collection('users').doc(user.uid).update({
+                    balance: firebase.firestore.FieldValue.increment(amount),
+                    hasDeposited: true
+                }).then(() => {
+                    showToast(`Successfully deposited ${amount} UGX!`);
+                    document.getElementById('depositModal').style.display = 'none';
+                    document.getElementById('depositAmount').value = '';
+                }).catch(error => {
+                    showToast('Deposit failed: ' + error.message, true);
+                });
+            } else {
+                showToast('Please enter a valid amount', true);
+            }
+        });
+
+        document.getElementById('nav-withdraw').addEventListener('click', () => {
+            if (!userData.hasDeposited) {
+                showToast('You need to deposit first before withdrawing', true);
+                return;
+            }
+            document.getElementById('withdrawModal').style.display = 'flex';
+        });
+
+        document.getElementById('confirmWithdraw').addEventListener('click', () => {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            if (amount <= 0) {
+                showToast('Please enter a valid amount', true);
                 return;
             }
             
-            activityList.innerHTML = '';
-            
-            activities.slice(0, 5).forEach(activity => {
-                const activityItem = document.createElement('div');
-                activityItem.className = 'activity-item';
-                
-                activityItem.innerHTML = `
-                    <div class="activity-icon">
-                        <i class="fas ${getActivityIcon(activity.type)}"></i>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-title">${activity.title || 'Activity'}</div>
-                        <div class="activity-time">${formatActivityTime(activity.timestamp)}</div>
-                    </div>
-                    <div class="activity-amount" style="color: ${activity.amount >= 0 ? 'var(--success)' : 'var(--accent)'}">
-                        ${activity.amount >= 0 ? '+' : ''}${activity.amount || 0} UGX
-                    </div>
-                `;
-                
-                activityList.appendChild(activityItem);
-            });
-        }
-        
-        // Helper function to get icon for activity type
-        function getActivityIcon(type) {
-            const icons = {
-                'deposit': 'fa-money-bill-wave',
-                'withdrawal': 'fa-wallet',
-                'task': 'fa-tasks',
-                'referral': 'fa-user-plus',
-                'bonus': 'fa-gift',
-                'investment': 'fa-chart-line',
-                'reward': 'fa-award'
-            };
-            return icons[type] || 'fa-circle';
-        }
-        
-        // Format activity timestamp
-        function formatActivityTime(timestamp) {
-            if (!timestamp) return 'Just now';
-            
-            try {
-                const date = timestamp.toDate();
-                const now = new Date();
-                const diffInHours = (now - date) / (1000 * 60 * 60);
-                
-                if (diffInHours < 24) {
-                    return `Today, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-                } else if (diffInHours < 48) {
-                    return `Yesterday, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-                } else {
-                    return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-                }
-            } catch (e) {
-                return 'Recent';
+            if (amount > (userData.balance || 0)) {
+                showToast('Insufficient balance', true);
+                return;
             }
+            
+            const user = auth.currentUser;
+            db.collection('users').doc(user.uid).update({
+                balance: firebase.firestore.FieldValue.increment(-amount)
+            }).then(() => {
+                // Record withdrawal
+                db.collection('withdrawals').add({
+                    userId: user.uid,
+                    amount: amount,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                showToast(`Withdrawal request for ${amount} UGX submitted!`);
+                document.getElementById('withdrawModal').style.display = 'none';
+                document.getElementById('withdrawAmount').value = '';
+            }).catch(error => {
+                showToast('Withdrawal failed: ' + error.message, true);
+            });
+        });
+
+        // =====================
+        // Withdrawal Alerts
+        // =====================
+        function startWithdrawalAlerts() {
+            db.collection('withdrawals')
+                .orderBy('timestamp', 'desc')
+                .limit(5)
+                .onSnapshot((snapshot) => {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === 'added') {
+                            const data = change.doc.data();
+                            // Don't show alert for current user's withdrawals
+                            if (data.userId !== auth.currentUser?.uid) {
+                                showToast(`Member ****${data.userId.slice(-4)} withdrew ${data.amount} UGX!`);
+                            }
+                        }
+                    });
+                });
         }
-        
-        // Show loading state
-        function showLoading(show) {
-            document.getElementById('loadingState').style.display = show ? 'flex' : 'none';
-        }
-        
-        // Show content after loading
-        function showContent() {
-            document.getElementById('accountSummary').style.display = 'block';
-            document.getElementById('quickActions').style.display = 'grid';
-            document.getElementById('statsCards').style.display = 'grid';
-            document.getElementById('recentActivity').style.display = 'block';
-        }
-        
-        // Setup event listeners
-        function setupEventListeners() {
-            // Logout button
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                auth.signOut().then(() => {
-                    window.location.href = 'login.html';
+
+        // =============
+        // Task System
+        // =============
+        document.getElementById('nav-task').addEventListener('click', () => {
+            document.getElementById('tasksModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeTasks').addEventListener('click', () => {
+            document.getElementById('tasksModal').style.display = 'none';
+        });
+
+        // Simulate task completion
+        document.getElementById('tasksList').addEventListener('click', (e) => {
+            if (e.target.classList.contains('task-item') || e.target.parentElement.classList.contains('task-item')) {
+                const reward = parseInt(e.target.querySelector('.task-reward')?.textContent || 
+                                e.target.parentElement.querySelector('.task-reward')?.textContent || '500').replace(/\D/g, '');
+                
+                const user = auth.currentUser;
+                db.collection('users').doc(user.uid).update({
+                    balance: firebase.firestore.FieldValue.increment(reward),
+                    pendingTasks: firebase.firestore.FieldValue.increment(-1)
+                }).then(() => {
+                    showToast(`Task completed! +${reward} UGX`);
                 }).catch(error => {
-                    showToast('Logout failed: ' + error.message, 'error');
+                    showToast('Failed to complete task: ' + error.message, true);
                 });
-            });
+            }
+        });
+
+        // =============
+        // Job System
+        // =============
+        document.getElementById('nav-job').addEventListener('click', () => {
+            document.getElementById('jobModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeJob').addEventListener('click', () => {
+            document.getElementById('jobModal').style.display = 'none';
+        });
+
+        // ==============
+        // Savings System
+        // ==============
+        document.getElementById('nav-savings').addEventListener('click', () => {
+            document.getElementById('savingsModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeSavings').addEventListener('click', () => {
+            document.getElementById('savingsModal').style.display = 'none';
+        });
+
+        document.getElementById('addSavings').addEventListener('click', () => {
+            const amount = parseFloat(document.getElementById('savingsInput').value);
+            if (amount <= 0 || amount > (userData.balance || 0)) {
+                showToast('Invalid amount or insufficient balance', true);
+                return;
+            }
             
-            // Quick deposit button
-            document.getElementById('quickDeposit').addEventListener('click', () => {
-                document.getElementById('depositModal').style.display = 'flex';
+            const user = auth.currentUser;
+            db.collection('users').doc(user.uid).update({
+                balance: firebase.firestore.FieldValue.increment(-amount),
+                savings: firebase.firestore.FieldValue.increment(amount)
+            }).then(() => {
+                showToast(`${amount} UGX added to savings!`);
+                document.getElementById('savingsInput').value = '';
+            }).catch(error => {
+                showToast('Failed to add to savings: ' + error.message, true);
             });
+        });
+
+        document.getElementById('withdrawSavings').addEventListener('click', () => {
+            if ((userData.savings || 0) <= 0) {
+                showToast('No savings to withdraw', true);
+                return;
+            }
             
-            // Quick withdraw button
-            document.getElementById('quickWithdraw').addEventListener('click', () => {
-                if (userData.balance > 0) {
-                    window.location.href = 'withdraw.html';
-                } else {
-                    showToast('Your balance is too low to withdraw', 'warning');
-                }
+            const user = auth.currentUser;
+            db.collection('users').doc(user.uid).update({
+                balance: firebase.firestore.FieldValue.increment(userData.savings || 0),
+                savings: 0
+            }).then(() => {
+                showToast(`Withdrew ${userData.savings} UGX from savings!`);
+            }).catch(error => {
+                showToast('Failed to withdraw savings: ' + error.message, true);
             });
+        });
+
+        // ==============
+        // Referral System
+        // ==============
+        document.getElementById('nav-invite').addEventListener('click', () => {
+            const referralCode = `ELITE${auth.currentUser.uid.slice(0, 5).toUpperCase()}`;
+            const referralLink = `${window.location.origin}/register.html?ref=${referralCode}`;
             
-            // Close deposit modal
-            document.getElementById('closeDepositModal').addEventListener('click', () => {
-                document.getElementById('depositModal').style.display = 'none';
-            });
-            
-            document.getElementById('cancelDeposit').addEventListener('click', () => {
-                document.getElementById('depositModal').style.display = 'none';
-            });
-            
-            // Deposit form submission
-            document.getElementById('depositForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const amount = parseFloat(document.getElementById('depositAmount').value);
-                const method = document.getElementById('depositMethod').value;
-                
-                if (!amount || amount <= 0 || !method) {
-                    showToast('Please enter a valid amount and select payment method', 'error');
-                    return;
-                }
-                
-                try {
-                    // Show loading state
-                    const submitBtn = document.querySelector('#depositForm button[type="submit"]');
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                    
-                    // Record deposit in Firestore
-                    await db.collection('users').doc(currentUser.uid).update({
-                        balance: firebase.firestore.FieldValue.increment(amount),
-                        hasDeposited: true,
-                        lastDeposit: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    
-                    // Add to transaction history
-                    await db.collection('transactions').add({
-                        userId: currentUser.uid,
-                        type: 'deposit',
-                        amount: amount,
-                        method: method,
-                        status: 'completed',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                    
-                    // Update recent activities
-                    await db.collection('users').doc(currentUser.uid).update({
-                        recentActivities: firebase.firestore.FieldValue.arrayUnion({
-                            type: 'deposit',
-                            title: 'Deposit via ' + method.replace('_', ' '),
-                            amount: amount,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        })
-                    });
-                    
-                    // Close modal and show success
-                    document.getElementById('depositModal').style.display = 'none';
-                    document.getElementById('depositForm').reset();
-                    showToast(`Deposit of UGX ${amount.toLocaleString()} successful!`, 'success');
-                    
-                } catch (error) {
-                    showToast('Deposit failed: ' + error.message, 'error');
-                    console.error('Deposit error:', error);
-                } finally {
-                    const submitBtn = document.querySelector('#depositForm button[type="submit"]');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Proceed';
-                }
-            });
-            
-            // Close modal when clicking outside
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
-                    }
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join EliteFX Return',
+                    text: 'Earn money with me on EliteFX Return!',
+                    url: referralLink
+                }).catch(() => {
+                    prompt('Copy your referral link:', referralLink);
                 });
-            });
+            } else {
+                prompt('Copy your referral link:', referralLink);
+            }
+        });
+
+        // =============
+        // Help & Settings
+        // =============
+        document.getElementById('nav-help').addEventListener('click', () => {
+            showToast('Help center is coming soon!');
+        });
+
+        document.getElementById('nav-settings').addEventListener('click', () => {
+            const newPassword = prompt('Enter new password (min 8 characters):');
+            if (newPassword && newPassword.length >= 8) {
+                auth.currentUser.updatePassword(newPassword)
+                    .then(() => {
+                        showToast('Password updated successfully!');
+                    })
+                    .catch(error => {
+                        if (error.code === 'auth/requires-recent-login') {
+                            reauthenticateAndChangePassword(newPassword);
+                        } else {
+                            showToast('Error: ' + error.message, true);
+                        }
+                    });
+            } else if (newPassword) {
+                showToast('Password must be at least 8 characters', true);
+            }
+        });
+
+        function reauthenticateAndChangePassword(newPassword) {
+            const user = auth.currentUser;
+            const credential = firebase.auth.EmailAuthProvider.credential(
+                user.email,
+                prompt('Please enter your current password to continue:')
+            );
+            
+            user.reauthenticateWithCredential(credential)
+                .then(() => {
+                    user.updatePassword(newPassword)
+                        .then(() => showToast('Password updated successfully!'))
+                        .catch(error => showToast('Error: ' + error.message, true));
+                })
+                .catch(error => showToast('Authentication failed: ' + error.message, true));
         }
-        
-        // Show toast notification
-        function showToast(message, type = 'default') {
+
+        // =====================
+        // Bottom Navigation
+        // =====================
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.bottom-nav-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Simulate page changes
+                switch(this.id) {
+                    case 'bottom-tasks':
+                        document.getElementById('tasksModal').style.display = 'flex';
+                        break;
+                    case 'bottom-profit':
+                        showToast('Profit analytics coming soon!');
+                        break;
+                    case 'bottom-profile':
+                        showToast('Profile page coming soon!');
+                        break;
+                }
+            });
+        });
+
+        // =============
+        // Toast Helper
+        // =============
+        function showToast(message, isError = false) {
             const toast = document.getElementById('toastNotification');
             toast.textContent = message;
-            toast.className = 'toast ' + type;
+            toast.className = 'toast ' + (isError ? 'error' : 'success');
             toast.style.display = 'block';
             
             setTimeout(() => {
                 toast.style.display = 'none';
             }, 5000);
         }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
