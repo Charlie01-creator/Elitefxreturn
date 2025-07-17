@@ -38,6 +38,29 @@
             margin: 0 auto;
         }
         
+        /* Loading State */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 35, 102, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         /* Header */
         .app-header {
             background-color: var(--primary);
@@ -418,7 +441,20 @@
             background: var(--warning);
         }
         
-        /* Dark Mode (optional) */
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 2rem;
+            color: #ddd;
+            margin-bottom: 10px;
+        }
+        
+        /* Dark Mode */
         @media (prefers-color-scheme: dark) {
             body {
                 background: #121212;
@@ -460,6 +496,10 @@
                 border-color: #444;
                 color: #f0f0f0;
             }
+            
+            .empty-state {
+                color: #aaa;
+            }
         }
     </style>
 </head>
@@ -477,15 +517,21 @@
 
     <!-- Dashboard Content -->
     <div class="container">
+        <!-- Loading State -->
+        <div class="loading-state" id="loadingState">
+            <div class="loading-spinner"></div>
+            <p>Loading your dashboard...</p>
+        </div>
+        
         <!-- Account Summary -->
-        <div class="account-summary">
+        <div class="account-summary" id="accountSummary" style="display: none;">
             <div class="balance-label">Account Balance</div>
             <div class="balance" id="accountBalance">UGX 0.00</div>
             <div class="balance-subtext">Available for withdrawal</div>
         </div>
         
         <!-- Quick Actions -->
-        <div class="quick-actions">
+        <div class="quick-actions" id="quickActions" style="display: none;">
             <button class="action-btn deposit" id="quickDeposit">
                 <i class="fas fa-plus-circle"></i>
                 <span>Deposit</span>
@@ -497,7 +543,7 @@
         </div>
         
         <!-- Stats Cards -->
-        <div class="stats-cards">
+        <div class="stats-cards" id="statsCards" style="display: none;">
             <div class="stat-card">
                 <i class="fas fa-chart-line"></i>
                 <div class="stat-value" id="todayEarnings">UGX 0.00</div>
@@ -511,32 +557,16 @@
         </div>
         
         <!-- Recent Activity -->
-        <div class="recent-activity">
+        <div class="recent-activity" id="recentActivity" style="display: none;">
             <div class="section-title">
                 <span>Recent Activity</span>
                 <a href="activity.html">View All</a>
             </div>
             <div class="activity-list" id="activityList">
                 <!-- Activities will be loaded here -->
-                <div class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-tasks"></i>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-title">Task Completed</div>
-                        <div class="activity-time">Today, 10:30 AM</div>
-                    </div>
-                    <div class="activity-amount">+500 UGX</div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-title">Referral Bonus</div>
-                        <div class="activity-time">Yesterday, 3:45 PM</div>
-                    </div>
-                    <div class="activity-amount">+2000 UGX</div>
+                <div class="empty-state">
+                    <i class="fas fa-history"></i>
+                    <p>No recent activity</p>
                 </div>
             </div>
         </div>
@@ -555,11 +585,12 @@
         <a href="profit.html" class="bottom-nav-item">
             <i class="fas fa-chart-line"></i>
             <span>Profit</span>
-        </a><a href="account.html" class="bottom-nav-item">
-    <i class="fas fa-user"></i>
-    <span>Account</span>
-</a>
-       </div>
+        </a>
+        <a href="account.html" class="bottom-nav-item">
+            <i class="fas fa-user"></i>
+            <span>Account</span>
+        </a>
+    </div>
     
     <!-- Deposit Modal -->
     <div class="modal" id="depositModal">
@@ -616,7 +647,12 @@
         
         // Global Variables
         let currentUser = null;
-        let userData = {};
+        let userData = {
+            balance: 0,
+            todayEarnings: 0,
+            totalEarnings: 0,
+            recentActivities: []
+        };
         
         // Initialize the app when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
@@ -646,10 +682,20 @@
         // Load user data from Firestore
         async function loadUserData(userId) {
             try {
+                // Show loading state
+                showLoading(true);
+                
                 const userDoc = await db.collection('users').doc(userId).get();
                 
                 if (userDoc.exists) {
                     userData = userDoc.data();
+                    
+                    // Initialize missing fields with default values
+                    userData.balance = userData.balance || 0;
+                    userData.todayEarnings = userData.todayEarnings || 0;
+                    userData.totalEarnings = userData.totalEarnings || 0;
+                    userData.recentActivities = userData.recentActivities || [];
+                    
                     updateDashboardUI();
                     
                     // Set up real-time listener
@@ -658,11 +704,50 @@
                             userData = doc.data();
                             updateDashboardUI();
                         }
+                    }, (error) => {
+                        console.error('Snapshot error:', error);
+                        showToast('Connection interrupted. Trying to reconnect...', 'warning');
                     });
+                } else {
+                    // Create user document if it doesn't exist
+                    await initializeUserDocument(userId);
                 }
+                
+                // Hide loading and show content
+                showLoading(false);
+                showContent();
+                
             } catch (error) {
-                showToast('Error loading user data', 'error');
                 console.error('Error loading user data:', error);
+                showToast('Failed to load data. Please refresh.', 'error');
+                showLoading(false);
+                showContent(); // Still show UI but with default/empty values
+            }
+        }
+        
+        // Initialize new user document
+        async function initializeUserDocument(userId) {
+            try {
+                await db.collection('users').doc(userId).set({
+                    balance: 0,
+                    todayEarnings: 0,
+                    totalEarnings: 0,
+                    recentActivities: [],
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Update local data
+                userData = {
+                    balance: 0,
+                    todayEarnings: 0,
+                    totalEarnings: 0,
+                    recentActivities: []
+                };
+                
+            } catch (error) {
+                console.error('Error initializing user document:', error);
+                throw error;
             }
         }
         
@@ -670,24 +755,33 @@
         function updateDashboardUI() {
             // Update balance
             document.getElementById('accountBalance').textContent = 
-                `UGX ${userData.balance?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || '0.00'}`;
+                `UGX ${userData.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
             
             // Update earnings
             document.getElementById('todayEarnings').textContent = 
-                `UGX ${userData.todayEarnings?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || '0.00'}`;
+                `UGX ${userData.todayEarnings.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
             
             document.getElementById('totalEarnings').textContent = 
-                `UGX ${userData.totalEarnings?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || '0.00'}`;
+                `UGX ${userData.totalEarnings.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
             
             // Update recent activities
-            if (userData.recentActivities) {
-                updateActivitiesUI(userData.recentActivities);
-            }
+            updateActivitiesUI(userData.recentActivities);
         }
         
         // Update activities list
         function updateActivitiesUI(activities) {
             const activityList = document.getElementById('activityList');
+            
+            if (!activities || activities.length === 0) {
+                activityList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-history"></i>
+                        <p>No recent activity</p>
+                    </div>
+                `;
+                return;
+            }
+            
             activityList.innerHTML = '';
             
             activities.slice(0, 5).forEach(activity => {
@@ -699,11 +793,11 @@
                         <i class="fas ${getActivityIcon(activity.type)}"></i>
                     </div>
                     <div class="activity-details">
-                        <div class="activity-title">${activity.title}</div>
+                        <div class="activity-title">${activity.title || 'Activity'}</div>
                         <div class="activity-time">${formatActivityTime(activity.timestamp)}</div>
                     </div>
                     <div class="activity-amount" style="color: ${activity.amount >= 0 ? 'var(--success)' : 'var(--accent)'}">
-                        ${activity.amount >= 0 ? '+' : ''}${activity.amount} UGX
+                        ${activity.amount >= 0 ? '+' : ''}${activity.amount || 0} UGX
                     </div>
                 `;
                 
@@ -718,26 +812,45 @@
                 'withdrawal': 'fa-wallet',
                 'task': 'fa-tasks',
                 'referral': 'fa-user-plus',
-                'bonus': 'fa-gift'
+                'bonus': 'fa-gift',
+                'investment': 'fa-chart-line',
+                'reward': 'fa-award'
             };
             return icons[type] || 'fa-circle';
         }
         
         // Format activity timestamp
         function formatActivityTime(timestamp) {
-            if (!timestamp) return '';
+            if (!timestamp) return 'Just now';
             
-            const date = timestamp.toDate();
-            const now = new Date();
-            const diffInHours = (now - date) / (1000 * 60 * 60);
-            
-            if (diffInHours < 24) {
-                return `Today, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-            } else if (diffInHours < 48) {
-                return `Yesterday, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-            } else {
-                return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            try {
+                const date = timestamp.toDate();
+                const now = new Date();
+                const diffInHours = (now - date) / (1000 * 60 * 60);
+                
+                if (diffInHours < 24) {
+                    return `Today, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                } else if (diffInHours < 48) {
+                    return `Yesterday, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                } else {
+                    return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                }
+            } catch (e) {
+                return 'Recent';
             }
+        }
+        
+        // Show loading state
+        function showLoading(show) {
+            document.getElementById('loadingState').style.display = show ? 'flex' : 'none';
+        }
+        
+        // Show content after loading
+        function showContent() {
+            document.getElementById('accountSummary').style.display = 'block';
+            document.getElementById('quickActions').style.display = 'grid';
+            document.getElementById('statsCards').style.display = 'grid';
+            document.getElementById('recentActivity').style.display = 'block';
         }
         
         // Setup event listeners
@@ -796,7 +909,8 @@
                     await db.collection('users').doc(currentUser.uid).update({
                         balance: firebase.firestore.FieldValue.increment(amount),
                         hasDeposited: true,
-                        lastDeposit: firebase.firestore.FieldValue.serverTimestamp()
+                        lastDeposit: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                     });
                     
                     // Add to transaction history
@@ -818,23 +932,7 @@
                             timestamp: firebase.firestore.FieldValue.serverTimestamp()
                         })
                     });
-                    async function loadUserData(userId) {
-  try {
-    const doc = await db.collection('users').doc(userId).get();
-    if (!doc.exists) {
-      // Create document if missing
-      await db.collection('users').doc(userId).set({
-        balance: 0,
-        earnings: 0
-      });
-    }
-    updateUI(doc.data());
-  } catch (error) {
-    console.error("Error loading user data:", error);
-    // Show user-friendly message
-    showErrorToast("Couldn't load data. Please refresh.");
-  }
-}
+                    
                     // Close modal and show success
                     document.getElementById('depositModal').style.display = 'none';
                     document.getElementById('depositForm').reset();
