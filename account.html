@@ -495,7 +495,24 @@
         }
       });
     }
-
+function loadUserData(userId) {
+  console.log('Attempting to load data for user:', userId);
+  db.collection('users').doc(userId).get()
+    .then((doc) => {
+      if (doc.exists) {
+        console.log('User data found:', doc.data());
+        userData = doc.data();
+        updateFormFields(userData);
+      } else {
+        console.log("No user data found - creating default");
+        // Consider creating default user data here
+      }
+    })
+    .catch((error) => {
+      console.error('Full error details:', error);
+      showToast('Error loading user data', 'error');
+    });
+}
     function loadUserData(userId) {
       db.collection('users').doc(userId).get()
         .then((doc) => {
