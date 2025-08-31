@@ -1,43 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard | EliteFX Return</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <style>
         :root {
             --primary: #002366;
-            --secondary: #FFD700;
+            --secondary: #ffd700;
             --accent: #008080;
             --dark: #1a1a2e;
             --light: #f8f9fa;
-            --success: #00C851;
+            --success: #00c851;
             --error: #ff4444;
             --warning: #ffbb33;
         }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: "Poppins", sans-serif;
             transition: all 0.3s ease;
         }
-        
         body {
             background-color: #f5f7fa;
             color: #333;
             padding-bottom: 80px;
         }
-        
         .container {
             padding: 15px;
             max-width: 600px;
             margin: 0 auto;
         }
-        
         /* Header */
         .app-header {
             background-color: var(--primary);
@@ -50,18 +49,15 @@
             top: 0;
             z-index: 100;
         }
-        
         .app-title {
             font-size: 1.2rem;
             font-weight: 600;
         }
-        
         .user-welcome {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        
         .user-avatar {
             width: 30px;
             height: 30px;
@@ -73,7 +69,6 @@
             color: var(--primary);
             font-weight: bold;
         }
-        
         .logout-btn {
             background: none;
             border: none;
@@ -81,7 +76,6 @@
             cursor: pointer;
             font-size: 0.9rem;
         }
-        
         /* Account Summary */
         .account-summary {
             background: white;
@@ -92,9 +86,8 @@
             position: relative;
             overflow: hidden;
         }
-        
         .account-summary::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
@@ -102,25 +95,21 @@
             height: 100%;
             background: var(--accent);
         }
-        
         .balance-label {
             font-size: 0.9rem;
             color: #666;
             margin-bottom: 5px;
         }
-        
         .balance {
             font-size: 2rem;
             font-weight: 700;
             color: var(--primary);
             margin: 5px 0;
         }
-        
         .balance-subtext {
             font-size: 0.8rem;
             color: #666;
         }
-        
         /* Quick Actions */
         .quick-actions {
             display: grid;
@@ -128,7 +117,6 @@
             gap: 15px;
             margin: 20px 0;
         }
-        
         .action-btn {
             display: flex;
             flex-direction: column;
@@ -141,21 +129,17 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             cursor: pointer;
         }
-        
         .action-btn i {
             font-size: 1.5rem;
             margin-bottom: 8px;
             color: var(--primary);
         }
-        
         .action-btn.deposit i {
             color: var(--success);
         }
-        
         .action-btn.withdraw i {
             color: var(--accent);
         }
-        
         /* Stats Cards */
         .stats-cards {
             display: grid;
@@ -163,31 +147,26 @@
             gap: 15px;
             margin-bottom: 20px;
         }
-        
         .stat-card {
             background: white;
             border-radius: 10px;
             padding: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
-        
         .stat-card i {
             font-size: 1.2rem;
             color: var(--accent);
             margin-bottom: 10px;
         }
-        
         .stat-value {
             font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 5px;
         }
-        
         .stat-label {
             font-size: 0.8rem;
             color: #666;
         }
-        
         /* Recent Activity */
         .recent-activity {
             background: white;
@@ -196,7 +175,6 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
         }
-        
         .section-title {
             font-size: 1.1rem;
             margin-bottom: 15px;
@@ -204,31 +182,26 @@
             justify-content: space-between;
             align-items: center;
         }
-        
         .section-title a {
             font-size: 0.8rem;
             color: var(--accent);
             text-decoration: none;
         }
-        
         .activity-list {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-        
         .activity-item {
             display: flex;
             align-items: center;
             padding-bottom: 10px;
             border-bottom: 1px solid #f0f0f0;
         }
-        
         .activity-item:last-child {
             border-bottom: none;
             padding-bottom: 0;
         }
-        
         .activity-icon {
             width: 40px;
             height: 40px;
@@ -240,26 +213,21 @@
             margin-right: 15px;
             color: var(--accent);
         }
-        
         .activity-details {
             flex: 1;
         }
-        
         .activity-title {
             font-weight: 600;
             margin-bottom: 3px;
         }
-        
         .activity-time {
             font-size: 0.8rem;
             color: #666;
         }
-        
         .activity-amount {
             font-weight: 600;
             color: var(--success);
         }
-        
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
@@ -273,7 +241,6 @@
             box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.1);
             z-index: 100;
         }
-        
         .bottom-nav-item {
             display: flex;
             flex-direction: column;
@@ -282,16 +249,13 @@
             color: #666;
             font-size: 0.7rem;
         }
-        
         .bottom-nav-item i {
             font-size: 1.2rem;
             margin-bottom: 3px;
         }
-        
         .bottom-nav-item.active {
             color: var(--primary);
         }
-        
         /* Modals */
         .modal {
             display: none;
@@ -305,7 +269,6 @@
             justify-content: center;
             align-items: center;
         }
-        
         .modal-content {
             background: white;
             width: 90%;
@@ -314,24 +277,26 @@
             padding: 20px;
             animation: modalFadeIn 0.3s ease;
         }
-        
         @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
         .modal-title {
             font-size: 1.2rem;
             font-weight: 600;
         }
-        
         .close-modal {
             background: none;
             border: none;
@@ -339,31 +304,27 @@
             cursor: pointer;
             color: #666;
         }
-        
         .form-group {
             margin-bottom: 15px;
         }
-        
         .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
         }
-        
-        .form-group input, .form-group select {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
         }
-        
         .modal-actions {
             display: flex;
             gap: 10px;
             margin-top: 20px;
         }
-        
         .btn {
             padding: 12px;
             border-radius: 8px;
@@ -372,17 +333,14 @@
             cursor: pointer;
             flex: 1;
         }
-        
         .btn-primary {
             background: var(--primary);
             color: white;
         }
-        
         .btn-secondary {
             background: #f0f0f0;
             color: #333;
         }
-        
         /* Toast Notifications */
         .toast {
             position: fixed;
@@ -400,61 +358,57 @@
             text-align: center;
             animation: toastFadeIn 0.3s ease;
         }
-        
         @keyframes toastFadeIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
         }
-        
         .toast.success {
             background: var(--success);
         }
-        
         .toast.error {
             background: var(--error);
         }
-        
         .toast.warning {
             background: var(--warning);
         }
-        
         /* Dark Mode (optional) */
         @media (prefers-color-scheme: dark) {
             body {
                 background: #121212;
                 color: #f0f0f0;
             }
-            
-            .account-summary, 
-            .action-btn, 
-            .stat-card, 
+            .account-summary,
+            .action-btn,
+            .stat-card,
             .recent-activity {
                 background: #1e1e1e;
                 color: #f0f0f0;
             }
-            
-            .balance, .stat-value {
+            .balance,
+            .stat-value {
                 color: var(--secondary);
             }
-            
-            .balance-label, 
-            .balance-subtext, 
-            .stat-label, 
+            .balance-label,
+            .balance-subtext,
+            .stat-label,
             .activity-time {
                 color: #aaa;
             }
-            
             .bottom-nav {
                 background: #1e1e1e;
                 border-top: 1px solid #333;
             }
-            
             .modal-content {
                 background: #1e1e1e;
                 color: #f0f0f0;
             }
-            
-            .form-group input, 
+            .form-group input,
             .form-group select {
                 background: #333;
                 border-color: #444;
@@ -483,7 +437,7 @@
             <div class="balance" id="accountBalance">UGX 0.00</div>
             <div class="balance-subtext">Available for withdrawal</div>
         </div>
-        
+
         <!-- Quick Actions -->
         <div class="quick-actions">
             <button class="action-btn deposit" id="quickDeposit">
@@ -495,7 +449,7 @@
                 <span>Withdraw</span>
             </button>
         </div>
-        
+
         <!-- Stats Cards -->
         <div class="stats-cards">
             <div class="stat-card">
@@ -509,7 +463,7 @@
                 <div class="stat-label">Total Earnings</div>
             </div>
         </div>
-        
+
         <!-- Recent Activity -->
         <div class="recent-activity">
             <div class="section-title">
@@ -518,30 +472,10 @@
             </div>
             <div class="activity-list" id="activityList">
                 <!-- Activities will be loaded here -->
-                <div class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-tasks"></i>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-title">Task Completed</div>
-                        <div class="activity-time">Today, 10:30 AM</div>
-                    </div>
-                    <div class="activity-amount">+500 UGX</div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <div class="activity-details">
-                        <div class="activity-title">Referral Bonus</div>
-                        <div class="activity-time">Yesterday, 3:45 PM</div>
-                    </div>
-                    <div class="activity-amount">+2000 UGX</div>
-                </div>
             </div>
         </div>
     </div>
-    
+
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <a href="dashboard.html" class="bottom-nav-item active">
@@ -555,12 +489,13 @@
         <a href="profit.html" class="bottom-nav-item">
             <i class="fas fa-chart-line"></i>
             <span>Profit</span>
-        </a><a href="account.html" class="bottom-nav-item">
-    <i class="fas fa-user"></i>
-    <span>Account</span>
-</a>
-       </div>
-    
+        </a>
+        <a href="account.html" class="bottom-nav-item">
+            <i class="fas fa-user"></i>
+            <span>Account</span>
+        </a>
+    </div>
+
     <!-- Deposit Modal -->
     <div class="modal" id="depositModal">
         <div class="modal-content">
@@ -571,7 +506,7 @@
             <form id="depositForm">
                 <div class="form-group">
                     <label for="depositAmount">Amount (UGX)</label>
-                    <input type="number" id="depositAmount" placeholder="Enter amount" min="1000" required>
+                    <input type="number" id="depositAmount" placeholder="Enter amount" min="1000" required />
                 </div>
                 <div class="form-group">
                     <label for="depositMethod">Payment Method</label>
@@ -589,7 +524,7 @@
             </form>
         </div>
     </div>
-    
+
     <!-- Toast Notification -->
     <div class="toast" id="toastNotification"></div>
 
@@ -597,7 +532,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    
+
     <script>
         // Firebase Configuration
         const firebaseConfig = {
@@ -606,24 +541,24 @@
             projectId: "elitefxreturn",
             storageBucket: "elitefxreturn.appspot.com",
             messagingSenderId: "333913364691",
-            appId: "1:333913364691:web:82566d278552b6cdec1c26"
+            appId: "1:333913364691:web:82566d278552b6cdec1c26",
         };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        
+
         // Global Variables
         let currentUser = null;
         let userData = {};
-        
+
         // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener("DOMContentLoaded", () => {
             initAuth();
             setupEventListeners();
         });
-        
+
         // Authentication Management
         function initAuth() {
             auth.onAuthStateChanged((user) => {
@@ -632,243 +567,272 @@
                     updateUserUI(user);
                     loadUserData(user.uid);
                 } else {
-                    window.location.href = 'login.html';
+                    window.location.href = "login.html";
                 }
             });
         }
-        
+
         // Update UI with user info
         function updateUserUI(user) {
-            const displayName = user.displayName || user.email.split('@')[0];
-            document.getElementById('userAvatar').textContent = displayName.charAt(0).toUpperCase();
+            const displayName = user.displayName || user.email.split("@")[0];
+            document.getElementById("userAvatar").textContent =
+                displayName.charAt(0).toUpperCase();
         }
-        
+
         // Load user data from Firestore
         async function loadUserData(userId) {
+            if (!userId) {
+                console.error("Invalid User ID");
+                showToast("Invalid user ID. Please login again.", "error");
+                auth.signOut();
+                return;
+            }
             try {
-                const userDoc = await db.collection('users').doc(userId).get();
-                
-                if (userDoc.exists) {
-                    userData = userDoc.data();
-                    updateDashboardUI();
-                    
-                    // Set up real-time listener
-                    db.collection('users').doc(userId).onSnapshot((doc) => {
-                        if (doc.exists) {
-                            userData = doc.data();
-                            updateDashboardUI();
-                        }
+                const userDoc = await db.collection("users").doc(userId).get();
+
+                if (!userDoc.exists) {
+                    // Optional: Create default document if missing
+                    await db.collection("users").doc(userId).set({
+                        balance: 0,
+                        todayEarnings: 0,
+                        totalEarnings: 0,
+                        recentActivities: [],
                     });
                 }
+                if (userDoc.exists) {
+                    userData = userDoc.data();
+                } else {
+                    // After creation, fetch the document again
+                    const newDoc = await db.collection("users").doc(userId).get();
+                    userData = newDoc.data() || {};
+                }
+                updateDashboardUI();
+
+                // Set up real-time listener
+                db.collection("users").doc(userId).onSnapshot((doc) => {
+                    if (doc.exists) {
+                        userData = doc.data();
+                        updateDashboardUI();
+                    }
+                });
             } catch (error) {
-                showToast('Error loading user data', 'error');
-                console.error('Error loading user data:', error);
+                console.error("Error loading user data:", error);
+                showToast("Error loading user data. Please refresh.", "error");
             }
         }
-        
+
         // Update the dashboard UI with latest data
         function updateDashboardUI() {
-            // Update balance
-            document.getElementById('accountBalance').textContent = 
-                `UGX ${userData.balance?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || '0.00'}`;
-            
-            // Update earnings
-            document.getElementById('todayEarnings').textContent = 
-                `UGX ${userData.todayEarnings?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || '0.00'}`;
-            
-            document.getElementById('totalEarnings').textContent = 
-                `UGX ${userData.totalEarnings?.toLocaleString('en-US', { minimumFractionDigits: 2 }) || '0.00'}`;
-            
-            // Update recent activities
-            if (userData.recentActivities) {
+            document.getElementById(
+                "accountBalance"
+            ).textContent = `UGX ${userData.balance?.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+            }) || "0.00"}`;
+
+            document.getElementById(
+                "todayEarnings"
+            ).textContent = `UGX ${userData.todayEarnings?.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+            }) || "0.00"}`;
+
+            document.getElementById(
+                "totalEarnings"
+            ).textContent = `UGX ${userData.totalEarnings?.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+            }) || "0.00"}`;
+
+            if (userData.recentActivities && userData.recentActivities.length > 0) {
                 updateActivitiesUI(userData.recentActivities);
+            } else {
+                // If no activities, show placeholder
+                const activityList = document.getElementById("activityList");
+                activityList.innerHTML =
+                    '<p style="color: #666; font-style: italic;">No recent activities.</p>';
             }
         }
-        
-        // Update activities list
+
+        // Update activities list in UI
         function updateActivitiesUI(activities) {
-            const activityList = document.getElementById('activityList');
-            activityList.innerHTML = '';
-            
-            activities.slice(0, 5).forEach(activity => {
-                const activityItem = document.createElement('div');
-                activityItem.className = 'activity-item';
-                
+            const activityList = document.getElementById("activityList");
+            activityList.innerHTML = "";
+
+            activities.slice(0, 5).forEach((activity) => {
+                const activityItem = document.createElement("div");
+                activityItem.className = "activity-item";
+
                 activityItem.innerHTML = `
                     <div class="activity-icon">
                         <i class="fas ${getActivityIcon(activity.type)}"></i>
                     </div>
                     <div class="activity-details">
                         <div class="activity-title">${activity.title}</div>
-                        <div class="activity-time">${formatActivityTime(activity.timestamp)}</div>
+                        <div class="activity-time">${formatActivityTime(
+                            activity.timestamp
+                        )}</div>
                     </div>
-                    <div class="activity-amount" style="color: ${activity.amount >= 0 ? 'var(--success)' : 'var(--accent)'}">
-                        ${activity.amount >= 0 ? '+' : ''}${activity.amount} UGX
+                    <div class="activity-amount" style="color: ${
+                        activity.amount >= 0 ? "var(--success)" : "var(--accent)"
+                    }">
+                        ${activity.amount >= 0 ? "+" : ""}${activity.amount} UGX
                     </div>
                 `;
-                
+
                 activityList.appendChild(activityItem);
             });
         }
-        
-        // Helper function to get icon for activity type
+
+        // Get icon class for each activity type
         function getActivityIcon(type) {
             const icons = {
-                'deposit': 'fa-money-bill-wave',
-                'withdrawal': 'fa-wallet',
-                'task': 'fa-tasks',
-                'referral': 'fa-user-plus',
-                'bonus': 'fa-gift'
+                deposit: "fa-money-bill-wave",
+                withdrawal: "fa-wallet",
+                task: "fa-tasks",
+                referral: "fa-user-plus",
+                bonus: "fa-gift",
             };
-            return icons[type] || 'fa-circle';
+            return icons[type] || "fa-circle";
         }
-        
-        // Format activity timestamp
+
+        // Format timestamp for activity display
         function formatActivityTime(timestamp) {
-            if (!timestamp) return '';
-            
-            const date = timestamp.toDate();
+            if (!timestamp) return "";
+
+            // Firestore Timestamp to JS Date fallback
+            const date = typeof timestamp.toDate === "function" ? timestamp.toDate() : new Date(timestamp);
             const now = new Date();
             const diffInHours = (now - date) / (1000 * 60 * 60);
-            
+
             if (diffInHours < 24) {
-                return `Today, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                return `Today, ${date.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                })}`;
             } else if (diffInHours < 48) {
-                return `Yesterday, ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                return `Yesterday, ${date.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                })}`;
             } else {
-                return date.toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                return date.toLocaleDateString([], {
+                    month: "short",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                });
             }
         }
-        
+
         // Setup event listeners
         function setupEventListeners() {
             // Logout button
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-                auth.signOut().then(() => {
-                    window.location.href = 'login.html';
-                }).catch(error => {
-                    showToast('Logout failed: ' + error.message, 'error');
-                });
+            document.getElementById("logoutBtn").addEventListener("click", () => {
+                auth
+                    .signOut()
+                    .then(() => {
+                        window.location.href = "login.html";
+                    })
+                    .catch((error) => {
+                        showToast("Logout failed: " + error.message, "error");
+                    });
             });
-            
+
             // Quick deposit button
-            document.getElementById('quickDeposit').addEventListener('click', () => {
-                document.getElementById('depositModal').style.display = 'flex';
+            document.getElementById("quickDeposit").addEventListener("click", () => {
+                document.getElementById("depositModal").style.display = "flex";
             });
-            
+
             // Quick withdraw button
-            document.getElementById('quickWithdraw').addEventListener('click', () => {
+            document.getElementById("quickWithdraw").addEventListener("click", () => {
                 if (userData.balance > 0) {
-                    window.location.href = 'withdraw.html';
+                    window.location.href = "withdraw.html";
                 } else {
-                    showToast('Your balance is too low to withdraw', 'warning');
+                    showToast("Your balance is too low to withdraw", "warning");
                 }
             });
-            
+
             // Close deposit modal
-            document.getElementById('closeDepositModal').addEventListener('click', () => {
-                document.getElementById('depositModal').style.display = 'none';
+            document.getElementById("closeDepositModal").addEventListener("click", () => {
+                document.getElementById("depositModal").style.display = "none";
             });
-            
-            document.getElementById('cancelDeposit').addEventListener('click', () => {
-                document.getElementById('depositModal').style.display = 'none';
+
+            document.getElementById("cancelDeposit").addEventListener("click", () => {
+                document.getElementById("depositModal").style.display = "none";
             });
-            
+
             // Deposit form submission
-            document.getElementById('depositForm').addEventListener('submit', async (e) => {
+            document.getElementById("depositForm").addEventListener("submit", async (e) => {
                 e.preventDefault();
-                
-                const amount = parseFloat(document.getElementById('depositAmount').value);
-                const method = document.getElementById('depositMethod').value;
-                
+
+                const amount = parseFloat(document.getElementById("depositAmount").value);
+                const method = document.getElementById("depositMethod").value;
+
                 if (!amount || amount <= 0 || !method) {
-                    showToast('Please enter a valid amount and select payment method', 'error');
+                    showToast("Please enter a valid amount and select payment method", "error");
                     return;
                 }
-                
+
                 try {
                     // Show loading state
-                    const submitBtn = document.querySelector('#depositForm button[type="submit"]');
+                    const submitBtn = document.querySelector("#depositForm button[type='submit']");
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                    
-                    // Record deposit in Firestore
-                    await db.collection('users').doc(currentUser.uid).update({
+
+                    // Update balance atomically in Firestore
+                    await db.collection("users").doc(currentUser.uid).update({
                         balance: firebase.firestore.FieldValue.increment(amount),
                         hasDeposited: true,
-                        lastDeposit: firebase.firestore.FieldValue.serverTimestamp()
+                        lastDeposit: firebase.firestore.FieldValue.serverTimestamp(),
+                        recentActivities: firebase.firestore.FieldValue.arrayUnion({
+                            type: "deposit",
+                            title: "Deposit via " + method.replace("_", " "),
+                            amount: amount,
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        }),
                     });
-                    
+
                     // Add to transaction history
-                    await db.collection('transactions').add({
+                    await db.collection("transactions").add({
                         userId: currentUser.uid,
-                        type: 'deposit',
+                        type: "deposit",
                         amount: amount,
                         method: method,
-                        status: 'completed',
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        status: "completed",
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     });
-                    
-                    // Update recent activities
-                    await db.collection('users').doc(currentUser.uid).update({
-                        recentActivities: firebase.firestore.FieldValue.arrayUnion({
-                            type: 'deposit',
-                            title: 'Deposit via ' + method.replace('_', ' '),
-                            amount: amount,
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                        })
-                    });
-                    async function loadUserData(userId) {
-  try {
-    const doc = await db.collection('users').doc(userId).get();
-    if (!doc.exists) {
-      // Create document if missing
-      await db.collection('users').doc(userId).set({
-        balance: 0,
-        earnings: 0
-      });
-    }
-    updateUI(doc.data());
-  } catch (error) {
-    console.error("Error loading user data:", error);
-    // Show user-friendly message
-    showErrorToast("Couldn't load data. Please refresh.");
-  }
-}
-                    // Close modal and show success
-                    document.getElementById('depositModal').style.display = 'none';
-                    document.getElementById('depositForm').reset();
-                    showToast(`Deposit of UGX ${amount.toLocaleString()} successful!`, 'success');
-                    
+
+                    // Close modal, reset form and show success toast
+                    document.getElementById("depositModal").style.display = "none";
+                    document.getElementById("depositForm").reset();
+                    showToast(`Deposit of UGX ${amount.toLocaleString()} successful!`, "success");
                 } catch (error) {
-                    showToast('Deposit failed: ' + error.message, 'error');
-                    console.error('Deposit error:', error);
+                    showToast("Deposit failed: " + error.message, "error");
+                    console.error("Deposit error:", error);
                 } finally {
-                    const submitBtn = document.querySelector('#depositForm button[type="submit"]');
+                    const submitBtn = document.querySelector("#depositForm button[type='submit']");
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Proceed';
+                    submitBtn.textContent = "Proceed";
                 }
             });
-            
-            // Close modal when clicking outside
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', (e) => {
+
+            // Close modal when clicking outside modal content
+            document.querySelectorAll(".modal").forEach((modal) => {
+                modal.addEventListener("click", (e) => {
                     if (e.target === modal) {
-                        modal.style.display = 'none';
+                        modal.style.display = "none";
                     }
                 });
             });
         }
-        
+
         // Show toast notification
-        function showToast(message, type = 'default') {
-            const toast = document.getElementById('toastNotification');
+        function showToast(message, type = "default") {
+            const toast = document.getElementById("toastNotification");
             toast.textContent = message;
-            toast.className = 'toast ' + type;
-            toast.style.display = 'block';
-            
+            toast.className = "toast " + type;
+            toast.style.display = "block";
+
             setTimeout(() => {
-                toast.style.display = 'none';
+                toast.style.display = "none";
             }, 5000);
         }
     </script>
