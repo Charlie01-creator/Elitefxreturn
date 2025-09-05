@@ -13,10 +13,12 @@
       --accent: #00bcd4;
       --success: #00C851;
       --error: #ff4444;
+      --warning: #ffbb33;
       --text-light: #e0e0e0;
       --text-muted: #a0a0a0;
       --card-bg: #1e293b;
       --nav-bg: #0f172a;
+      --transition: all 0.3s ease;
     }
 
     * {
@@ -30,6 +32,7 @@
       background-color: var(--primary);
       color: var(--text-light);
       padding-bottom: 80px;
+      transition: var(--transition);
     }
 
     .container {
@@ -46,6 +49,9 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     .profile-header {
@@ -56,6 +62,7 @@
       border-radius: 10px;
       margin-bottom: 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      transition: var(--transition);
     }
 
     .profile-pic {
@@ -69,6 +76,7 @@
       margin-right: 15px;
       font-size: 1.5rem;
       color: #000;
+      transition: var(--transition);
     }
 
     .profile-info h3 {
@@ -87,6 +95,13 @@
       padding: 15px;
       margin-bottom: 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      transition: var(--transition);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .section-title {
@@ -103,6 +118,7 @@
 
     .form-group {
       margin-bottom: 15px;
+      position: relative;
     }
 
     .form-group label {
@@ -120,11 +136,24 @@
       border-radius: 8px;
       color: var(--text-light);
       font-size: 0.9rem;
+      transition: var(--transition);
     }
 
     .form-control:focus {
       outline: none;
       border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+    }
+
+    .form-control.error {
+      border-color: var(--error);
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 0.75rem;
+      margin-top: 5px;
+      display: none;
     }
 
     .btn {
@@ -136,19 +165,85 @@
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: var(--transition);
       font-size: 0.9rem;
       width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    .btn:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      20% {
+        transform: scale(25, 25);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(50, 50);
+        opacity: 0;
+      }
     }
 
     .btn:hover {
       opacity: 0.9;
       transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn:active {
+      transform: translateY(0);
     }
 
     .btn-secondary {
       background: #2d3748;
       color: var(--text-light);
+    }
+
+    .btn-loading {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .btn-loading:after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      border: 3px solid transparent;
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: button-loading-spinner 1s ease infinite;
+    }
+
+    @keyframes button-loading-spinner {
+      from { transform: rotate(0turn); }
+      to { transform: rotate(1turn); }
     }
 
     .divider {
@@ -231,14 +326,20 @@
       color: var(--text-muted);
       font-size: 0.75rem;
       text-decoration: none;
+      transition: var(--transition);
     }
 
     .bottom-nav-item i {
       display: block;
       font-size: 1rem;
+      margin-bottom: 4px;
     }
 
     .bottom-nav-item.active {
+      color: var(--accent);
+    }
+
+    .bottom-nav-item:hover {
       color: var(--accent);
     }
 
@@ -255,6 +356,27 @@
       z-index: 1000;
       display: none;
       max-width: 90%;
+      animation: toast-in 0.3s ease, toast-out 0.3s ease 2.7s;
+    }
+
+    .toast.error {
+      background: var(--error);
+      color: white;
+    }
+
+    .toast.success {
+      background: var(--success);
+      color: black;
+    }
+
+    @keyframes toast-in {
+      from { transform: translate(-50%, 100px); opacity: 0; }
+      to { transform: translate(-50%, 0); opacity: 1; }
+    }
+
+    @keyframes toast-out {
+      from { transform: translate(-50%, 0); opacity: 1; }
+      to { transform: translate(-50%, 100px); opacity: 0; }
     }
 
     .verification-badge {
@@ -270,13 +392,96 @@
 
     .pending-badge {
       display: inline-block;
-      background: #ffc107;
+      background: var(--warning);
       color: #000;
       padding: 3px 8px;
       border-radius: 4px;
       font-size: 0.7rem;
       font-weight: bold;
       margin-left: 8px;
+    }
+
+    .password-strength {
+      margin-top: 8px;
+      height: 5px;
+      border-radius: 3px;
+      background: #2d3748;
+      overflow: hidden;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0;
+      transition: width 0.3s ease;
+      border-radius: 3px;
+    }
+
+    .strength-weak {
+      background: var(--error);
+      width: 33%;
+    }
+
+    .strength-medium {
+      background: var(--warning);
+      width: 66%;
+    }
+
+    .strength-strong {
+      background: var(--success);
+      width: 100%;
+    }
+
+    .password-criteria {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 5px;
+    }
+
+    .criteria-met {
+      color: var(--success);
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(13, 27, 42, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      display: none;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--accent);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .profile-header {
+        padding: 15px;
+      }
+      
+      .profile-pic {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+      }
     }
   </style>
 </head>
@@ -310,17 +515,19 @@
       
       <div class="form-group">
         <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" class="form-control" placeholder="Enter your full name">
+        <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" aria-required="true">
+        <div class="error-message" id="fullNameError">Please enter your full name</div>
       </div>
       
       <div class="form-group">
         <label for="phoneNumber">Phone Number</label>
         <input type="tel" id="phoneNumber" class="form-control" placeholder="Enter your phone number">
+        <div class="error-message" id="phoneNumberError">Please enter a valid phone number</div>
       </div>
       
       <div class="form-group">
         <label for="country">Country</label>
-        <select id="country" class="form-control">
+        <select id="country" class="form-control" aria-required="true">
           <option value="">Select your country</option>
           <option value="US">United States</option>
           <option value="UK">United Kingdom</option>
@@ -328,6 +535,7 @@
           <option value="AU">Australia</option>
           <!-- More countries would be added here -->
         </select>
+        <div class="error-message" id="countryError">Please select your country</div>
       </div>
       
       <button id="savePersonalInfo" class="btn">Save Changes</button>
@@ -354,16 +562,28 @@
       <div class="form-group">
         <label for="currentPassword">Current Password</label>
         <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password">
+        <div class="error-message" id="currentPasswordError">Please enter your current password</div>
       </div>
       
       <div class="form-group">
         <label for="newPassword">New Password</label>
         <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
+        <div class="password-strength">
+          <div class="password-strength-bar" id="passwordStrengthBar"></div>
+        </div>
+        <div class="password-criteria" id="passwordCriteria">
+          <div id="lengthCriteria">At least 8 characters</div>
+          <div id="uppercaseCriteria">One uppercase letter</div>
+          <div id="numberCriteria">One number</div>
+          <div id="specialCriteria">One special character</div>
+        </div>
+        <div class="error-message" id="newPasswordError">Please enter a valid password</div>
       </div>
       
       <div class="form-group">
         <label for="confirmPassword">Confirm New Password</label>
         <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
+        <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
       </div>
       
       <button id="changePasswordBtn" class="btn">Change Password</button>
@@ -379,7 +599,7 @@
       <div class="switch-container">
         <span class="switch-label">Dark Mode</span>
         <label class="switch">
-          <input type="checkbox" id="darkModeToggle" checked>
+          <input type="checkbox" id="darkModeToggle" checked aria-checked="true">
           <span class="slider"></span>
         </label>
       </div>
@@ -387,7 +607,7 @@
       <div class="switch-container">
         <span class="switch-label">Email Notifications</span>
         <label class="switch">
-          <input type="checkbox" id="emailNotificationsToggle" checked>
+          <input type="checkbox" id="emailNotificationsToggle" checked aria-checked="true">
           <span class="slider"></span>
         </label>
       </div>
@@ -395,7 +615,7 @@
       <div class="switch-container">
         <span class="switch-label">SMS Notifications</span>
         <label class="switch">
-          <input type="checkbox" id="smsNotificationsToggle">
+          <input type="checkbox" id="smsNotificationsToggle" aria-checked="false">
           <span class="slider"></span>
         </label>
       </div>
@@ -456,6 +676,11 @@
   <!-- Toast Notification -->
   <div class="toast" id="toastNotification"></div>
 
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
@@ -482,10 +707,13 @@
     document.addEventListener('DOMContentLoaded', () => {
       initAuth();
       setupEventListeners();
+      setupPasswordStrengthMeter();
     });
 
     function initAuth() {
+      showLoading(true);
       auth.onAuthStateChanged((user) => {
+        showLoading(false);
         if (user) {
           currentUser = user;
           loadUserData(user.uid);
@@ -495,27 +723,12 @@
         }
       });
     }
-function loadUserData(userId) {
-  console.log('Attempting to load data for user:', userId);
-  db.collection('users').doc(userId).get()
-    .then((doc) => {
-      if (doc.exists) {
-        console.log('User data found:', doc.data());
-        userData = doc.data();
-        updateFormFields(userData);
-      } else {
-        console.log("No user data found - creating default");
-        // Consider creating default user data here
-      }
-    })
-    .catch((error) => {
-      console.error('Full error details:', error);
-      showToast('Error loading user data', 'error');
-    });
-}
+
     function loadUserData(userId) {
+      showLoading(true);
       db.collection('users').doc(userId).get()
         .then((doc) => {
+          showLoading(false);
           if (doc.exists) {
             userData = doc.data();
             updateFormFields(userData);
@@ -524,6 +737,7 @@ function loadUserData(userId) {
           }
         })
         .catch((error) => {
+          showLoading(false);
           showToast('Error loading user data', 'error');
           console.error('Error loading user data:', error);
         });
@@ -561,19 +775,139 @@ function loadUserData(userId) {
       document.getElementById('emailNotificationsToggle').checked = data.preferences?.emailNotifications !== false;
       document.getElementById('smsNotificationsToggle').checked = data.preferences?.smsNotifications || false;
       document.getElementById('language').value = data.preferences?.language || 'en';
+      
+      // Update ARIA attributes for toggles
+      document.getElementById('darkModeToggle').setAttribute('aria-checked', 
+        document.getElementById('darkModeToggle').checked);
+      document.getElementById('emailNotificationsToggle').setAttribute('aria-checked', 
+        document.getElementById('emailNotificationsToggle').checked);
+      document.getElementById('smsNotificationsToggle').setAttribute('aria-checked', 
+        document.getElementById('smsNotificationsToggle').checked);
+    }
+
+    function setupPasswordStrengthMeter() {
+      const passwordInput = document.getElementById('newPassword');
+      const strengthBar = document.getElementById('passwordStrengthBar');
+      const criteria = {
+        length: document.getElementById('lengthCriteria'),
+        uppercase: document.getElementById('uppercaseCriteria'),
+        number: document.getElementById('numberCriteria'),
+        special: document.getElementById('specialCriteria')
+      };
+      
+      passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        let strength = 0;
+        
+        // Check password criteria
+        const hasLength = password.length >= 8;
+        const hasUppercase = /[A-Z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecial = /[^A-Za-z0-9]/.test(password);
+        
+        // Update criteria indicators
+        criteria.length.className = hasLength ? 'criteria-met' : '';
+        criteria.uppercase.className = hasUppercase ? 'criteria-met' : '';
+        criteria.number.className = hasNumber ? 'criteria-met' : '';
+        criteria.special.className = hasSpecial ? 'criteria-met' : '';
+        
+        // Calculate strength
+        if (hasLength) strength++;
+        if (hasUppercase) strength++;
+        if (hasNumber) strength++;
+        if (hasSpecial) strength++;
+        
+        // Update strength bar
+        strengthBar.className = 'password-strength-bar';
+        if (strength > 0) {
+          if (strength <= 2) {
+            strengthBar.classList.add('strength-weak');
+          } else if (strength === 3) {
+            strengthBar.classList.add('strength-medium');
+          } else {
+            strengthBar.classList.add('strength-strong');
+          }
+        }
+      });
+    }
+
+    function validatePersonalInfo() {
+      let isValid = true;
+      
+      // Validate full name
+      const fullName = document.getElementById('fullName').value.trim();
+      if (!fullName) {
+        document.getElementById('fullNameError').style.display = 'block';
+        document.getElementById('fullName').classList.add('error');
+        isValid = false;
+      } else {
+        document.getElementById('fullNameError').style.display = 'none';
+        document.getElementById('fullName').classList.remove('error');
+      }
+      
+      // Validate country
+      const country = document.getElementById('country').value;
+      if (!country) {
+        document.getElementById('countryError').style.display = 'block';
+        document.getElementById('country').classList.add('error');
+        isValid = false;
+      } else {
+        document.getElementById('countryError').style.display = 'none';
+        document.getElementById('country').classList.remove('error');
+      }
+      
+      return isValid;
+    }
+
+    function validatePasswordForm() {
+      let isValid = true;
+      
+      // Validate current password
+      const currentPassword = document.getElementById('currentPassword').value;
+      if (!currentPassword) {
+        document.getElementById('currentPasswordError').style.display = 'block';
+        document.getElementById('currentPassword').classList.add('error');
+        isValid = false;
+      } else {
+        document.getElementById('currentPasswordError').style.display = 'none';
+        document.getElementById('currentPassword').classList.remove('error');
+      }
+      
+      // Validate new password
+      const newPassword = document.getElementById('newPassword').value;
+      if (!newPassword || newPassword.length < 8) {
+        document.getElementById('newPasswordError').style.display = 'block';
+        document.getElementById('newPassword').classList.add('error');
+        isValid = false;
+      } else {
+        document.getElementById('newPasswordError').style.display = 'none';
+        document.getElementById('newPassword').classList.remove('error');
+      }
+      
+      // Validate confirm password
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      if (newPassword !== confirmPassword) {
+        document.getElementById('confirmPasswordError').style.display = 'block';
+        document.getElementById('confirmPassword').classList.add('error');
+        isValid = false;
+      } else {
+        document.getElementById('confirmPasswordError').style.display = 'none';
+        document.getElementById('confirmPassword').classList.remove('error');
+      }
+      
+      return isValid;
     }
 
     function setupEventListeners() {
       // Save Personal Info
       document.getElementById('savePersonalInfo').addEventListener('click', () => {
+        if (!validatePersonalInfo()) return;
+        
         const fullName = document.getElementById('fullName').value;
         const phoneNumber = document.getElementById('phoneNumber').value;
         const country = document.getElementById('country').value;
         
-        if (!fullName) {
-          showToast('Please enter your full name', 'error');
-          return;
-        }
+        setButtonLoading('savePersonalInfo', true);
         
         db.collection('users').doc(currentUser.uid).update({
           fullName,
@@ -582,7 +916,8 @@ function loadUserData(userId) {
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         })
         .then(() => {
-          showToast('Personal information updated successfully');
+          setButtonLoading('savePersonalInfo', false);
+          showToast('Personal information updated successfully', 'success');
           // Update display name if changed
           if (fullName !== currentUser.displayName) {
             currentUser.updateProfile({
@@ -593,6 +928,7 @@ function loadUserData(userId) {
           }
         })
         .catch((error) => {
+          setButtonLoading('savePersonalInfo', false);
           showToast('Error updating information', 'error');
           console.error('Error updating user data:', error);
         });
@@ -600,11 +936,14 @@ function loadUserData(userId) {
       
       // Verify Email
       document.getElementById('verifyEmailBtn').addEventListener('click', () => {
+        setButtonLoading('verifyEmailBtn', true);
         currentUser.sendEmailVerification()
           .then(() => {
-            showToast('Verification email sent. Please check your inbox.');
+            setButtonLoading('verifyEmailBtn', false);
+            showToast('Verification email sent. Please check your inbox.', 'success');
           })
           .catch((error) => {
+            setButtonLoading('verifyEmailBtn', false);
             showToast('Error sending verification email', 'error');
             console.error('Error sending verification email:', error);
           });
@@ -612,24 +951,13 @@ function loadUserData(userId) {
       
       // Change Password
       document.getElementById('changePasswordBtn').addEventListener('click', () => {
+        if (!validatePasswordForm()) return;
+        
         const currentPassword = document.getElementById('currentPassword').value;
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
         
-        if (!currentPassword || !newPassword || !confirmPassword) {
-          showToast('Please fill all password fields', 'error');
-          return;
-        }
-        
-        if (newPassword !== confirmPassword) {
-          showToast('New passwords do not match', 'error');
-          return;
-        }
-        
-        if (newPassword.length < 6) {
-          showToast('Password must be at least 6 characters', 'error');
-          return;
-        }
+        setButtonLoading('changePasswordBtn', true);
         
         // Reauthenticate user before changing password
         const credential = firebase.auth.EmailAuthProvider.credential(
@@ -642,13 +970,20 @@ function loadUserData(userId) {
             return currentUser.updatePassword(newPassword);
           })
           .then(() => {
-            showToast('Password changed successfully');
+            setButtonLoading('changePasswordBtn', false);
+            showToast('Password changed successfully', 'success');
             // Clear password fields
             document.getElementById('currentPassword').value = '';
             document.getElementById('newPassword').value = '';
             document.getElementById('confirmPassword').value = '';
+            
+            // Reset strength meter
+            document.getElementById('passwordStrengthBar').className = 'password-strength-bar';
+            const criteriaElements = document.querySelectorAll('.password-criteria > div');
+            criteriaElements.forEach(el => el.className = '');
           })
           .catch((error) => {
+            setButtonLoading('changePasswordBtn', false);
             showToast('Error changing password', 'error');
             console.error('Error changing password:', error);
           });
@@ -663,12 +998,15 @@ function loadUserData(userId) {
           language: document.getElementById('language').value
         };
         
+        setButtonLoading('savePreferencesBtn', true);
+        
         db.collection('users').doc(currentUser.uid).update({
           preferences,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         })
         .then(() => {
-          showToast('Preferences saved successfully');
+          setButtonLoading('savePreferencesBtn', false);
+          showToast('Preferences saved successfully', 'success');
           // Apply dark mode immediately
           if (preferences.darkMode) {
             document.documentElement.style.setProperty('--primary', '#0d1b2a');
@@ -681,37 +1019,65 @@ function loadUserData(userId) {
           }
         })
         .catch((error) => {
+          setButtonLoading('savePreferencesBtn', false);
           showToast('Error saving preferences', 'error');
           console.error('Error saving preferences:', error);
         });
       });
       
+      // Toggle switches accessibility
+      const toggles = document.querySelectorAll('.switch input');
+      toggles.forEach(toggle => {
+        toggle.addEventListener('change', function() {
+          this.setAttribute('aria-checked', this.checked);
+        });
+      });
+      
       // Logout
       document.getElementById('logoutBtn').addEventListener('click', () => {
-        auth.signOut()
-          .then(() => {
-            window.location.href = 'login.html';
-          })
-          .catch((error) => {
-            showToast('Error logging out', 'error');
-            console.error('Error logging out:', error);
-          });
+        if (confirm('Are you sure you want to log out?')) {
+          auth.signOut()
+            .then(() => {
+              window.location.href = 'login.html';
+            })
+            .catch((error) => {
+              showToast('Error logging out', 'error');
+              console.error('Error logging out:', error);
+            });
+        }
       });
       
       // Delete Account
       document.getElementById('deleteAccountBtn').addEventListener('click', () => {
-        if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-          // First delete user data
-          db.collection('users').doc(currentUser.uid).delete()
+        const confirmDelete = confirm('Are you sure you want to delete your account? This action cannot be undone.');
+        if (confirmDelete) {
+          const password = prompt('Please enter your password to confirm account deletion:');
+          if (!password) return;
+          
+          showLoading(true);
+          
+          // Reauthenticate before deletion
+          const credential = firebase.auth.EmailAuthProvider.credential(
+            currentUser.email,
+            password
+          );
+          
+          currentUser.reauthenticateWithCredential(credential)
+            .then(() => {
+              // First delete user data
+              return db.collection('users').doc(currentUser.uid).delete();
+            })
             .then(() => {
               // Then delete the user account
               return currentUser.delete();
             })
             .then(() => {
+              showLoading(false);
               window.location.href = 'login.html';
             })
             .catch((error) => {
-              showToast('Error deleting account', 'error');
+              showLoading(false);
+              showToast('Error deleting account. Please check your password.', 'error');
               console.error('Error deleting account:', error);
             });
         }
@@ -721,12 +1087,30 @@ function loadUserData(userId) {
     function showToast(message, type = 'info') {
       const toast = document.getElementById('toastNotification');
       toast.textContent = message;
-      toast.style.backgroundColor = type === 'error' ? '#ff4444' : '#00bcd4';
+      toast.className = 'toast';
+      if (type === 'error') {
+        toast.classList.add('error');
+      } else if (type === 'success') {
+        toast.classList.add('success');
+      }
       toast.style.display = 'block';
 
       setTimeout(() => {
         toast.style.display = 'none';
       }, 3000);
+    }
+
+    function showLoading(show) {
+      document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+    }
+
+    function setButtonLoading(buttonId, isLoading) {
+      const button = document.getElementById(buttonId);
+      if (isLoading) {
+        button.classList.add('btn-loading');
+      } else {
+        button.classList.remove('btn-loading');
+      }
     }
   </script>
 </body>
