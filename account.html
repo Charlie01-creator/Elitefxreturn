@@ -488,7 +488,7 @@
 <body>
   <!-- App Header -->
   <div class="app-header">
-    <div>●●Update Account</div>
+    <div>Update Account</div>
     <div class="user-welcome">
       <i class="fas fa-user-cog"></i>
     </div>
@@ -736,13 +736,7 @@
             console.log("No user data found");
           }
         })
-        .catch((error) => {
-          showLoading(false);
-          showToast('Error loading user data', 'error');
-          console.error('Error loading user data:', error);
-        });
-    }
-
+      
     function updateUserProfileUI(user) {
       document.getElementById('userName').textContent = user.displayName || 'User';
       document.getElementById('userEmail').textContent = user.email;
