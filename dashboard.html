@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard | EliteFX Return</title>
+  <title>EliteFX Return - Professional Investment Platform</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -54,10 +54,121 @@
       z-index: -1;
     }
 
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(var(--blur-amount));
+      -webkit-backdrop-filter: blur(var(--blur-amount));
+      border-radius: var(--border-radius);
+      padding: 30px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .auth-logo {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 15px;
+    }
+
+    .auth-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, var(--accent) 0%, var(--accent-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .auth-subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .auth-form .form-group {
+      margin-bottom: 20px;
+    }
+
+    .auth-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .auth-form .form-control {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(45, 55, 72, 0.6);
+      border: 1px solid rgba(60, 74, 94, 0.4);
+      border-radius: 10px;
+      color: var(--text-light);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .auth-form .form-control:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+      background: rgba(45, 55, 72, 0.8);
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(to right, var(--accent) 0%, #00a5bb 100%);
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 14px rgba(0, 188, 212, 0.3);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 25px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .auth-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .auth-link:hover {
+      text-decoration: underline;
+    }
+
     .container {
       padding: 15px;
       max-width: 1200px;
       margin: 0 auto;
+      display: none;
     }
 
     /* App Header with Hamburger */
@@ -134,6 +245,30 @@
       justify-content: center;
     }
 
+    .user-menu {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .user-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
     .menu-overlay {
       position: fixed;
       top: 0;
@@ -162,7 +297,7 @@
       height: 100%;
       background: rgba(19, 33, 51, 0.95);
       backdrop-filter: blur(var(--blur-amount));
-      -webkit-backdrop-filter: blur(var(--blur-amount));
+      -webkit-backdrop-filter: blur(var(--blur-amount);
       z-index: 99;
       padding: 70px 20px 20px;
       transition: var(--transition);
@@ -193,6 +328,7 @@
       margin-right: 15px;
       font-size: 1.2rem;
       color: #000;
+      font-weight: 600;
     }
 
     .side-menu-info h4 {
@@ -746,80 +882,151 @@
         transform: none;
         margin-top: 5px;
       }
+      
+      .user-name {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- App Header with Hamburger -->
-  <div class="app-header">
-    <div class="hamburger-menu" id="hamburgerMenu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <div>Dashboard</div>
-    <div class="header-actions">
-      <div class="notification-bell">
-        <i class="fas fa-bell"></i>
-        <span class="notification-badge">3</span>
+  <!-- Authentication Section -->
+  <div class="auth-container" id="authContainer">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-logo">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h1 class="auth-title">EliteFX Return</h1>
+        <p class="auth-subtitle">Professional Investment Platform</p>
       </div>
+      
+      <form class="auth-form" id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+        </div>
+        
+        <button type="submit" class="auth-btn">Sign In</button>
+        
+        <div class="auth-footer">
+          <p>Don't have an account? <a href="#" class="auth-link" id="showRegister">Register Now</a></p>
+        </div>
+      </form>
+      
+      <form class="auth-form" id="registerForm" style="display: none;">
+        <div class="form-group">
+          <label for="registerName">Full Name</label>
+          <input type="text" id="registerName" class="form-control" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerEmail">Email Address</label>
+          <input type="email" id="registerEmail" class="form-control" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerPhone">Phone Number</label>
+          <input type="tel" id="registerPhone" class="form-control" placeholder="Enter your phone number" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerPassword">Password</label>
+          <input type="password" id="registerPassword" class="form-control" placeholder="Create a password" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="registerConfirmPassword">Confirm Password</label>
+          <input type="password" id="registerConfirmPassword" class="form-control" placeholder="Confirm your password" required>
+        </div>
+        
+        <button type="submit" class="auth-btn">Create Account</button>
+        
+        <div class="auth-footer">
+          <p>Already have an account? <a href="#" class="auth-link" id="showLogin">Sign In</a></p>
+        </div>
+      </form>
     </div>
   </div>
 
-  <!-- Side Menu with Blur Effect -->
-  <div class="menu-overlay" id="menuOverlay"></div>
-  <div class="side-menu" id="sideMenu">
-    <div class="side-menu-header">
-      <div class="side-menu-pic">
-        <i class="fas fa-user"></i>
+  <!-- Dashboard Container (Initially Hidden) -->
+  <div class="container" id="dashboardContainer">
+    <!-- App Header with Hamburger -->
+    <div class="app-header">
+      <div class="hamburger-menu" id="hamburgerMenu">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
-      <div class="side-menu-info">
-        <h4 id="sideMenuName">John Doe</h4>
-        <p id="sideMenuEmail">john.doe@example.com</p>
+      <div>Dashboard</div>
+      <div class="header-actions">
+        <div class="notification-bell">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge">3</span>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <div class="user-avatar" id="userAvatar">JD</div>
+          <div class="user-name" id="userName">John Doe</div>
+        </div>
       </div>
     </div>
-    
-    <a href="dashboard.html" class="menu-item active">
-      <i class="fas fa-home"></i>
-      <span>Dashboard</span>
-    </a>
-    <a href="deposit.html" class="menu-item">
-      <i class="fas fa-wallet"></i>
-      <span>Deposit Funds</span>
-    </a>
-    <a href="withdraw.html" class="menu-item">
-      <i class="fas fa-money-bill-wave"></i>
-      <span>Withdraw Earnings</span>
-    </a>
-    <a href="referrals.html" class="menu-item">
-      <i class="fas fa-users"></i>
-      <span>Referral Program</span>
-    </a>
-    <a href="account.html" class="menu-item">
-      <i class="fas fa-user-cog"></i>
-      <span>Account Settings</span>
-    </a>
-    <a href="support.html" class="menu-item">
-      <i class="fas fa-headset"></i>
-      <span>Support</span>
-    </a>
-    
-    <div class="divider"></div>
-    
-    <a href="#" class="menu-item" id="menuLogoutBtn">
-      <i class="fas fa-sign-out-alt"></i>
-      <span>Log Out</span>
-    </a>
-  </div>
 
-  <div class="container">
+    <!-- Side Menu with Blur Effect -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+    <div class="side-menu" id="sideMenu">
+      <div class="side-menu-header">
+        <div class="side-menu-pic" id="sideMenuAvatar">JD</div>
+        <div class="side-menu-info">
+          <h4 id="sideMenuName">John Doe</h4>
+          <p id="sideMenuEmail">john.doe@example.com</p>
+        </div>
+      </div>
+      
+      <a href="dashboard.html" class="menu-item active">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="deposit.html" class="menu-item">
+        <i class="fas fa-wallet"></i>
+        <span>Deposit Funds</span>
+      </a>
+      <a href="withdraw.html" class="menu-item">
+        <i class="fas fa-money-bill-wave"></i>
+        <span>Withdraw Earnings</span>
+      </a>
+      <a href="referrals.html" class="menu-item">
+        <i class="fas fa-users"></i>
+        <span>Referral Program</span>
+      </a>
+      <a href="account.html" class="menu-item">
+        <i class="fas fa-user-cog"></i>
+        <span>Account Settings</span>
+      </a>
+      <a href="support.html" class="menu-item">
+        <i class="fas fa-headset"></i>
+        <span>Support</span>
+      </a>
+      
+      <div class="divider"></div>
+      
+      <a href="#" class="menu-item" id="menuLogoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Log Out</span>
+      </a>
+    </div>
+
     <!-- Welcome Banner -->
     <div class="welcome-banner">
       <div class="welcome-text">
-        <h2>Welcome back, John!</h2>
+        <h2 id="welcomeUserName">Welcome back, John!</h2>
         <p>Your investments are growing steadily. 10% daily returns for 25 days!</p>
         <div class="referral-code">
-          <span>Your Referral Code: <strong>ELITE123</strong></span>
+          <span>Your Referral Code: <strong id="userReferralCode">ELITE123</strong></span>
           <button class="copy-btn" id="copyRefCode">Copy</button>
         </div>
       </div>
@@ -838,10 +1045,10 @@
             <i class="fas fa-wallet"></i>
           </div>
         </div>
-        <div class="stat-value">1,250,000 UGX</div>
+        <div class="stat-value" id="statTotalBalance">0 UGX</div>
         <div class="stat-change change-positive">
           <i class="fas fa-arrow-up"></i>
-          <span>+125,000 UGX today</span>
+          <span id="statTodayEarnings">+0 UGX today</span>
         </div>
       </div>
       
@@ -852,10 +1059,10 @@
             <i class="fas fa-chart-line"></i>
           </div>
         </div>
-        <div class="stat-value">1,000,000 UGX</div>
+        <div class="stat-value" id="statTotalInvested">0 UGX</div>
         <div class="stat-change">
           <i class="fas fa-lock"></i>
-          <span>Locked for 25 days</span>
+          <span>Locked for <span id="statDaysRemaining">25</span> days</span>
         </div>
       </div>
       
@@ -866,7 +1073,7 @@
             <i class="fas fa-users"></i>
           </div>
         </div>
-        <div class="stat-value">250,000 UGX</div>
+        <div class="stat-value" id="statReferralEarnings">0 UGX</div>
         <div class="stat-change change-positive">
           <i class="fas fa-arrow-up"></i>
           <span>+8% from referrals</span>
@@ -880,7 +1087,7 @@
             <i class="fas fa-hand-holding-usd"></i>
           </div>
         </div>
-        <div class="stat-value">500,000 UGX</div>
+        <div class="stat-value" id="statAvailableWithdrawal">0 UGX</div>
         <div class="stat-change">
           <i class="fas fa-check-circle"></i>
           <span>From profits only</span>
@@ -895,7 +1102,7 @@
           <i class="fas fa-plus"></i>
         </div>
         <div class="action-label">Deposit</div>
-        <div class="action-note">5,000 - 2,000,000 UGX</div>
+        <div class="action-note">Min. 10,000 UGX</div>
       </a>
       
       <a href="withdraw.html" class="action-button">
@@ -958,7 +1165,7 @@
       <div class="plans-grid">
         <div class="plan-card">
           <div class="plan-name">Starter Plan</div>
-          <div class="plan-amount">5,000 - 500,000 UGX</div>
+          <div class="plan-amount">10,000 - 500,000 UGX</div>
           <ul class="plan-features">
             <li><i class="fas fa-check"></i> 10% daily earnings for 25 days</li>
             <li><i class="fas fa-check"></i> Principal locked for 25 days</li>
@@ -990,52 +1197,15 @@
         <a href="history.html" class="view-all">View All</a>
       </div>
       
-      <ul class="activity-list">
+      <ul class="activity-list" id="activityList">
         <li class="activity-item">
           <div class="activity-icon">
-            <i class="fas fa-arrow-down"></i>
+            <i class="fas fa-info-circle"></i>
           </div>
           <div class="activity-content">
-            <div class="activity-description">Daily earnings</div>
-            <div class="activity-time">Today, 09:30 AM</div>
-            <div class="withdrawal-info">Principal remains locked for 18 more days</div>
+            <div class="activity-description">No recent activity</div>
+            <div class="activity-time">Make your first deposit to get started</div>
           </div>
-          <div class="activity-amount positive-amount">+100,000 UGX</div>
-        </li>
-        
-        <li class="activity-item">
-          <div class="activity-icon">
-            <i class="fas fa-users"></i>
-          </div>
-          <div class="activity-content">
-            <div class="activity-description">Referral earnings</div>
-            <div class="activity-time">Yesterday, 02:15 PM</div>
-          </div>
-          <div class="activity-amount positive-amount">+80,000 UGX</div>
-        </li>
-        
-        <li class="activity-item">
-          <div class="activity-icon">
-            <i class="fas fa-arrow-up"></i>
-          </div>
-          <div class="activity-content">
-            <div class="activity-description">Withdrawal</div>
-            <div class="activity-time">23 Oct, 10:45 AM</div>
-            <div class="withdrawal-info">From profits only (Min. 10,000 UGX)</div>
-          </div>
-          <div class="activity-amount negative-amount">-200,000 UGX</div>
-        </li>
-        
-        <li class="activity-item">
-          <div class="activity-icon">
-            <i class="fas fa-plus"></i>
-          </div>
-          <div class="activity-content">
-            <div class="activity-description">Investment deposit</div>
-            <div class="activity-time">20 Oct, 03:20 PM</div>
-            <div class="withdrawal-info">Locked for 25 days - cannot be withdrawn</div>
-          </div>
-          <div class="activity-amount negative-amount">-500,000 UGX</div>
         </li>
       </ul>
     </div>
@@ -1067,12 +1237,244 @@
   </div>
 
   <script>
+    // User Management System
+    let currentUser = null;
+    let users = JSON.parse(localStorage.getItem('elitefxUsers')) || [];
+    
+    // Generate a random referral code
+    function generateReferralCode() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = 'ELITE';
+      for (let i = 0; i < 4; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+    
+    // Initialize the application
     document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is already logged in
+      const savedUser = localStorage.getItem('elitefxCurrentUser');
+      if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        showDashboard();
+      } else {
+        showAuth();
+      }
+      
+      setupAuthForms();
       setupHamburgerMenu();
-      initializeCharts();
       setupCopyButton();
     });
-
+    
+    // Show authentication forms
+    function showAuth() {
+      document.getElementById('authContainer').style.display = 'flex';
+      document.getElementById('dashboardContainer').style.display = 'none';
+    }
+    
+    // Show dashboard
+    function showDashboard() {
+      document.getElementById('authContainer').style.display = 'none';
+      document.getElementById('dashboardContainer').style.display = 'block';
+      
+      // Update UI with user data
+      updateUserUI();
+      initializeCharts();
+    }
+    
+    // Update UI with user data
+    function updateUserUI() {
+      if (!currentUser) return;
+      
+      // Update user info
+      document.getElementById('userName').textContent = currentUser.name;
+      document.getElementById('userAvatar').textContent = currentUser.name.charAt(0);
+      document.getElementById('sideMenuName').textContent = currentUser.name;
+      document.getElementById('sideMenuEmail').textContent = currentUser.email;
+      document.getElementById('sideMenuAvatar').textContent = currentUser.name.charAt(0);
+      document.getElementById('welcomeUserName').textContent = `Welcome back, ${currentUser.name.split(' ')[0]}!`;
+      document.getElementById('userReferralCode').textContent = currentUser.referralCode;
+      
+      // Update stats
+      document.getElementById('statTotalBalance').textContent = `${currentUser.totalBalance.toLocaleString()} UGX`;
+      document.getElementById('statTotalInvested').textContent = `${currentUser.totalInvested.toLocaleString()} UGX`;
+      document.getElementById('statReferralEarnings').textContent = `${currentUser.referralEarnings.toLocaleString()} UGX`;
+      document.getElementById('statAvailableWithdrawal').textContent = `${currentUser.availableWithdrawal.toLocaleString()} UGX`;
+      document.getElementById('statTodayEarnings').textContent = `+${currentUser.todayEarnings.toLocaleString()} UGX today`;
+      
+      // Calculate days remaining
+      if (currentUser.investmentDate) {
+        const investmentDate = new Date(currentUser.investmentDate);
+        const today = new Date();
+        const daysPassed = Math.floor((today - investmentDate) / (1000 * 60 * 60 * 24));
+        const daysRemaining = Math.max(0, 25 - daysPassed);
+        document.getElementById('statDaysRemaining').textContent = daysRemaining;
+      }
+      
+      // Update activity list
+      updateActivityList();
+    }
+    
+    // Update activity list
+    function updateActivityList() {
+      const activityList = document.getElementById('activityList');
+      activityList.innerHTML = '';
+      
+      if (!currentUser.activities || currentUser.activities.length === 0) {
+        activityList.innerHTML = `
+          <li class="activity-item">
+            <div class="activity-icon">
+              <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-description">No recent activity</div>
+              <div class="activity-time">Make your first deposit to get started</div>
+            </div>
+          </li>
+        `;
+        return;
+      }
+      
+      // Show latest 5 activities
+      const recentActivities = currentUser.activities.slice(-5).reverse();
+      
+      recentActivities.forEach(activity => {
+        const activityItem = document.createElement('li');
+        activityItem.className = 'activity-item';
+        
+        let icon = 'fas fa-info-circle';
+        let amountClass = '';
+        
+        if (activity.type === 'deposit') {
+          icon = 'fas fa-plus';
+          amountClass = 'negative-amount';
+        } else if (activity.type === 'withdrawal') {
+          icon = 'fas fa-arrow-up';
+          amountClass = 'negative-amount';
+        } else if (activity.type === 'earning') {
+          icon = 'fas fa-arrow-down';
+          amountClass = 'positive-amount';
+        } else if (activity.type === 'referral') {
+          icon = 'fas fa-users';
+          amountClass = 'positive-amount';
+        }
+        
+        activityItem.innerHTML = `
+          <div class="activity-icon">
+            <i class="${icon}"></i>
+          </div>
+          <div class="activity-content">
+            <div class="activity-description">${activity.description}</div>
+            <div class="activity-time">${formatDate(activity.date)}</div>
+            ${activity.note ? `<div class="withdrawal-info">${activity.note}</div>` : ''}
+          </div>
+          ${activity.amount ? `<div class="activity-amount ${amountClass}">${activity.amount > 0 ? '+' : ''}${activity.amount.toLocaleString()} UGX</div>` : ''}
+        `;
+        
+        activityList.appendChild(activityItem);
+      });
+    }
+    
+    // Format date for display
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' ' + 
+             date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    // Setup authentication forms
+    function setupAuthForms() {
+      // Show register form
+      document.getElementById('showRegister').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('registerForm').style.display = 'block';
+      });
+      
+      // Show login form
+      document.getElementById('showLogin').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('registerForm').style.display = 'none';
+        document.getElementById('loginForm').style.display = 'block';
+      });
+      
+      // Handle login form submission
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        // Find user
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+          currentUser = user;
+          localStorage.setItem('elitefxCurrentUser', JSON.stringify(currentUser));
+          showDashboard();
+        } else {
+          alert('Invalid email or password. Please try again.');
+        }
+      });
+      
+      // Handle register form submission
+      document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const phone = document.getElementById('registerPhone').value;
+        const password = document.getElementById('registerPassword').value;
+        const confirmPassword = document.getElementById('registerConfirmPassword').value;
+        
+        // Validate passwords match
+        if (password !== confirmPassword) {
+          alert('Passwords do not match. Please try again.');
+          return;
+        }
+        
+        // Check if user already exists
+        if (users.some(u => u.email === email)) {
+          alert('An account with this email already exists. Please login instead.');
+          return;
+        }
+        
+        // Create new user
+        const newUser = {
+          id: Date.now().toString(),
+          name,
+          email,
+          phone,
+          password,
+          referralCode: generateReferralCode(),
+          totalBalance: 0,
+          totalInvested: 0,
+          referralEarnings: 0,
+          availableWithdrawal: 0,
+          todayEarnings: 0,
+          investmentDate: null,
+          activities: []
+        };
+        
+        users.push(newUser);
+        localStorage.setItem('elitefxUsers', JSON.stringify(users));
+        
+        currentUser = newUser;
+        localStorage.setItem('elitefxCurrentUser', JSON.stringify(currentUser));
+        
+        showDashboard();
+      });
+      
+      // Handle logout
+      document.getElementById('menuLogoutBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('elitefxCurrentUser');
+        currentUser = null;
+        showAuth();
+      });
+    }
+    
     function setupHamburgerMenu() {
       const hamburgerMenu = document.getElementById('hamburgerMenu');
       const sideMenu = document.getElementById('sideMenu');
@@ -1094,8 +1496,10 @@
     function setupCopyButton() {
       const copyButton = document.getElementById('copyRefCode');
       copyButton.addEventListener('click', function() {
+        if (!currentUser) return;
+        
         // Copy referral code to clipboard
-        navigator.clipboard.writeText('ELITE123')
+        navigator.clipboard.writeText(currentUser.referralCode)
           .then(() => {
             // Change button text temporarily
             const originalText = copyButton.textContent;
@@ -1111,10 +1515,14 @@
     }
 
     function initializeCharts() {
+      if (!currentUser) return;
+      
       // Earnings Growth Chart (25 days projection)
       const earningsCtx = document.getElementById('earningsChart').getContext('2d');
+      const startingAmount = currentUser.totalInvested || 1000000;
       const earningsData = [];
-      let amount = 1000000; // Starting investment
+      let amount = startingAmount;
+      
       for (let i = 0; i <= 25; i++) {
         earningsData.push(amount);
         amount += amount * 0.10; // 10% daily growth
@@ -1185,12 +1593,14 @@
 
       // Income Sources Chart
       const incomeCtx = document.getElementById('incomeChart').getContext('2d');
+      const directEarnings = currentUser.totalBalance - currentUser.referralEarnings;
+      
       const incomeChart = new Chart(incomeCtx, {
         type: 'doughnut',
         data: {
           labels: ['Direct Investment', 'Referral Earnings'],
           datasets: [{
-            data: [700000, 250000],
+            data: [directEarnings, currentUser.referralEarnings],
             backgroundColor: [
               '#00bcd4',
               '#009688'
